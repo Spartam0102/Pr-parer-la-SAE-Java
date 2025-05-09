@@ -22,7 +22,7 @@ public class Commande {
     this.livresCommander = new ArrayList<>();
     this.prixTotal = 0.0; // Initialiser à 0
 }
-    }
+    
     public Client getClient() {
         return this.client;
     }

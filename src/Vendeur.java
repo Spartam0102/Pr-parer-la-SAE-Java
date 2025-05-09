@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Vendeur extends Personne{
@@ -69,9 +71,10 @@ private int generateUniqueCommandeId() {
 }
 
 private String getCurrentDate() {
-    // Implémentez la logique pour obtenir la date actuelle
-    return "2024-06-04";
-}
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Format ISO 8601
+        return currentDate.format(formatter);
+    }
     
     
     @Override

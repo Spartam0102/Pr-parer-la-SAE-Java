@@ -33,9 +33,9 @@ public class Administrateur extends Personne{
         int index = magasin.getLivres().indexOf(livre);
         if (index != -1) {
             magasin.stockLivre.set(index, nouvelleQte);
-            System.out.println("Le stock du livre '" + livre.getNom() + "' dans le magasin '" + magasin.getNomMagasin() + "' a été mis à jour à " + nouvelleQte + ".");
+            System.out.println("Le stock du livre '" + livre.getNomLivre() + "' dans le magasin '" + magasin.getNomMagasin() + "' a été mis à jour à " + nouvelleQte + ".");
         } else {
-            System.out.println("Le livre '" + livre.getNom() + "' n'a pas été trouvé dans le magasin '" + magasin.getNomMagasin() + "'.");
+            System.out.println("Le livre '" + livre.getNomLivre() + "' n'a pas été trouvé dans le magasin '" + magasin.getNomMagasin() + "'.");
         }
     }
 
