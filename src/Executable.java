@@ -98,6 +98,9 @@ public class Executable{
     livre3.addMagasins(magasin6);
     livre3.addMagasins(magasin7);
 
+
+
+
     // Affichage de l'entreprise;
     System.out.println(entreprise);
     
@@ -141,5 +144,8 @@ public class Executable{
     System.out.println(commande1);
     System.out.println(commande2);
     System.out.println(commande3);
+
+    AppLibrairie app = new AppLibrairie(entreprise);
+    app.run();
     }
 }

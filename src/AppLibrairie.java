@@ -1,10 +1,11 @@
 
-
 public class AppLibrairie {
+    private Entreprise entreprise;
 
     private boolean quitter;
 
-    public AppLibrairie() {
+    public AppLibrairie(Entreprise entreprise) {
+        this.entreprise = entreprise;
         this.quitter = false;
     }
 
@@ -85,6 +86,10 @@ public class AppLibrairie {
             System.out.println("|  " + role);
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
+            if (role.equals("Administrateur")){
+                System.out.println("| a: afficher les magasins             |");
+
+            }
             System.out.println("| P: Menu principal       |");
             System.out.println("+-------------------------+");
             String commande = lireCommande();
@@ -92,6 +97,12 @@ public class AppLibrairie {
             if (commande.equals("q")) {
                 quitter = true;
                 commandeFaite = true;
+            }
+            if (commande.equals("a")) {
+                quitter = true;
+                commandeFaite = true;
+                System.out.println(entreprise.toString());
+
             } else if (commande.equals("p")) {
                 commandeFaite = true; // retour au menu principal
             } else {
@@ -119,7 +130,5 @@ public class AppLibrairie {
         return mess2;
     }
 
-    public static void main(String[] args) {
-        new AppLibrairie().run();
-    }
 }
+
