@@ -11,12 +11,12 @@ public class Administrateur extends Personne{
         return this.idAdmin;
     }
     
-    public void créerCompteVendeur(Vendeur vendeur){ 
+    public Vendeur créerCompteVendeur(){ 
         
     }
 
-    public void créerCompteClient(Client client){
-        
+    public Client créerCompteClient(String nom, String prenom, String dateDeNaissance, int id, String adresse){
+        return new Client(nom, prenom, dateDeNaissance, id, adresse);
         
     }
 
