@@ -7,12 +7,15 @@ public class Classification {
         this.iddewey = iddewey;
         this.nomclass = nomClass;
     }
+
     public int getIddewey() {
         return this.iddewey;
     }
+
     public String getNomclass() {
         return this.nomclass;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj){
@@ -27,6 +30,7 @@ public class Classification {
         Classification tmp = (Classification) obj;
         return this.iddewey == tmp.iddewey && this.nomclass.equals(tmp.nomclass);
     }
+    
     @Override
     public String toString(){
         return "La classification " + this.iddewey + " a comme genre " + this.nomclass;

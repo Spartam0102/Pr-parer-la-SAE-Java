@@ -16,32 +16,36 @@ public class Magasin {
         this.stockLivre = new ArrayList<>();
         
     }
+
     public int getIdMagasin() {
         return this.idMagasin;
     }
+
     public List<Livre> getLivres() {
         return this.livres;
     }
+
     public String getNom() {
         return this.nom;
     }
+
     public String getVille() {
         return this.ville;
     }
     
     public void ajouterLivre(List<Livre> listeLivre, List<Integer> qte) {
-    for (int i = 0; i < listeLivre.size(); i++) {
-        Livre livre = listeLivre.get(i);
-        int quantite = qte.get(i);
-        int index = livres.indexOf(livre);
-        if (index == -1) { // Le livre n'est pas dans le magasin
-            livres.add(livre);
-            stockLivre.add(quantite);
-        } else { // Le livre est déjà dans le magasin, mettre à jour le stock
-            stockLivre.set(index, stockLivre.get(index) + quantite);
+        for (int i = 0; i < listeLivre.size(); i++) {
+            Livre livre = listeLivre.get(i);
+            int quantite = qte.get(i);
+            int index = livres.indexOf(livre);
+            if (index == -1) {
+                livres.add(livre);
+                stockLivre.add(quantite);
+            } else {
+                stockLivre.set(index, stockLivre.get(index) + quantite);
+            }
         }
     }
-}
     
     @Override
     public String toString(){
@@ -61,7 +65,5 @@ public class Magasin {
         }
         Magasin tmp = (Magasin) obj;
         return this.nom.equals(tmp.nom) && this.idMagasin == tmp.idMagasin && this.ville.equals(tmp.ville);
-    }
-
-    
+    } 
 }
