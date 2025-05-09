@@ -7,6 +7,7 @@ public class Magasin {
     private int idMagasin;
     private List<Livre>livres;
     List<Integer>stockLivre;
+    List<Vendeur>lesVendeurs;
 
     public Magasin(String nom,String ville,int idMagasin) {
         this.nom=nom;
@@ -14,6 +15,7 @@ public class Magasin {
         this.idMagasin=idMagasin;
         this.livres = new ArrayList<>();
         this.stockLivre = new ArrayList<>();
+        this.lesVendeurs = new ArrayList<>();
         
     }
 
@@ -44,6 +46,12 @@ public class Magasin {
             } else {
                 stockLivre.set(index, stockLivre.get(index) + quantite);
             }
+        }
+    }
+
+    public void ajouterVendeur(Vendeur vendeur){
+        if (!(this.lesVendeurs.contains(vendeur))){
+            this.lesVendeurs.add(vendeur);
         }
     }
     
