@@ -18,9 +18,16 @@ public class Client extends Personne{
         return this.adresse;
     }
     
-    public boolean passerCommande(List<Livre> livresCommander, List<Integer> qte, char modeDeReception){
-        return true;    
+    // Exemple d'ajout de livres à une commande (nécessite une Commande en cours comme argument)
+public boolean ajouterLivresACommande(Commande commande, List<Livre> livres, List<Integer> qtes) {
+    if (!commande.getClient().equals(this)) {
+        return false; // Le client n'est pas le propriétaire de la commande
     }
+    for (int i = 0; i < livres.size(); i++) {
+        commande.ajouterLivre(livres.get(i), qtes.get(i));
+    }
+    return true;
+}
 
     public boolean choisirModeReception(Commande commande , char modeDeReception){
         if (this.equals(commande.getClient())){

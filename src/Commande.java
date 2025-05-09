@@ -13,17 +13,15 @@ public class Commande {
     private List<Livre> livresCommander;
 
     public Commande(int idCommande, String dateDeCommande, char modeDeReception, Client client, Magasin magasin){
-        this.idCommande = idCommande;
-        this.dateDeCommande = dateDeCommande;
-        this.modeDeReception = modeDeReception;
-        this.client = client;
-        this.magasin = magasin;
-        this.qte = new ArrayList<>();
-        this.livresCommander = new ArrayList<>();
-        int prTot = 0;
-        for (int i = 0 ; i < this.livresCommander.size() ; i += 1){
-            prTot += this.livresCommander.get(i).getPrix() * this.qte.get(i);
-        }
+    this.idCommande = idCommande;
+    this.dateDeCommande = dateDeCommande;
+    this.modeDeReception = modeDeReception;
+    this.client = client;
+    this.magasin = magasin;
+    this.qte = new ArrayList<>();
+    this.livresCommander = new ArrayList<>();
+    this.prixTotal = 0.0; // Initialiser à 0
+}
     }
     public Client getClient() {
         return this.client;
@@ -50,12 +48,16 @@ public class Commande {
         return this.qte;
     }
     public void ajouterLivre(Livre livre, int quantite) {
-        this.livresCommander.add(livre);
-        this.qte.add(quantite);
+    this.livresCommander.add(livre);
+    this.qte.add(quantite);
+    calculerPrixTotal(); // Recalculer le prix total après l'ajout
+}
+    public void calculerPrixTotal() {
+    this.prixTotal = 0;
+    for (int i = 0; i < this.livresCommander.size(); i++) {
+        this.prixTotal += this.livresCommander.get(i).getPrix() * this.qte.get(i);
     }
-    public void majPrixTotal(){
-        
-    }
+}
     public void editerFacture(){
 
     }

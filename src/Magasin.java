@@ -6,7 +6,7 @@ public class Magasin {
     private String ville;
     private int idMagasin;
     private List<Livre>livres;
-    private List<Integer>stockLivre;
+    List<Integer>stockLivre;
 
     public Magasin(String nom,String ville,int idMagasin) {
         this.nom=nom;
@@ -29,8 +29,19 @@ public class Magasin {
         return this.ville;
     }
     
-    public void ajouterLivre(List <Livre> listeLivre, List<Integer> qte){
+    public void ajouterLivre(List<Livre> listeLivre, List<Integer> qte) {
+    for (int i = 0; i < listeLivre.size(); i++) {
+        Livre livre = listeLivre.get(i);
+        int quantite = qte.get(i);
+        int index = livres.indexOf(livre);
+        if (index == -1) { // Le livre n'est pas dans le magasin
+            livres.add(livre);
+            stockLivre.add(quantite);
+        } else { // Le livre est déjà dans le magasin, mettre à jour le stock
+            stockLivre.set(index, stockLivre.get(index) + quantite);
         }
+    }
+}
     
     @Override
     public String toString(){
