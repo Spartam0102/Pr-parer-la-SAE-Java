@@ -1,12 +1,3 @@
-package TestApp;
-
-import TestApp.Commande;
-import TestApp.Client;
-import TestApp.Magasin;
-import TestApp.Livre;
-import TestApp.Auteur;
-import TestApp.Editeur;
-import TestApp.Classification;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
