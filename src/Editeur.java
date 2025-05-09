@@ -7,12 +7,15 @@ public class Editeur {
         this.idEdit = idEdit;
         this.nomEdit = nomEdit;
     }
+
     public int getIdEdit(){
         return this.idEdit;
     }
+
     public String getNomEdit(){
         return this.nomEdit;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj){
@@ -27,6 +30,7 @@ public class Editeur {
         Editeur tmp = (Editeur) obj;
         return this.nomEdit.equals(tmp.nomEdit) && this.idEdit == tmp.idEdit;
     }
+    
     @Override
     public String toString(){
         return "L'éditeur " + this.nomEdit +" possède l'id " + this.idEdit;
