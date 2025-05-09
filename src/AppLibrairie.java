@@ -1,10 +1,10 @@
-import java.util.Scanner;
 
-public class apptest {
+
+public class AppLibrairie {
 
     private boolean quitter;
 
-    public apptest() {
+    public AppLibrairie() {
         this.quitter = false;
     }
 
@@ -114,12 +114,12 @@ public class apptest {
 
     private String lireCommande() {
         System.out.print("Commande > ");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        return input.strip().toLowerCase();
+        String mess = System.console().readLine();
+        String mess2 = mess.strip().toLowerCase();
+        return mess2;
     }
 
     public static void main(String[] args) {
-        new apptest().run();
+        new AppLibrairie().run();
     }
 }
