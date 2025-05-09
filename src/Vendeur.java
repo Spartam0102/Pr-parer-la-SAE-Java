@@ -24,70 +24,9 @@ public class Vendeur extends Personne {
     }
 
     public boolean disponibiliteLivre(Magasin magasin, Livre livre) {
-<<<<<<< HEAD
-    int index = magasin.getLivres().indexOf(livre);
-    if (index != -1) { // Le livre est dans le magasin
-        return magasin.stockLivre.get(index) > 0; // En supposant que stockLivre est accessible ou que vous avez un getter
-    }
-    return false; // Livre non trouvé dans ce magasin
-}
-    
-    public boolean transfererLivre(Magasin magasinDepart, Magasin magasinArrivee, Livre livre, int qte) {
-    // Gestion des erreurs : Vérifier si magasinDepart a suffisamment de stock
-    int indexDepart = magasinDepart.getLivres().indexOf(livre);
-    if (indexDepart == -1 || magasinDepart.stockLivre.get(indexDepart) < qte) {
-        return false; // Pas assez de stock dans le magasin de départ
-    }
-
-    // Mettre à jour le stock dans magasinDepart
-    magasinDepart.stockLivre.set(indexDepart, magasinDepart.stockLivre.get(indexDepart) - qte);
-
-    // Mettre à jour le stock dans magasinArrivee
-    int indexArrivee = magasinArrivee.getLivres().indexOf(livre);
-    if (indexArrivee == -1) { // Le livre n'est pas dans le magasin d'arrivée, l'ajouter
-        magasinArrivee.getLivres().add(livre);
-        magasinArrivee.stockLivre.add(qte);
-    } else { // Le livre existe dans le magasin d'arrivée, mettre à jour le stock
-        magasinArrivee.stockLivre.set(indexArrivee, magasinArrivee.stockLivre.get(indexArrivee) + qte);
-    }
-    return true;
-}
-
-    public Commande passerCommande(Client client, Magasin magasin, List<Livre> listeLivre, List<Integer> qte){
-    // Créer une nouvelle Commande
-    Commande nouvelleCommande = new Commande(generateUniqueCommandeId(), "Date actuelle", 'L', client, magasin);  // Vous devrez générer un ID unique et obtenir la date actuelle
-
-    // Ajouter des livres à la commande
-    for (int i = 0; i < listeLivre.size(); i++) {
-        nouvelleCommande.ajouterLivre(listeLivre.get(i), qte.get(i));
-    }
-
-    return nouvelleCommande;
-}
-
-private int generateUniqueCommandeId() {
-    // Implémentez la logique pour générer un ID unique (par exemple, en utilisant un compteur, UUID)
-    // Pour simplifier, voici un compteur de base (non thread-safe) :
-    int nextCommandeId = 1;
-    return nextCommandeId++;
-}
-
-private String getCurrentDate() {
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Format ISO 8601
-        return currentDate.format(formatter);
-    }
-    
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj){
-            return true;
-=======
         int index = magasin.getLivres().indexOf(livre);
         if (index != -1) {
             return magasin.stockLivre.get(index) > 0;
->>>>>>> 3d19dfdf23abe81cd181156f6a30bc919afe81d7
         }
         return false;
     }
