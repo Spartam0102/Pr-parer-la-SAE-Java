@@ -6,9 +6,11 @@ public class Auteur extends Personne{
         super(nom, prenom, dateDeNaissance);
         this.idedit = id;
     }
+
     public int getIdedit() {
         return this.idedit;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj){
@@ -22,8 +24,9 @@ public class Auteur extends Personne{
         }
         Auteur tmp = (Auteur) obj;
         return super.getNom().equals(tmp.getNom()) && super.getPrenom().equals(tmp.getPrenom()) && super.getDateDeNaissance().equals(tmp.getDateDeNaissance()) 
-        && this.idedit == tmp.getIdedit();
+                && this.idedit == tmp.getIdedit();
     }
+
     @Override
     public String toString(){
         return super.toString() + ", fait partie des auteurs, et possède l'id " + this.idedit;

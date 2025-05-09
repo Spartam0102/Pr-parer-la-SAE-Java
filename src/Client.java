@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Client extends Personne{
@@ -11,23 +10,24 @@ public class Client extends Personne{
         this.ideCli = id;
         this.adresse = adresse;
     }
+
     public int getIdCli() {
         return this.ideCli;
     }
+
     public String getAdresse() {
         return this.adresse;
     }
     
-    // Exemple d'ajout de livres à une commande (nécessite une Commande en cours comme argument)
-public boolean ajouterLivresACommande(Commande commande, List<Livre> livres, List<Integer> qtes) {
-    if (!commande.getClient().equals(this)) {
-        return false; // Le client n'est pas le propriétaire de la commande
+    public boolean ajouterLivresACommande(Commande commande, List<Livre> livres, List<Integer> qtes) {
+        if (!commande.getClient().equals(this)) {
+            return false;
+        }
+        for (int i = 0; i < livres.size(); i++) {
+            commande.ajouterLivre(livres.get(i), qtes.get(i));
+        }
+        return true;
     }
-    for (int i = 0; i < livres.size(); i++) {
-        commande.ajouterLivre(livres.get(i), qtes.get(i));
-    }
-    return true;
-}
 
     public boolean choisirModeReception(Commande commande , char modeDeReception){
         if (this.equals(commande.getClient())){
@@ -53,7 +53,7 @@ public boolean ajouterLivresACommande(Commande commande, List<Livre> livres, Lis
         }
         Client tmp = (Client) obj;
         return super.getNom().equals(tmp.getNom()) && super.getPrenom().equals(tmp.getPrenom()) && super.getDateDeNaissance().equals(tmp.getDateDeNaissance()) 
-        && this.ideCli == tmp.getIdCli() && this.adresse.equals(tmp.getAdresse());
+                && this.ideCli == tmp.getIdCli() && this.adresse.equals(tmp.getAdresse());
     }
     @Override
     public String toString(){

@@ -9,15 +9,19 @@ public abstract class Personne{
         this.prenom = prenom;
         this.dateDeNaissance = dateDeNaissance;
     }
+
     public String getDateDeNaissance() {
         return this.dateDeNaissance;
     }
+
     public String getNom() {
         return this.nom;
     }
+
     public String getPrenom() {
         return this.prenom;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj){
@@ -32,6 +36,7 @@ public abstract class Personne{
         Personne tmp = (Personne) obj;
         return this.nom.equals(tmp.nom) && this.prenom.equals(tmp.prenom )&& this.dateDeNaissance.equals(tmp.dateDeNaissance);
     }
+    
     @Override
     public String toString(){
         return "La personne nommée " + this.prenom +" "+ this.nom + " est née le " + this.dateDeNaissance;

@@ -20,44 +20,60 @@ public class Commande {
     this.magasin = magasin;
     this.qte = new ArrayList<>();
     this.livresCommander = new ArrayList<>();
+<<<<<<< HEAD
     this.prixTotal = 0.0; // Initialiser à 0
 }
     
+=======
+    this.prixTotal = 0.0;
+    }
+
+>>>>>>> 3d19dfdf23abe81cd181156f6a30bc919afe81d7
     public Client getClient() {
         return this.client;
     }
+
     public String getDateDeCommande() {
         return this.dateDeCommande;
     }
+
     public int getIdCommande() {
         return this.idCommande;
     }
+
     public List<Livre> getLivresCommander() {
         return this.livresCommander;
     }
+
     public Magasin getMagasin() {
         return this.magasin;
     }
+
     public char getModeDeReception() {
         return this.modeDeReception;
     }
+
     public double getPrixTotal() {
         return this.prixTotal;
     }
+
     public List<Integer> getQte() {
         return this.qte;
     }
+
     public void ajouterLivre(Livre livre, int quantite) {
-    this.livresCommander.add(livre);
-    this.qte.add(quantite);
-    calculerPrixTotal(); // Recalculer le prix total après l'ajout
-}
-    public void calculerPrixTotal() {
-    this.prixTotal = 0;
-    for (int i = 0; i < this.livresCommander.size(); i++) {
-        this.prixTotal += this.livresCommander.get(i).getPrix() * this.qte.get(i);
+        this.livresCommander.add(livre);
+        this.qte.add(quantite);
+        calculerPrixTotal();
     }
-}
+
+    public void calculerPrixTotal() {
+        this.prixTotal = 0;
+        for (int i = 0; i < this.livresCommander.size(); i++) {
+            this.prixTotal += this.livresCommander.get(i).getPrix() * this.qte.get(i);
+        }
+    }
+
     public void editerFacture(){
 
     }
@@ -80,6 +96,7 @@ public class Commande {
         }
         return res;
     }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj){
