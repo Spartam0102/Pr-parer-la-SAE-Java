@@ -20,9 +20,15 @@ public class Commande {
     this.magasin = magasin;
     this.qte = new ArrayList<>();
     this.livresCommander = new ArrayList<>();
+<<<<<<< HEAD
+    this.prixTotal = 0.0; // Initialiser à 0
+}
+    
+=======
     this.prixTotal = 0.0;
     }
 
+>>>>>>> 3d19dfdf23abe81cd181156f6a30bc919afe81d7
     public Client getClient() {
         return this.client;
     }
