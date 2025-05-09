@@ -1,10 +1,16 @@
-package Test;
+package TestApp;
+
+import TestApp.Commande;
+import TestApp.Client;
+import TestApp.Magasin;
+import TestApp.Livre;
+import TestApp.Auteur;
+import TestApp.Editeur;
+import TestApp.Classification;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestCommande {
 
