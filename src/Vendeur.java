@@ -1,5 +1,4 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 
 public class Vendeur extends Personne {
@@ -8,10 +7,10 @@ public class Vendeur extends Personne {
     private Magasin magasin;
 
     public Vendeur(String nom, String prenom, String dateDeNaissance, int id, Magasin magasin) {
-        super(nom, prenom, dateDeNaissance);
-        this.idVendeur = id;
-        this.magasin = magasin;
-    }
+    super(nom, prenom, dateDeNaissance);
+    this.idVendeur = id;
+    this.magasin = magasin;
+}
 
     public Magasin getMagasin() {
         return this.magasin;

@@ -5,18 +5,18 @@ public class Magasin {
     private String nom;
     private String ville;
     private int idMagasin;
-    private List<Livre>livres;
-    List<Integer>stockLivre;
-    List<Vendeur>lesVendeurs;
+    private List<Livre> livres;
+    List<Integer> stockLivre;
+    List<Vendeur> lesVendeurs;
 
-    public Magasin(String nom,String ville,int idMagasin) {
-        this.nom=nom;
-        this.ville=ville;
-        this.idMagasin=idMagasin;
+    public Magasin(String nom, String ville, int idMagasin) {
+        this.nom = nom;
+        this.ville = ville;
+        this.idMagasin = idMagasin;
         this.livres = new ArrayList<>();
         this.stockLivre = new ArrayList<>();
         this.lesVendeurs = new ArrayList<>();
-        
+
     }
 
     public int getIdMagasin() {
@@ -34,7 +34,7 @@ public class Magasin {
     public String getVille() {
         return this.ville;
     }
-    
+
     public void ajouterLivre(List<Livre> listeLivre, List<Integer> qte) {
         for (int i = 0; i < listeLivre.size(); i++) {
             Livre livre = listeLivre.get(i);
@@ -49,29 +49,29 @@ public class Magasin {
         }
     }
 
-    public void ajouterVendeur(Vendeur vendeur){
-        if (!(this.lesVendeurs.contains(vendeur))){
+    public void ajouterVendeur(Vendeur vendeur) {
+        if (!(this.lesVendeurs.contains(vendeur))) {
             this.lesVendeurs.add(vendeur);
         }
     }
-    
+
     @Override
-    public String toString(){
-        return "Le magasin " + this.nom +" est situé " + this.ville + " et possède l'ID " + this.idMagasin;
+    public String toString() {
+        return "Le magasin " + this.nom + " est situé " + this.ville + " et possède l'ID " + this.idMagasin;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj){
+        if (this == obj) {
             return true;
         }
-        if (obj == null){
+        if (obj == null) {
             return false;
         }
-        if(!(obj instanceof Magasin)){
+        if (!(obj instanceof Magasin)) {
             return false;
         }
         Magasin tmp = (Magasin) obj;
         return this.nom.equals(tmp.nom) && this.idMagasin == tmp.idMagasin && this.ville.equals(tmp.ville);
-    } 
+    }
 }

@@ -2,12 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Commande {
-    
+
     private List<Integer> qte;
     private String dateDeCommande;
     private double prixTotal;
     private char modeDeReception;
-    private int idCommande; 
+    private int idCommande;
     private Magasin magasin;
     private Client client;
     private List<Livre> livresCommander;
@@ -20,15 +20,15 @@ public class Commande {
     this.magasin = magasin;
     this.qte = new ArrayList<>();
     this.livresCommander = new ArrayList<>();
-<<<<<<< HEAD
-    this.prixTotal = 0.0; // Initialiser à 0
+    this.prixTotal = 0.0; 
 }
-    
-=======
-    this.prixTotal = 0.0;
-    }
 
->>>>>>> 3d19dfdf23abe81cd181156f6a30bc919afe81d7
+
+
+    
+
+
+
     public Client getClient() {
         return this.client;
     }
@@ -74,7 +74,7 @@ public class Commande {
         }
     }
 
-    public void editerFacture(){
+    public void editerFacture() {
 
     }
 
@@ -82,33 +82,47 @@ public class Commande {
         this.modeDeReception = modeDeReception;
     }
 
-    public void modifierStock(double nouvelleValeur){
+    public void modifierStock() {
+    for (int i = 0; i < livresCommander.size(); i++) {
+        Livre livre = livresCommander.get(i);
+        int quantite = qte.get(i);
 
+        int index = magasin.getLivres().indexOf(livre);
+        if (index != -1) {
+            int stockActuel = magasin.stockLivre.get(index);
+            magasin.stockLivre.set(index, stockActuel - quantite);
+        }
     }
-    
+}
+
+
     @Override
-    public String toString(){
-        String res = "la commande " + this.idCommande +" datant du "+ this.dateDeCommande +" provenant du magasin "+ this.magasin.getNom() + ", est crée par l'utilisateur " 
-        + this.client.getPrenom() + " " + this.client.getNom() + " a un prix total de " + this.prixTotal+ "€ et le mode de reception est " + this.modeDeReception 
-        + ".\nLes livres se trouvant dans la commande sont : ";
-        for (int i = 0 ; i < this.livresCommander.size() ; i += 1){
+    public String toString() {
+        String res = "la commande " + this.idCommande + " datant du " + this.dateDeCommande + " provenant du magasin "
+                + this.magasin.getNom() + ", est crée par l'utilisateur "
+                + this.client.getPrenom() + " " + this.client.getNom() + " a un prix total de " + this.prixTotal
+                + "€ et le mode de reception est " + this.modeDeReception
+                + ".\nLes livres se trouvant dans la commande sont : ";
+        for (int i = 0; i < this.livresCommander.size(); i += 1) {
             res += this.livresCommander.get(i) + " commandé " + this.qte.get(i) + "fois\n";
         }
         return res;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj){
+        if (this == obj) {
             return true;
         }
-        if (obj == null){
+        if (obj == null) {
             return false;
         }
-        if(!(obj instanceof Commande)){
+        if (!(obj instanceof Commande)) {
             return false;
         }
         Commande tmp = (Commande) obj;
-        return this.dateDeCommande.equals(tmp.dateDeCommande) && this.prixTotal == tmp.prixTotal && this.modeDeReception == tmp.modeDeReception && this.idCommande == tmp.idCommande && this.magasin.equals(tmp.magasin) && this.client.equals(tmp.client);
+        return this.dateDeCommande.equals(tmp.dateDeCommande) && this.prixTotal == tmp.prixTotal
+                && this.modeDeReception == tmp.modeDeReception && this.idCommande == tmp.idCommande
+                && this.magasin.equals(tmp.magasin) && this.client.equals(tmp.client);
     }
 }
