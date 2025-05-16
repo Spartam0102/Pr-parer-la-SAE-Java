@@ -38,6 +38,7 @@ public class Client extends Personne{
     }
 
     public void consulterCatalogue(Magasin magasin){
+
     }
     
     @Override
