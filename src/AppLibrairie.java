@@ -127,7 +127,7 @@ public class AppLibrairie {
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
             System.out.println("| A: Afficher magasins    |");
-            System.out.println("| J: ajpouter magasins    |");
+            System.out.println("| J: ajouter magasins     |");
             System.out.println("| P: Menu précédent       |");
             System.out.println("+-------------------------+");
 
