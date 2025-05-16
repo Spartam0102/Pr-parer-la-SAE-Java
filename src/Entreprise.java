@@ -2,14 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Entreprise {
-    
+
     private String nom;
     private String adresse;
-    private List<Magasin> listeMagasins; 
+    private List<Magasin> listeMagasins;
 
-    public Entreprise (String nom, String adresse){
+    public Entreprise(String nom, String adresse) {
         this.nom = nom;
-        this.adresse = adresse; 
+        this.adresse = adresse;
         this.listeMagasins = new ArrayList<>();
     }
 
@@ -25,19 +25,19 @@ public class Entreprise {
         return nom;
     }
 
-    public void ajouterMagasin(Magasin magasin){
+    public void ajouterMagasin(Magasin magasin) {
         this.listeMagasins.add(magasin);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj){
+        if (this == obj) {
             return true;
         }
-        if (obj == null){
+        if (obj == null) {
             return false;
         }
-        if(!(obj instanceof Entreprise)){
+        if (!(obj instanceof Entreprise)) {
             return false;
         }
         Entreprise tmp = (Entreprise) obj;
@@ -45,9 +45,9 @@ public class Entreprise {
     }
 
     @Override
-    public String toString(){
-        String res = "L'entreprise nommée " + this.nom +" se situe à " + this.adresse + " et a comme magasins : \n";
-        for (Magasin magasin : this.listeMagasins){
+    public String toString() {
+        String res = "L'entreprise nommée " + this.nom + " se situe à " + this.adresse + " et a comme magasins : \n";
+        for (Magasin magasin : this.listeMagasins) {
             res += magasin.toString() + "\n";
         }
         return res;
