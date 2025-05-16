@@ -74,7 +74,9 @@ public class AppLibrairie {
             System.out.println("| Client                  |");
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
-            System.out.println("| A: Afficher magasins    |");
+            System.out.println("| C: Passer une commande  |");
+            System.out.println("| R: Choix mode réception |");
+            System.out.println("| A: Afficher catalogue   |");
             System.out.println("| P: Menu précédent       |");
             System.out.println("+-------------------------+");
 
@@ -83,8 +85,14 @@ public class AppLibrairie {
             if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
+            } else if (commande.equals("c")) {
+                 
+            } else if (commande.equals("c")) {
+                
+            } else if (commande.equals("r")) {
+                
             } else if (commande.equals("a")) {
-                System.out.println(entreprise.toString());
+                
             } else if (commande.equals("p")) {
                 menu3 = true;
             } else {
@@ -100,7 +108,11 @@ public class AppLibrairie {
             System.out.println("| Vendeur                 |");
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
-            System.out.println("| A: Afficher magasins    |");
+            System.out.println("| A: Ajouter un livre     |");
+            System.out.println("| S: Changer stock livre  |");
+            System.out.println("| V: Voir dispo livre     |");
+            System.out.println("| C: Passer une commande  |");
+            System.out.println("| T: Transférer livre     |");
             System.out.println("| P: Menu précédent       |");
             System.out.println("+-------------------------+");
 
@@ -110,7 +122,15 @@ public class AppLibrairie {
                 quitterApp = true;
                 menu3 = true;
             } else if (commande.equals("a")) {
-                System.out.println(entreprise.toString());
+               
+            } else if (commande.equals("s")) {
+
+            } else if (commande.equals("v")) {
+
+            } else if (commande.equals("c")) {
+
+            } else if (commande.equals("t")) {
+
             } else if (commande.equals("p")) {
                 menu3 = true;
             } else {
@@ -126,8 +146,10 @@ public class AppLibrairie {
             System.out.println("| Administrateur          |");
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
-            System.out.println("| A: Afficher magasins    |");
+            System.out.println("| C: Créer compte vendeur |");
             System.out.println("| J: ajouter magasins     |");
+            System.out.println("| G: Gérer stocks globaux |");
+            System.out.println("| S: Consulter stat vente |");
             System.out.println("| P: Menu précédent       |");
             System.out.println("+-------------------------+");
 
@@ -136,8 +158,8 @@ public class AppLibrairie {
             if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
-            } else if (commande.equals("a")) {
-                System.out.println(entreprise.toString());
+            } else if (commande.equals("c")) {
+                
             } else if (commande.equals("j")) {
                 System.out.print("nom > ");
                 String nomR = System.console().readLine();
@@ -148,6 +170,11 @@ public class AppLibrairie {
 
                 Magasin magasin = new Magasin(nomR, villeR,idR);
                 entreprise.ajouterMagasin(magasin);
+            
+            } else if (commande.equals("g")) {
+                
+            } else if (commande.equals("s")) {
+
             } else if (commande.equals("p")) {
                 menu3 = true;
             } else {
