@@ -1,16 +1,15 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Commande {
 
-    private List<Integer> qte;
     private String dateDeCommande;
     private double prixTotal;
     private char modeDeReception;
     private int idCommande;
     private Magasin magasin;
     private Client client;
-    private List<Livre> livresCommander;
+    private Map<Livre, Integer> livresCommande;
 
     public Commande(int idCommande, String dateDeCommande, char modeDeReception, Client client, Magasin magasin){
     this.idCommande = idCommande;
@@ -18,16 +17,9 @@ public class Commande {
     this.modeDeReception = modeDeReception;
     this.client = client;
     this.magasin = magasin;
-    this.qte = new ArrayList<>();
-    this.livresCommander = new ArrayList<>();
-    this.prixTotal = 0.0; 
-}
-
-
-
-    
-
-
+    this.prixTotal = 0.0;
+    this.livresCommande = new HashMap<>();
+    }
 
     public Client getClient() {
         return this.client;
@@ -39,10 +31,6 @@ public class Commande {
 
     public int getIdCommande() {
         return this.idCommande;
-    }
-
-    public List<Livre> getLivresCommander() {
-        return this.livresCommander;
     }
 
     public Magasin getMagasin() {
@@ -57,20 +45,20 @@ public class Commande {
         return this.prixTotal;
     }
 
-    public List<Integer> getQte() {
-        return this.qte;
+    public Map<Livre, Integer> getLivresCommande() {
+        return this.livresCommande;
     }
 
-    public void ajouterLivre(Livre livre, int quantite) {
-        this.livresCommander.add(livre);
-        this.qte.add(quantite);
+    public void ajouterLivre(Livre livre, Integer quantite) {
+        this.livresCommande.put(livre, quantite);
         calculerPrixTotal();
     }
 
     public void calculerPrixTotal() {
         this.prixTotal = 0;
-        for (int i = 0; i < this.livresCommander.size(); i++) {
-            this.prixTotal += this.livresCommander.get(i).getPrix() * this.qte.get(i);
+        for (Integer quantite : this.livresCommande.values()){
+            double quantiteDouble = quantite;
+            this.prixTotal += quantiteDouble;
         }
     }
 
@@ -83,16 +71,7 @@ public class Commande {
     }
 
     public void modifierStock() {
-    for (int i = 0; i < livresCommander.size(); i++) {
-        Livre livre = livresCommander.get(i);
-        int quantite = qte.get(i);
-
-        int index = magasin.getLivres().indexOf(livre);
-        if (index != -1) {
-            int stockActuel = magasin.stockLivre.get(index);
-            magasin.stockLivre.set(index, stockActuel - quantite);
-        }
-    }
+        this.magasin.supprimerLivres(this.livresCommande);
 }
 
 
@@ -103,8 +82,10 @@ public class Commande {
                 + this.client.getPrenom() + " " + this.client.getNom() + " a un prix total de " + this.prixTotal
                 + "€ et le mode de reception est " + this.modeDeReception
                 + ".\nLes livres se trouvant dans la commande sont : ";
-        for (int i = 0; i < this.livresCommander.size(); i += 1) {
-            res += this.livresCommander.get(i) + " commandé " + this.qte.get(i) + "fois\n";
+        for (Map.Entry<Livre, Integer> coupleLivre : this.livresCommande.entrySet()){
+            Livre livre = coupleLivre.getKey();
+            int quantite = coupleLivre.getValue();
+            res += livre + " commandé " + quantite + "fois\n";
         }
         return res;
     }

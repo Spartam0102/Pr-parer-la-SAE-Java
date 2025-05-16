@@ -1,5 +1,4 @@
-
-import java.util.List;
+import java.util.Map;
 
 public class Vendeur extends Personne {
 
@@ -10,7 +9,7 @@ public class Vendeur extends Personne {
     super(nom, prenom, dateDeNaissance);
     this.idVendeur = id;
     this.magasin = magasin;
-}
+    }
 
     public Magasin getMagasin() {
         return this.magasin;
@@ -20,8 +19,8 @@ public class Vendeur extends Personne {
         return this.idVendeur;
     }
 
-    public void ajouterLivre(Magasin magasin, Livre livre, int qte) {
-        magasin.ajouterLivre(List.of(livre), List.of(qte));
+    public void ajouterLivres(Map<Livre, Integer> livresAAjouter) {
+        this.magasin.ajouterLivres(livresAAjouter);
     }
 
     public void mettreAJour() {
@@ -29,35 +28,27 @@ public class Vendeur extends Personne {
     }
 
     public boolean disponibiliteLivre(Magasin magasin, Livre livre) {
-        int index = magasin.getLivres().indexOf(livre);
-        if (index != -1) {
-            return magasin.stockLivre.get(index) > 0;
-        }
-        return false;
-    }
-
-    public boolean transfererLivre(Magasin magasinDepart, Magasin magasinArrivee, Livre livre, int qte) {
-        int indexDepart = magasinDepart.getLivres().indexOf(livre);
-        if (indexDepart == -1 || magasinDepart.stockLivre.get(indexDepart) < qte) {
+        if (!this.magasin.getStockLivre().containsKey(livre)){
             return false;
         }
-        magasinDepart.stockLivre.set(indexDepart, magasinDepart.stockLivre.get(indexDepart) - qte);
-
-        int indexArrivee = magasinArrivee.getLivres().indexOf(livre);
-        if (indexArrivee == -1) {
-            magasinArrivee.getLivres().add(livre);
-            magasinArrivee.stockLivre.add(qte);
-        } else {
-            magasinArrivee.stockLivre.set(indexArrivee, magasinArrivee.stockLivre.get(indexArrivee) + qte);
+        else{
+            return true;
         }
-        return true;
     }
 
-    public Commande passerCommande(Client client, Magasin magasin, List<Livre> listeLivre, List<Integer> qte) {
+    public void transfererLivre(Magasin magasinArrivee, Map<Livre, Integer> LivresATransferer) {
+        this.magasin.supprimerLivres(LivresATransferer);
+        magasinArrivee.ajouterLivres(LivresATransferer);
+    }
+
+    public Commande passerCommande(Client client, Magasin magasin, Map<Livre, Integer> LivresACommander) {
         Commande nouvelleCommande = new Commande(generateUniqueCommandeId(), "Date actuelle", 'L', client, magasin);
-        for (int i = 0; i < listeLivre.size(); i++) {
-            nouvelleCommande.ajouterLivre(listeLivre.get(i), qte.get(i));
+        for (Map.Entry<Livre, Integer> coupleLivre : LivresACommander.entrySet()){
+            Livre livre = coupleLivre.getKey();
+            int quantite = coupleLivre.getValue();
+            nouvelleCommande.ajouterLivre(livre, quantite);
         }
+        nouvelleCommande.modifierStock();
         return nouvelleCommande;
     }
 

@@ -1,30 +1,29 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Magasin {
     private String nom;
     private String ville;
     private int idMagasin;
-    private List<Livre> livres;
-    List<Integer> stockLivre;
+    Map<Livre, Integer> stockLivre;
     List<Vendeur> lesVendeurs;
 
     public Magasin(String nom, String ville, int idMagasin) {
         this.nom = nom;
         this.ville = ville;
         this.idMagasin = idMagasin;
-        this.livres = new ArrayList<>();
-        this.stockLivre = new ArrayList<>();
+        this.stockLivre = new HashMap<>();
         this.lesVendeurs = new ArrayList<>();
-
     }
 
     public int getIdMagasin() {
         return this.idMagasin;
     }
 
-    public List<Livre> getLivres() {
-        return this.livres;
+    public Map<Livre, Integer> getStockLivre() {
+        return stockLivre;
     }
 
     public String getNom() {
@@ -35,16 +34,34 @@ public class Magasin {
         return this.ville;
     }
 
-    public void ajouterLivre(List<Livre> listeLivre, List<Integer> qte) {
-        for (int i = 0; i < listeLivre.size(); i++) {
-            Livre livre = listeLivre.get(i);
-            int quantite = qte.get(i);
-            int index = livres.indexOf(livre);
-            if (index == -1) {
-                livres.add(livre);
-                stockLivre.add(quantite);
-            } else {
-                stockLivre.set(index, stockLivre.get(index) + quantite);
+    public List<Vendeur> getLesVendeurs() {
+        return lesVendeurs;
+    }
+
+    public void ajouterLivres(Map<Livre, Integer> livresAAjouter) {
+        for (Map.Entry<Livre, Integer> coupleLivre : livresAAjouter.entrySet()){
+            Livre livre = coupleLivre.getKey();
+            int quantite = coupleLivre.getValue();
+            if (this.stockLivre.containsKey(livre)){
+                int nouvelleQuantite = this.stockLivre.get(livre) + quantite;
+                this.stockLivre.put(livre, nouvelleQuantite);
+            } 
+            else{
+                this.stockLivre.put(livre, quantite);
+            }
+        }
+    }
+
+    public void supprimerLivres(Map<Livre, Integer> livresASupprimer) {
+        for (Map.Entry<Livre, Integer> coupleLivre : livresASupprimer.entrySet()){
+            Livre livre = coupleLivre.getKey();
+            int quantite = coupleLivre.getValue();
+            if (!this.stockLivre.containsKey(livre)){
+                System.out.println("Le livre existe pas");   /*faire exception */
+            } 
+            else{
+                int nouvelleQuantite = this.stockLivre.get(livre) - quantite;
+                this.stockLivre.put(livre, nouvelleQuantite);
             }
         }
     }
