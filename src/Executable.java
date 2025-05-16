@@ -60,9 +60,9 @@ public class Executable{
     Livre livre3 = new Livre(3, "Harry Potter à l'école des sorciers", "1997-06-26", 25, 309, classifications3, editeur3, auteur3);
 
     // Création des vendeurs
-    Vendeur vendeur1 = new Vendeur("Durand", "Paul", "1985-03-14", 101);
-    Vendeur vendeur2 = new Vendeur("Martin", "Claire", "1990-07-22", 102);
-    Vendeur vendeur3 = new Vendeur("Petit", "Julien", "1978-11-02", 103);
+    Vendeur vendeur1 = new Vendeur("Durand", "Paul", "1985-03-14", 101, magasin3);
+    Vendeur vendeur2 = new Vendeur("Martin", "Claire", "1990-07-22", 102, magasin2);
+    Vendeur vendeur3 = new Vendeur("Petit", "Julien", "1978-11-02", 103, magasin5);
 
     // Création des clients
     Client client1 = new Client("Leclerc", "Marie", "1992-03-12", 201, "10 rue des Lilas, Paris");
