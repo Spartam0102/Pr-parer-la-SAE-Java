@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Executable{
 
@@ -59,6 +61,15 @@ public class Executable{
     Livre livre2 = new Livre(2, "1984", "1949-06-08", 15, 328, classifications2, editeur2, auteur2);
     Livre livre3 = new Livre(3, "Harry Potter à l'école des sorciers", "1997-06-26", 25, 309, classifications3, editeur3, auteur3);
 
+    // Ajout des livres dans les magasins
+    Map<Livre, Integer> livresAAjouter1 = new HashMap<>(Map.of(livre1, 2, livre2, 4, livre3, 3));
+    Map<Livre, Integer> livresAAjouter2 = new HashMap<>(Map.of(livre1, 5, livre3, 2));
+    Map<Livre, Integer> livresAAjouter3 = new HashMap<>(Map.of(livre1, 1, livre2, 3, livre3, 5));
+    magasin1.ajouterLivres(livresAAjouter1);
+    magasin2.ajouterLivres(livresAAjouter2);
+    magasin3.ajouterLivres(livresAAjouter3);
+
+
     // Création des vendeurs
     Vendeur vendeur1 = new Vendeur("Durand", "Paul", "1985-03-14", 101, magasin3);
     Vendeur vendeur2 = new Vendeur("Martin", "Claire", "1990-07-22", 102, magasin2);
@@ -98,52 +109,49 @@ public class Executable{
     livre3.addMagasins(magasin6);
     livre3.addMagasins(magasin7);
 
-
-
-
-    // Affichage de l'entreprise;
-    System.out.println(entreprise);
+    // // Affichage de l'entreprise;
+    // System.out.println(entreprise);
     
-    // Affichage des auteurs;
-    System.out.println(auteur1);
-    System.out.println(auteur2);
-    System.out.println(auteur3 + "\n");
+    // // Affichage des auteurs;
+    // System.out.println(auteur1);
+    // System.out.println(auteur2);
+    // System.out.println(auteur3 + "\n");
 
-    // Affichage des éditeurs;
-    System.out.println(editeur1);
-    System.out.println(editeur2);
-    System.out.println(editeur3 + "\n");
+    // // Affichage des éditeurs;
+    // System.out.println(editeur1);
+    // System.out.println(editeur2);
+    // System.out.println(editeur3 + "\n");
 
-    // Afichage des clients;
-    System.out.println(client1);
-    System.out.println(client2);
-    System.out.println(client3 + "\n");
+    // // Afichage des clients;
+    // System.out.println(client1);
+    // System.out.println(client2);
+    // System.out.println(client3 + "\n");
 
-    // Affichage des administrateurs;
-    System.out.println(admin1);
-    System.out.println(admin2);
-    System.out.println(admin3 + "\n");
+    // // Affichage des administrateurs;
+    // System.out.println(admin1);
+    // System.out.println(admin2);
+    // System.out.println(admin3 + "\n");
 
-    // Affichage des vendeurs;
-    System.out.println(vendeur1);
-    System.out.println(vendeur2);
-    System.out.println(vendeur3 + "\n");
+    // // Affichage des vendeurs;
+    // System.out.println(vendeur1);
+    // System.out.println(vendeur2);
+    // System.out.println(vendeur3 + "\n");
 
-    // Affichage des classifications;
-    System.out.println(fiction);
-    System.out.println(classique);
-    System.out.println(fantastique);
-    System.out.println(politique + "\n");
+    // // Affichage des classifications;
+    // System.out.println(fiction);
+    // System.out.println(classique);
+    // System.out.println(fantastique);
+    // System.out.println(politique + "\n");
 
-    // Affichage des livres
-    System.out.println(livre1);
-    System.out.println(livre2);
-    System.out.println(livre3 + "\n");
+    // // Affichage des livres
+    // System.out.println(livre1);
+    // System.out.println(livre2);
+    // System.out.println(livre3 + "\n");
     
-    // Affichage des commandes
-    System.out.println(commande1);
-    System.out.println(commande2);
-    System.out.println(commande3);
+    // // Affichage des commandes
+    // System.out.println(commande1);
+    // System.out.println(commande2);
+    // System.out.println(commande3);
 
     AppLibrairie app = new AppLibrairie(entreprise);
     app.run();
