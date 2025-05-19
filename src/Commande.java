@@ -63,7 +63,7 @@ public class Commande {
     }
 
     public void editerFacture() {
-
+        
     }
 
     public void setModeDeReception(char modeDeReception) {
