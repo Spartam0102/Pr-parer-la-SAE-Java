@@ -10,7 +10,6 @@ public class MagasinBD {
 		this.laConnexion=laConnexion;
 	}
 
-
 	int maxMagasin() throws SQLException{
 		int maxNum=0;
 		this.st=this.laConnexion.createStatement();
@@ -20,19 +19,6 @@ public class MagasinBD {
 
 		}
 		return maxNum;
-/* 		Statement s=c.createStatement();
-		int i= s.executeUpdate("select max(numJoueur) from JOUEUR");
-		executeUpdate(String);
-*/
-	}
-
-
-	int insererJoueur( Magasin j) throws  SQLException{
-		PreparedStatement ps=this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?,?,?,?)");
-		int numJoueur=this.maxNumMagasin()+1;
-		ps.setInt(1,numJoueur);
-        System.out.print("Commande > ");
-        String mess = System.console().readLine().strip().toLowerCase();
 
 	}
 
@@ -82,7 +68,6 @@ void majJoueur(Joueur j) throws SQLException {
     Joueur rechercherJoueurParNum(int num)throws SQLException{
     	throw new SQLException("méthode rechercherJoueurParNum à implémenter");
     }
-
 */
 	ArrayList<Magasin> listeDesMagasins() throws SQLException{
 		try(PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")){
@@ -93,7 +78,6 @@ void majJoueur(Joueur j) throws SQLException {
 			}
 			return entreprise;
 		}
-
 	}
 	
 	String rapportMessage() throws SQLException{

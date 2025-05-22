@@ -8,6 +8,7 @@ public class AppLibrairie {
 
     private ConnexionMySQL connexionMySQL;
     private MagasinBD magasinBD;
+    private Entreprise entreprise;
     private boolean connexionEtablie = false;
 
     private boolean quitterApp = false;
