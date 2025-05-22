@@ -151,7 +151,12 @@ public class Executable{
     connexionMySQL.connecter();
 
 
-    AppLibrairie app = new AppLibrairie(entreprise);
+
+
+
+        
+    AppLibrairie app = new AppLibrairie();
     app.run();
+
     }
 }

@@ -1,10 +1,34 @@
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AppLibrairie {
-    private Entreprise entreprise;
+
+    private ConnexionMySQL connexionMySQL;
+    private MagasinBD magasinBD;
+    private boolean connexionEtablie = false;
 
     private boolean quitterApp = false;
 
-    public AppLibrairie(Entreprise entreprise) {
-        this.entreprise = entreprise;
+    public AppLibrairie() {
+        // Initialiser la connexion au démarrage
+        initialiserConnexion();
+    }
+
+    private void initialiserConnexion() {
+        try {
+            this.connexionMySQL = new ConnexionMySQL();
+            this.connexionMySQL.connecter();
+            this.magasinBD = new MagasinBD(this.connexionMySQL);
+            this.connexionEtablie = true;
+            System.out.println("Connexion à la base de données établie avec succès !");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Driver MySQL non trouvé !");
+            this.connexionEtablie = false;
+        } catch (SQLException e) {
+            System.out.println("Erreur de connexion à la base de données : " + e.getMessage());
+            this.connexionEtablie = false;
+        }
     }
 
     public void run() {
@@ -12,7 +36,19 @@ public class AppLibrairie {
         while (!quitterApp) {
             menuPrincipal();
         }
+        fermerConnexion();
         auRevoir();
+    }
+
+    private void fermerConnexion() {
+        if (connexionEtablie && connexionMySQL != null) {
+            try {
+                connexionMySQL.close();
+                System.out.println("Connexion fermée.");
+            } catch (SQLException e) {
+                System.out.println("Erreur lors de la fermeture de la connexion : " + e.getMessage());
+            }
+        }
     }
 
     public void menuPrincipal() {
@@ -32,7 +68,7 @@ public class AppLibrairie {
                 menuActif = false;
             } else if (commande.equals("c")) {
                 menuConnexion();
-                menuActif = false; // revient au menu principal après connexion
+                menuActif = false;
             } else {
                 System.out.println("Commande invalide.");
             }
@@ -84,7 +120,7 @@ public class AppLibrairie {
                 quitterApp = true;
                 menu3 = true;
             } else if (commande.equals("a")) {
-                System.out.println(entreprise.toString());
+                afficherMagasins();
             } else if (commande.equals("p")) {
                 menu3 = true;
             } else {
@@ -110,7 +146,7 @@ public class AppLibrairie {
                 quitterApp = true;
                 menu3 = true;
             } else if (commande.equals("a")) {
-                System.out.println(entreprise.toString());
+                afficherMagasins();
             } else if (commande.equals("p")) {
                 menu3 = true;
             } else {
@@ -127,7 +163,7 @@ public class AppLibrairie {
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
             System.out.println("| A: Afficher magasins    |");
-            System.out.println("| J: ajpouter magasins    |");
+            System.out.println("| J: Ajouter magasins     |");
             System.out.println("| P: Menu précédent       |");
             System.out.println("+-------------------------+");
 
@@ -137,23 +173,55 @@ public class AppLibrairie {
                 quitterApp = true;
                 menu3 = true;
             } else if (commande.equals("a")) {
-                System.out.println(entreprise.toString());
+                afficherMagasins();
             } else if (commande.equals("j")) {
-                System.out.print("nom > ");
-                String nomR = System.console().readLine();
-                System.out.print("ville > ");
-                String villeR = System.console().readLine();
-                System.out.print("id > ");
-                int idR = Integer.parseInt(System.console().readLine());
-
-                Magasin magasin = new Magasin(nomR, villeR,idR);
-                entreprise.ajouterMagasin(magasin);
+                ajouterMagasin();
             } else if (commande.equals("p")) {
                 menu3 = true;
             } else {
                 System.out.println("Commande invalide.");
             }
         }
+    }
+
+    private void afficherMagasins() {
+
+
+        try {
+            List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
+
+            System.out.println("\nListe des magasins :");
+            System.out.println("========================");
+
+            if (listeMagasins.isEmpty()) {
+                System.out.println("Aucun magasin trouvé dans la base de données.");
+            } else {
+                for (Magasin magasin : listeMagasins) {
+                    System.out.println(magasin.getNom() +
+                            " (Ville: " + magasin.getVille() +
+                            ", ID: " + magasin.getIdMagasin() + ")");
+                }
+            }
+            System.out.println();
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des magasins : " + e.getMessage());
+        }
+    }
+
+    private void ajouterMagasin() {
+
+
+        System.out.print("Nom du magasin > ");
+        String nomR = System.console().readLine();
+        System.out.print("Ville > ");
+        String villeR = System.console().readLine();
+        System.out.print("ID > ");
+        int idR = Integer.parseInt(System.console().readLine());
+
+        Magasin magasin = new Magasin(nomR, villeR, idR);
+        System.out.println("Magasin créé : " + magasin.getNom());
+
     }
 
     public void bienvenue() {

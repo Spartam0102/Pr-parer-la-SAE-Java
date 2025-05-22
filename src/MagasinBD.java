@@ -10,10 +10,11 @@ public class MagasinBD {
 		this.laConnexion=laConnexion;
 	}
 
-	int maxNumMagasin() throws SQLException{
+
+	int maxMagasin() throws SQLException{
 		int maxNum=0;
 		this.st=this.laConnexion.createStatement();
-		ResultSet resultat=st.executeQuery("SELECT MAX(idMagasin) maxn FROM magasin;");
+		ResultSet resultat=st.executeQuery("SELECT MAX(idmag) maxn FROM MAGASIN;");
 		if(resultat.next()){
 			maxNum=resultat.getInt("maxn");
 
@@ -32,6 +33,14 @@ public class MagasinBD {
 		ps.setInt(1,numJoueur);
         System.out.print("Commande > ");
         String mess = System.console().readLine().strip().toLowerCase();
+
+	}
+
+/* 
+	int insererJoueur( Joueur j) throws  SQLException{
+		PreparedStatement ps=this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)");
+		int numJoueur=this.maxNumJoueur()+1;
+		ps.setInt(1,numJoueur);
 		ps.setString(2, j.getPseudo());
 		ps.setString(3, j.getMotdepasse());
 		if(j.isAbonne()){
@@ -74,8 +83,17 @@ void majJoueur(Joueur j) throws SQLException {
     	throw new SQLException("méthode rechercherJoueurParNum à implémenter");
     }
 
-	ArrayList<Joueur> listeDesJoueurs() throws SQLException{
-		throw new SQLException("méthode listeDesJoueurs à implémenter");
+*/
+	ArrayList<Magasin> listeDesMagasins() throws SQLException{
+		try(PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")){
+			ResultSet rs = ps.executeQuery();
+			ArrayList<Magasin> entreprise=new ArrayList<>();
+			while (rs.next()) {
+				entreprise.add(new Magasin(rs.getString("nommag"),rs.getString("villemag"),rs.getInt("idmag")));				
+			}
+			return entreprise;
+		}
+
 	}
 	
 	String rapportMessage() throws SQLException{
