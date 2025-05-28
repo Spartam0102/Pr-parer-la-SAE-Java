@@ -62,10 +62,21 @@ public class Executable{
     Livre livre2 = new Livre(2, "1984", "1949-06-08", 15, 328, classifications2, editeur2, auteur2);
     Livre livre3 = new Livre(3, "Harry Potter à l'école des sorciers", "1997-06-26", 25, 309, classifications3, editeur3, auteur3);
 
+    // Ajout des livres dans les magasins
+    Map<Livre, Integer> livresAAjouter1 = new HashMap<>(Map.of(livre1, 2, livre2, 4, livre3, 3));
+    Map<Livre, Integer> livresAAjouter2 = new HashMap<>(Map.of(livre1, 5, livre3, 2));
+    Map<Livre, Integer> livresAAjouter3 = new HashMap<>(Map.of(livre1, 1, livre2, 3, livre3, 5));
+    magasin1.ajouterLivres(livresAAjouter1);
+    magasin2.ajouterLivres(livresAAjouter2);
+    magasin3.ajouterLivres(livresAAjouter3);
+
+
     // Création des vendeurs
+
 //    Vendeur vendeur1 = new Vendeur("Durand", "Paul", "1985-03-14", 101);
 //    Vendeur vendeur2 = new Vendeur("Martin", "Claire", "1990-07-22", 102);
 //    Vendeur vendeur3 = new Vendeur("Petit", "Julien", "1978-11-02", 103);
+
 
     // Création des clients
     Client client1 = new Client("Leclerc", "Marie", "1992-03-12", 201, "10 rue des Lilas, Paris");
@@ -101,12 +112,10 @@ public class Executable{
     livre3.addMagasins(magasin6);
     livre3.addMagasins(magasin7);
 
-
-
-
-    // Affichage de l'entreprise;
-    System.out.println(entreprise);
+    // // Affichage de l'entreprise;
+    // System.out.println(entreprise);
     
+
     // Affichage des auteurs;
     System.out.println(auteur1);
     System.out.println(auteur2);
@@ -142,11 +151,12 @@ public class Executable{
     System.out.println(livre1);
     System.out.println(livre2);
     System.out.println(livre3 + "\n");
+
     
-    // Affichage des commandes
-    System.out.println(commande1);
-    System.out.println(commande2);
-    System.out.println(commande3);
+    // // Affichage des commandes
+    // System.out.println(commande1);
+    // System.out.println(commande2);
+    // System.out.println(commande3);
 
 
 

@@ -1,9 +1,11 @@
 
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+
 public class AppLibrairie {
 
     private ConnexionMySQL connexionMySQL;
@@ -146,9 +148,11 @@ public class AppLibrairie {
             else if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
+
             } else if (commande.equals("a")) {
                 afficherMagasins();
             } else if (commande.equals("p")) {
+
 
             }
             else {
@@ -369,7 +373,9 @@ public class AppLibrairie {
                 quitterApp = true;
                 menu3 = true;
             } else if (commande.equals("a")) {
+
                 afficherMagasins();
+
                
             } else if (commande.equals("s")) {
 
@@ -394,8 +400,10 @@ public class AppLibrairie {
             System.out.println("| Administrateur          |");
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
+
             System.out.println("| A: Afficher magasins    |");
             System.out.println("| J: Ajouter magasins     |");
+
             System.out.println("| C: Créer compte vendeur |");
             System.out.println("| J: ajouter magasins     |");
             System.out.println("| G: Gérer stocks globaux |");
@@ -408,10 +416,12 @@ public class AppLibrairie {
             if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
+
             } else if (commande.equals("a")) {
                 afficherMagasins();
             } else if (commande.equals("j")) {
                 ajouterMagasin();
+
             } else if (commande.equals("c")) {
                 
             } else if (commande.equals("j")) {

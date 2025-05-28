@@ -4,6 +4,7 @@ public class ConnexionMySQL {
 	private Connection mysql=null;
 	private boolean connecte=false;
 
+
 	public ConnexionMySQL() throws ClassNotFoundException{
 		Class.forName("org.mariadb.jdbc.Driver");
 
@@ -22,6 +23,7 @@ public class ConnexionMySQL {
 	}
 	public void close() throws SQLException {
 		this.mysql.close();
+
 		// fermer la connexion
 		this.connecte=false;
 	}
