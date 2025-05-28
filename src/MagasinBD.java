@@ -22,6 +22,57 @@ public class MagasinBD {
 
 	}
 
+	/*
+	int insererJoueur( Joueur j) throws  SQLException{
+		PreparedStatement ps = this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)"); 
+		
+		int numJoueur = this.maxNumJoueur()+1; 
+		ps.setInt(1,numJoueur);
+		ps.setString(2, j.getPseudo());
+		ps.setString(3, j.getMotdepasse());	
+		if (j.isAbonne())
+			ps.setString(4, "O");
+		else 
+			ps.setString(4, "N");
+			
+		ps.setString(5, ""+j.getMain());
+		ps.setInt(6, j.getNiveau());
+
+		ps.executeUpdate(); 
+		return numJoueur; 
+
+	}
+
+
+	void effacerJoueur(int num) throws SQLException {
+    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
+    ps.setInt(1, num);
+    ps.executeUpdate();
+}
+
+    void majJoueur(Joueur j)throws SQLException{
+		throw new SQLException("méthode majJoueur à implémenter");
+    }
+
+    Joueur rechercherJoueurParNum(int num) throws SQLException {
+    PreparedStatement ps = this.laConnexion.prepareStatement("SELECT * FROM JOUEUR WHERE numJoueur = ?");
+    ps.setInt(1, num);
+    ResultSet rs = ps.executeQuery();
+
+    if (rs.next()) {
+        String pseudo = rs.getString("pseudo");
+        String motdepasse = rs.getString("motdepasse");
+        boolean abonne = rs.getString("abonne").equalsIgnoreCase("O");
+        String main = rs.getString("main");
+        int niveau = rs.getInt("niveau");
+
+        return new Joueur(num, pseudo, motdepasse, abonne, main.charAt(0), niveau);
+    } else {
+        return null; 
+    }
+}
+	 */
+
 /* 
 	int insererJoueur( Joueur j) throws  SQLException{
 		PreparedStatement ps=this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)");
