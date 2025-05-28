@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class Executable{
 
     public static void main(String[] args) {
+
     
     // Création de l'entreprise
     Entreprise entreprise = new Entreprise("Livre Express", "Paris");
@@ -71,9 +72,11 @@ public class Executable{
 
 
     // Création des vendeurs
-    Vendeur vendeur1 = new Vendeur("Durand", "Paul", "1985-03-14", 101, magasin3);
-    Vendeur vendeur2 = new Vendeur("Martin", "Claire", "1990-07-22", 102, magasin2);
-    Vendeur vendeur3 = new Vendeur("Petit", "Julien", "1978-11-02", 103, magasin5);
+
+//    Vendeur vendeur1 = new Vendeur("Durand", "Paul", "1985-03-14", 101);
+//    Vendeur vendeur2 = new Vendeur("Martin", "Claire", "1990-07-22", 102);
+//    Vendeur vendeur3 = new Vendeur("Petit", "Julien", "1978-11-02", 103);
+
 
     // Création des clients
     Client client1 = new Client("Leclerc", "Marie", "1992-03-12", 201, "10 rue des Lilas, Paris");
@@ -97,6 +100,73 @@ public class Executable{
     // Commande 3
     Commande commande3 = new Commande(1003, "2025-05-07", 'C', client1, magasin3);
     commande3.ajouterLivre(livre1, 1);
+
+    // Ajout des livres à des magasins
+    livre1.addMagasins(magasin1);
+    livre1.addMagasins(magasin2);
+
+    livre2.addMagasins(magasin3);
+    livre2.addMagasins(magasin4);
+    livre2.addMagasins(magasin5);
+
+    livre3.addMagasins(magasin6);
+    livre3.addMagasins(magasin7);
+
+    // // Affichage de l'entreprise;
+    // System.out.println(entreprise);
+    
+
+    // Affichage des auteurs;
+    System.out.println(auteur1);
+    System.out.println(auteur2);
+    System.out.println(auteur3 + "\n");
+
+    // Affichage des éditeurs;
+    System.out.println(editeur1);
+    System.out.println(editeur2);
+    System.out.println(editeur3 + "\n");
+
+    // Afichage des clients;
+    System.out.println(client1);
+    System.out.println(client2);
+    System.out.println(client3 + "\n");
+
+    // Affichage des administrateurs;
+    System.out.println(admin1);
+    System.out.println(admin2);
+    System.out.println(admin3 + "\n");
+
+    // Affichage des vendeurs;
+//    System.out.println(vendeur1);
+//    System.out.println(vendeur2);
+//    System.out.println(vendeur3 + "\n");
+
+    // Affichage des classifications;
+    System.out.println(fiction);
+    System.out.println(classique);
+    System.out.println(fantastique);
+    System.out.println(politique + "\n");
+
+    // Affichage des livres
+    System.out.println(livre1);
+    System.out.println(livre2);
+    System.out.println(livre3 + "\n");
+
+    
+    // // Affichage des commandes
+    // System.out.println(commande1);
+    // System.out.println(commande2);
+    // System.out.println(commande3);
+
+
+
+
+
+
+
+
+    
+
 
     // Ajout des livres à des magasins
     livre1.addMagasins(magasin1);
@@ -153,7 +223,8 @@ public class Executable{
     // System.out.println(commande2);
     // System.out.println(commande3);
 
-    AppLibrairie app = new AppLibrairie(entreprise);
+    AppLibrairie app = new AppLibrairie();
     app.run();
+
     }
 }
