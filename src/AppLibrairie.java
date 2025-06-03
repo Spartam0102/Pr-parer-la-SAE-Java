@@ -1,15 +1,17 @@
 
-
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+
 public class AppLibrairie {
 
     private ConnexionMySQL connexionMySQL;
     private MagasinBD magasinBD;
+    private LivreBD LivreBD;
     private Entreprise entreprise;
     private boolean connexionEtablie = false;
 
@@ -25,6 +27,7 @@ public class AppLibrairie {
             this.connexionMySQL = new ConnexionMySQL();
             this.connexionMySQL.connecter();
             this.magasinBD = new MagasinBD(this.connexionMySQL);
+            this.LivreBD = new LivreBD(this.connexionMySQL);
             this.connexionEtablie = true;
             System.out.println("Connexion à la base de données établie avec succès !");
         } catch (ClassNotFoundException ex) {
@@ -126,26 +129,21 @@ public class AppLibrairie {
 
             if (commande.equals("i")) {
                 System.out.println(client.toString());
-            }
-            else if (commande.equals("a")) {
+            } else if (commande.equals("a")) {
                 menuMagasins(client);
-            } 
-            else if (commande.equals("v")) {
-                if (client.getPanier().isEmpty()){
+            } else if (commande.equals("v")) {
+                if (client.getPanier().isEmpty()) {
                     System.out.println("Panier vide");
-                }
-                else{
-                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()){
+                } else {
+                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()) {
                         String livre = coupleLivre.getKey().getNomLivre();
                         int quantite = coupleLivre.getValue();
                         System.out.println(livre + " (" + quantite + ")\n");
                     }
                 }
-            }
-            else if (commande.equals("m")) {
+            } else if (commande.equals("m")) {
                 menu3 = true;
-            }
-            else if (commande.equals("q")) {
+            } else if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
 
@@ -153,9 +151,7 @@ public class AppLibrairie {
                 afficherMagasins();
             } else if (commande.equals("p")) {
 
-
-            }
-            else {
+            } else {
                 System.out.println("Commande invalide.");
             }
         }
@@ -167,10 +163,10 @@ public class AppLibrairie {
             System.out.println("+-------------------------+");
             System.out.println("| Magasins                |");
             System.out.println("+-------------------------+");
-            for (int i = 0 ; i < this.entreprise.getListeMagasins().size() ; i++){
+            for (int i = 0; i < this.entreprise.getListeMagasins().size(); i++) {
                 String nomMagasin = this.entreprise.getListeMagasins().get(i).getNom();
                 int longueurRestante = 21 - nomMagasin.length();
-                for (int y = 0 ; y < longueurRestante ; y++){
+                for (int y = 0; y < longueurRestante; y++) {
                     nomMagasin += " ";
                 }
                 int num = i + 1;
@@ -186,28 +182,23 @@ public class AppLibrairie {
             if (commande.matches("[1-7]")) {
                 int commandeInt = Integer.parseInt(commande);
                 menuUnMagasin(this.entreprise.getListeMagasins().get(commandeInt - 1), client);
-            }
-             else if (commande.equals("v")) {
-                if (client.getPanier().isEmpty()){
+            } else if (commande.equals("v")) {
+                if (client.getPanier().isEmpty()) {
                     System.out.println("Panier vide");
-                }
-                else{
-                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()){
+                } else {
+                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()) {
                         String livre = coupleLivre.getKey().getNomLivre();
                         int quantite = coupleLivre.getValue();
                         System.out.println(livre + " (" + quantite + ")\n");
                     }
                 }
-            }
-            else if (commande.equals("m")) {
+            } else if (commande.equals("m")) {
 
                 menu3 = true;
-            }
-            else if (commande.equals("q")) {
+            } else if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
-            }
-            else {
+            } else {
                 System.out.println("Commande invalide.");
             }
         }
@@ -218,10 +209,10 @@ public class AppLibrairie {
         while (!menu3 && !quitterApp) {
             System.out.println("+-------------------------+");
             String nomMagasin = magasin.getNom();
-                int longueurRestante = 24 - nomMagasin.length();
-                for (int y = 0 ; y < longueurRestante ; y++){
-                    nomMagasin += " ";
-                }
+            int longueurRestante = 24 - nomMagasin.length();
+            for (int y = 0; y < longueurRestante; y++) {
+                nomMagasin += " ";
+            }
             System.out.println("| " + nomMagasin + "|");
             System.out.println("+-------------------------+");
             System.out.println("| I: Infos Magasin        |");
@@ -233,34 +224,27 @@ public class AppLibrairie {
 
             String commande = lireCommande();
 
-           
             if (commande.equals("i")) {
                 System.out.println(magasin.toString());
-            }
-            else if (commande.equals("s")) {
+            } else if (commande.equals("s")) {
                 Map<Livre, Integer> stock = magasin.getStockLivre();
                 menuStock(stock, client);
-            }
-            else if (commande.equals("v")) {
-                if (client.getPanier().isEmpty()){
+            } else if (commande.equals("v")) {
+                if (client.getPanier().isEmpty()) {
                     System.out.println("Panier vide");
-                }
-                else{
-                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()){
+                } else {
+                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()) {
                         String livre = coupleLivre.getKey().getNomLivre();
                         int quantite = coupleLivre.getValue();
                         System.out.println(livre + " (" + quantite + ")\n");
                     }
                 }
-            }
-            else if (commande.equals("m")) {
+            } else if (commande.equals("m")) {
                 menu3 = true;
-            }
-            else if (commande.equals("q")) {
+            } else if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
-            }
-            else {
+            } else {
                 System.out.println("Commande invalide.");
             }
         }
@@ -278,15 +262,15 @@ public class AppLibrairie {
             System.out.println("| livre                   |");
             System.out.println("+-------------------------+");
             int num = 1;
-            for (Map.Entry<Livre, Integer> coupleLivre : stock.entrySet()){
+            for (Map.Entry<Livre, Integer> coupleLivre : stock.entrySet()) {
                 String livre = coupleLivre.getKey().getNomLivre();
                 if (livre.length() >= 17) {
                     livre = livre.substring(0, 17 - 3) + "...";
                 }
                 int quantite = coupleLivre.getValue();
                 int longueurRestante = 17 - livre.length();
-                livre += " (" + quantite +")";
-                for (int y = 0 ; y < longueurRestante ; y++){
+                livre += " (" + quantite + ")";
+                for (int y = 0; y < longueurRestante; y++) {
                     livre += " ";
                 }
                 System.out.println("| " + num + ": " + livre + "|");
@@ -315,38 +299,31 @@ public class AppLibrairie {
                     }
                     i++;
                 }
-                if (client.getPanier().get(livre)!= null){
-                    if (quantiteRestante <= client.getPanier().get(livre)){
+                if (client.getPanier().get(livre) != null) {
+                    if (quantiteRestante <= client.getPanier().get(livre)) {
                         System.out.println("Stock insuffisant");
-                    }
-                    else{
+                    } else {
                         client.ajouterLivrePanier(livre);
                     }
-                }
-                else{
+                } else {
                     client.ajouterLivrePanier(livre);
                 }
-            }
-            else if (commande.equals("v")) {
-                if (client.getPanier().isEmpty()){
+            } else if (commande.equals("v")) {
+                if (client.getPanier().isEmpty()) {
                     System.out.println("Panier vide");
-                }
-                else{
-                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()){
+                } else {
+                    for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()) {
                         String livre = coupleLivre.getKey().getNomLivre();
                         int quantite = coupleLivre.getValue();
                         System.out.println(livre + " (" + quantite + ")\n");
                     }
                 }
-            }
-            else if (commande.equals("m")) {
+            } else if (commande.equals("m")) {
                 menu3 = true;
-            }
-            else if (commande.equals("q")) {
+            } else if (commande.equals("q")) {
                 quitterApp = true;
                 menu3 = true;
-            }
-            else {
+            } else {
                 System.out.println("Commande invalide.");
             }
         }
@@ -374,9 +351,8 @@ public class AppLibrairie {
                 menu3 = true;
             } else if (commande.equals("a")) {
 
-                afficherMagasins();
+                ajouterLivre();
 
-               
             } else if (commande.equals("s")) {
 
             } else if (commande.equals("v")) {
@@ -400,12 +376,9 @@ public class AppLibrairie {
             System.out.println("| Administrateur          |");
             System.out.println("+-------------------------+");
             System.out.println("| Q: Quitter              |");
-
             System.out.println("| A: Afficher magasins    |");
             System.out.println("| J: Ajouter magasins     |");
-
             System.out.println("| C: Créer compte vendeur |");
-            System.out.println("| J: ajouter magasins     |");
             System.out.println("| G: Gérer stocks globaux |");
             System.out.println("| S: Consulter stat vente |");
             System.out.println("| P: Menu précédent       |");
@@ -423,20 +396,9 @@ public class AppLibrairie {
                 ajouterMagasin();
 
             } else if (commande.equals("c")) {
-                
-            } else if (commande.equals("j")) {
-                System.out.print("nom > ");
-                String nomR = System.console().readLine();
-                System.out.print("ville > ");
-                String villeR = System.console().readLine();
-                System.out.print("id > ");
-                int idR = Integer.parseInt(System.console().readLine());
 
-                Magasin magasin = new Magasin(nomR, villeR,idR);
-                entreprise.ajouterMagasin(magasin);
-            
             } else if (commande.equals("g")) {
-                
+
             } else if (commande.equals("s")) {
 
             } else if (commande.equals("p")) {
@@ -448,7 +410,6 @@ public class AppLibrairie {
     }
 
     private void afficherMagasins() {
-
 
         try {
             List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
@@ -474,17 +435,32 @@ public class AppLibrairie {
 
     private void ajouterMagasin() {
 
-
         System.out.print("Nom du magasin > ");
         String nomR = System.console().readLine();
-        System.out.print("Ville > ");
-        String villeR = System.console().readLine();
-        System.out.print("ID > ");
-        int idR = Integer.parseInt(System.console().readLine());
+        System.out.print("Ville du magasin > ");
+        String villem = System.console().readLine();
+        Magasin nouveau = new Magasin(nomR, villem, 1);
+        try {
+            int nb = magasinBD.insererMagasin(nouveau);
+            System.out.println("magasin bien inserer" + nb);
+        } catch (SQLException ex) {
+            System.out.println("erreur");
 
-        Magasin magasin = new Magasin(nomR, villeR, idR);
-        System.out.println("Magasin créé : " + magasin.getNom());
+        }
+    }
 
+    private void ajouterLivre() {
+
+        System.out.print("isbin du livre > ");
+        String isbnL = System.console().readLine();
+
+        try {
+            ResultSet nb = LivreBD.VerificationIsbn(isbnL);
+            System.out.println("cool"+nb);
+        } catch (SQLException ex) {
+            System.out.println("erreur");
+
+        }
     }
 
     public void bienvenue() {

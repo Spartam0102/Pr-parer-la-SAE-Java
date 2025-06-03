@@ -3,26 +3,28 @@ import java.util.ArrayList;
 import java.util.AbstractMap;
 import java.util.Map;
 
-public class MagasinBD {
+public class LivreBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	MagasinBD(ConnexionMySQL laConnexion){
+	LivreBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-	int maxNumMagasin() throws SQLException{
-		int maxNum=0;
-		this.st=this.laConnexion.createStatement();
-		ResultSet resultat=st.executeQuery("SELECT MAX(idmag) maxn FROM MAGASIN;");
-		if(resultat.next()){
-			maxNum=resultat.getInt("maxn");
+ResultSet VerificationIsbn(String isbn) throws SQLException {
+    this.st = this.laConnexion.createStatement();
+    ResultSet resultat = st.executeQuery("SELECT * FROM LIVRE WHERE isbn='" + isbn + "';");
+    System.out.println("SELECT * FROM LIVRE WHERE isbn='" + isbn + "';");
 
-		}
-		return maxNum;
+    if (!resultat.next()) {
+        System.out.println("Aucun livre trouvé avec l'ISBN : " + isbn);
+        return null;
+    }
+    resultat.beforeFirst();
 
-	}
+    return resultat;
+}
 
-
+	/*
 	int insererMagasin( Magasin m) throws  SQLException{
 		PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?)"); 
 		
@@ -36,7 +38,7 @@ public class MagasinBD {
 
 	}
 
-	/*
+
 	void effacerJoueur(int num) throws SQLException {
     PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
     ps.setInt(1, num);
