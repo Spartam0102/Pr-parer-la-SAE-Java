@@ -36,16 +36,18 @@ public class MagasinBD {
 
 	}
 
-	/*
-	void effacerJoueur(int num) throws SQLException {
-    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
+	
+	void effacerMagasin(int num) throws SQLException {
+    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");
     ps.setInt(1, num);
     ps.executeUpdate();
 }
 
+/*
     void majJoueur(Joueur j)throws SQLException{
 		throw new SQLException("méthode majJoueur à implémenter");
     }
+
 
     Joueur rechercherJoueurParNum(int num) throws SQLException {
     PreparedStatement ps = this.laConnexion.prepareStatement("SELECT * FROM JOUEUR WHERE numJoueur = ?");
