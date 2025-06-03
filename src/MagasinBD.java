@@ -2,6 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.AbstractMap;
 import java.util.Map;
+import java.util.HashMap;
 
 public class MagasinBD {
 	ConnexionMySQL laConnexion;
@@ -120,9 +121,26 @@ void majJoueur(Joueur j) throws SQLException {
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Magasin> entreprise=new ArrayList<>();
 			while (rs.next()) {
-				entreprise.add(new Magasin(rs.getString("nommag"),rs.getString("villemag"),rs.getInt("idmag")));				
+				Magasin magasin = new Magasin(rs.getString("nommag"),rs.getString("villemag"),rs.getInt("idmag"));	
+				this.ajouterLivreDansMagasins(magasin);
+				entreprise.add(magasin);		
 			}
 			return entreprise;
+		}
+	}
+	
+	void ajouterLivreDansMagasins(Magasin magasin) throws SQLException{
+		try(PreparedStatement ps = laConnexion.prepareStatement("select * from POSSEDER;")){
+			ResultSet rs = ps.executeQuery();
+			Map<Livre, Integer> livresAAjouter = new HashMap<>();
+			while (rs.next()) {
+				if((rs.getString("idmag")).equals(magasin.getIdMagasin() + "")){
+					Livre livre = new Livre(Integer.parseInt(rs.getString("qte")), "morain", "15-51-54", 0, 0, null, null, null);
+					// !!!!!!!!!!!!! Prendre aussi les infos de livres dans la base de donnée
+					livresAAjouter.put(livre, Integer.parseInt(rs.getString("qte")));
+				}
+				magasin.ajouterLivres(livresAAjouter);		
+			}
 		}
 	}
 	

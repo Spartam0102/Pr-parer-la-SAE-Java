@@ -21,7 +21,6 @@ public class AppLibrairieAdmin {
             System.out.println("+-------------------------+");
             System.out.println("| Administrateur          |");
             System.out.println("+-------------------------+");
-            System.out.println("| Q: Quitter              |");
             System.out.println("| A: Afficher magasins    |");
             System.out.println("| J: Ajouter magasins     |");
             System.out.println("| U: Supprimer magasins   |");
@@ -29,6 +28,7 @@ public class AppLibrairieAdmin {
             System.out.println("| G: Gérer stocks globaux |");
             System.out.println("| S: Consulter stat vente |");
             System.out.println("| P: Menu précédent       |");
+            System.out.println("| Q: Quitter              |");
             System.out.println("+-------------------------+");
 
             String commande = lireCommande();
