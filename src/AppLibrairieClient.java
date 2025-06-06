@@ -19,19 +19,27 @@ public class AppLibrairieClient {
         System.out.println("\nConnexion :");
         System.out.println("========================");
         System.out.print("Votre id > ");
-        String idStr = System.console().readLine();
-        int id = Integer.parseInt(idStr);
         try{
-            return clientBD.recupererClient(id);
-        } catch(SQLException e){
-            System.out.println("Erreur lors de la récupération du client : " + e.getMessage());
-            return null;
+            String idStr = System.console().readLine();
+            int id = Integer.parseInt(idStr);
+            try{
+                return clientBD.recupererClient(id);
+            } catch(SQLException e){
+                System.out.println("Erreur lors de la récupération du client : " + e.getMessage());
+                return null;
+            }
         }
+        catch(NumberFormatException e){System.out.println("Veuillez rentrer un entier");}
+        return null;
+        
     }
 
 
     public void menuClient() {
         Client client = this.menuClientConexion();
+        while (client == null){
+            client = this.menuClientConexion();
+        }
         boolean menu3 = false;
         while (!menu3 && !quitterApp) {
             System.out.println("+-------------------------+");
@@ -150,8 +158,12 @@ public class AppLibrairieClient {
             if (commande.equals("i")) {
                 System.out.println(magasin.toString());
             } else if (commande.equals("s")) {
-                Map<Livre, Integer> stock = magasin.getStockLivre();
-                menuStock(stock, client);
+                try{
+                    Map<Livre, Integer> stock = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
+                    menuStock(stock, client);
+                }
+                catch (SQLException e) {System.out.println("Erreur lors de la récupération des magasins : " + e.getMessage());
+            }
             } else if (commande.equals("v")) {
                 if (client.getPanier().isEmpty()) {
                     System.out.println("Panier vide");
@@ -179,26 +191,30 @@ public class AppLibrairieClient {
             System.out.println("+-------------------------+");
             System.out.println("| Stock                   |");
             System.out.println("+-------------------------+");
+            int num = 1;
+            for (Map.Entry<Livre, Integer> coupleLivre : stock.entrySet()) {
+                if (!(coupleLivre.getValue() == 0)){
+                    String livre = coupleLivre.getKey().getNomLivre();
+                    if (livre.length() >= 17){
+                        
+                            livre = livre.substring(0, 17 - 3) + "...";
+                    }
+                    int quantite = coupleLivre.getValue();
+                    int longueurRestante = 17 - livre.length();
+                    livre += " (" + quantite + ")";
+                    for (int y = 0; y < longueurRestante; y++) {
+                        livre += " ";
+                    }
+                    System.out.println("| " + num + ": " + livre + "|");
+                    num += 1;
+                }
+            }
+            System.out.println("+-------------------------+");
             System.out.println("| Pour ajouter un livre à |");
             System.out.println("| votre panier, entrez le |");
             System.out.println("| numéro correspondant au |");
             System.out.println("| livre                   |");
             System.out.println("+-------------------------+");
-            int num = 1;
-            for (Map.Entry<Livre, Integer> coupleLivre : stock.entrySet()) {
-                String livre = coupleLivre.getKey().getNomLivre();
-                if (livre.length() >= 17) {
-                    livre = livre.substring(0, 17 - 3) + "...";
-                }
-                int quantite = coupleLivre.getValue();
-                int longueurRestante = 17 - livre.length();
-                livre += " (" + quantite + ")";
-                for (int y = 0; y < longueurRestante; y++) {
-                    livre += " ";
-                }
-                System.out.println("| " + num + ": " + livre + "|");
-                num += 1;
-            }
             System.out.println("| V: Voir mon panier      |");
             System.out.println("| M: Menu précédent       |");
             System.out.println("| Q: Quitter              |");
@@ -207,6 +223,7 @@ public class AppLibrairieClient {
             String commande = lireCommande();
 
             int nbLivreDiff = stock.size();
+            System.out.println(nbLivreDiff);
 
             if (commande.matches("[1-" + nbLivreDiff + "]")) {
                 int commandeInt = Integer.parseInt(commande);
