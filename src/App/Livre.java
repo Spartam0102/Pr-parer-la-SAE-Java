@@ -90,9 +90,9 @@ public class Livre {
 /* 
     @Override
     public String toString() {
-        String res = "Le livre " + this.nomLivre + " d'id " + this.idLivre + ", écrit par " + this.auteur.getPrenom()
-                + " " + this.auteur.getNom() + ", a été publié le " + this.dateDePublication
-                + " par " + this.editeur.getNomEdit() + ". Il coûte " + this.prix + "€ et contient " + this.nbPage
+        String res = "Le livre " + this.nomLivre + " d'id " + this.idLivre + ", Ã©crit par " + this.auteur.getPrenom()
+                + " " + this.auteur.getNom() + ", a Ã©tÃ© publiÃ© le " + this.dateDePublication
+                + " par " + this.editeur.getNomEdit() + ". Il coÃ»te " + this.prix + "â‚¬ et contient " + this.nbPage
                 + " pages. Il a comme classification";
 
         if (this.magasins.isEmpty()) {
