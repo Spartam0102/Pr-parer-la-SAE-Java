@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-
 public class AppLibrairie {
 
     private ConnexionMySQL connexionMySQL;
@@ -133,6 +132,7 @@ public class AppLibrairie {
                 quitterApp = true;
                 menu3 = true;
             } else if (commande.equals("a")) {
+                System.err.println("caca");
 
                 ajouterLivre();
 
@@ -156,14 +156,68 @@ public class AppLibrairie {
 
         System.out.print("isbin du livre > ");
         String isbnL = System.console().readLine();
+        long isbnLI = Long.parseLong(isbnL);
+
+        System.out.print("titre du livre > ");
+        String titreL = System.console().readLine();
+        System.out.print("nbpages du livre > ");
+        String nbpagesL = System.console().readLine();
+        int nbpagesLI = Integer.parseInt(nbpagesL);
+        System.out.print("datepubli du livre > ");
+        String datepubliL = System.console().readLine();
+        System.out.print("prix du livre > ");
+        String prixL = System.console().readLine();
+        double prixLI = Double.parseDouble(prixL);
+
+        List<String> classification = new ArrayList<>();
+        boolean passer = true;
+        while (passer) {
+            System.out.print("classifications du livre sinon P pour passer> ");
+            String commande = lireCommande();
+            if (commande.equals("p")) {
+                passer = false;
+            } else {
+                classification.add(commande);
+
+            }
+        }
+
+        List<String> auteur = new ArrayList<>();
+        passer = true;
+        while (passer) {
+            System.out.print("auteur du livre sinon P pour passer> ");
+            String commande = lireCommande();
+            if (commande.equals("p")) {
+                passer = false;
+            } else {
+                auteur.add(commande);
+
+            }
+        }
+
+        List<Integer> editeur = new ArrayList<>();
+        passer = true;
+        while (passer) {
+            System.out.print("editeur du livre sinon P pour passer> ");
+            String commande = lireCommande();
+            if (commande.equals("p")) {
+                passer = false;
+            } else {
+                int number = Integer.parseInt(commande);
+                editeur.add(number);
+
+            }
+        }
+        Livre nouveau = new Livre(isbnLI, titreL, datepubliL, prixLI, nbpagesLI, classification, editeur,auteur);
 
         try {
-            ResultSet nb = LivreBD.VerificationIsbn(isbnL);
-            System.out.println("cool"+nb);
+            String nb = LivreBD.insererLivre(nouveau);
+            System.out.println("cool" + nb);
         } catch (SQLException ex) {
             System.out.println("erreur");
 
         }
+
     }
 
     public void bienvenue() {
