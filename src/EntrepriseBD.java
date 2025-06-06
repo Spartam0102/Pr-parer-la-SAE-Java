@@ -3,10 +3,10 @@ import java.util.ArrayList;
 import java.util.AbstractMap;
 import java.util.Map;
 
-public class MagasinBD {
+public class EntrepriseBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	MagasinBD(ConnexionMySQL laConnexion){
+	EntrepriseBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 

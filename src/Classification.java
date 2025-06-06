@@ -1,14 +1,14 @@
 public class Classification {
     
-    private int iddewey;
+    private String iddewey;
     private String nomclass;
 
-    public Classification(int iddewey, String nomClass){
+    public Classification(String iddewey, String nomClass){
         this.iddewey = iddewey;
         this.nomclass = nomClass;
     }
 
-    public int getIddewey() {
+    public String getIddewey() {
         return this.iddewey;
     }
 
