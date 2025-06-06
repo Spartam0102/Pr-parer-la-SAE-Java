@@ -1,4 +1,6 @@
+package BD; 
 import java.sql.*;
+
 
 public class ConnexionMySQL {
 	private Connection mysql=null;

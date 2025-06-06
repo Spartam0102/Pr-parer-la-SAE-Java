@@ -1,3 +1,6 @@
+package App; 
+
+
 public class Editeur {
 
     private int idEdit;

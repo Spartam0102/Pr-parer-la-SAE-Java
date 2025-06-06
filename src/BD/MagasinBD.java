@@ -1,16 +1,18 @@
+package BD; 
+import App.*; 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.AbstractMap;
 import java.util.Map;
+import java.util.HashMap;
 
-public class PersonneBD {
+public class MagasinBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	PersonneBD(ConnexionMySQL laConnexion){
+	public MagasinBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-	int maxMagasin() throws SQLException{
+	int maxNumMagasin() throws SQLException{
 		int maxNum=0;
 		this.st=this.laConnexion.createStatement();
 		ResultSet resultat=st.executeQuery("SELECT MAX(idmag) maxn FROM MAGASIN;");
@@ -22,37 +24,32 @@ public class PersonneBD {
 
 	}
 
-	/*
-	int insererJoueur( Joueur j) throws  SQLException{
-		PreparedStatement ps = this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)"); 
-		
-		int numJoueur = this.maxNumJoueur()+1; 
-		ps.setInt(1,numJoueur);
-		ps.setString(2, j.getPseudo());
-		ps.setString(3, j.getMotdepasse());	
-		if (j.isAbonne())
-			ps.setString(4, "O");
-		else 
-			ps.setString(4, "N");
-			
-		ps.setString(5, ""+j.getMain());
-		ps.setInt(6, j.getNiveau());
 
-		ps.executeUpdate(); 
+	public int insererMagasin( Magasin m) throws  SQLException{
+		PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?)"); 
+		
+		int numJoueur = this.maxNumMagasin()+1; 
+		ps.setInt(1,numJoueur);
+		ps.setString(2, m.getNom());
+		ps.setString(3, m.getVille());
+		ps.executeUpdate();	
+ 
 		return numJoueur; 
 
 	}
 
-
-	void effacerJoueur(int num) throws SQLException {
-    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
+	
+	void effacerMagasin(int num) throws SQLException {
+    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");
     ps.setInt(1, num);
     ps.executeUpdate();
 }
 
+/*
     void majJoueur(Joueur j)throws SQLException{
 		throw new SQLException("méthode majJoueur à implémenter");
     }
+
 
     Joueur rechercherJoueurParNum(int num) throws SQLException {
     PreparedStatement ps = this.laConnexion.prepareStatement("SELECT * FROM JOUEUR WHERE numJoueur = ?");
@@ -120,17 +117,57 @@ void majJoueur(Joueur j) throws SQLException {
     	throw new SQLException("méthode rechercherJoueurParNum à implémenter");
     }
 */
-	ArrayList<Magasin> listeDesMagasins() throws SQLException{
+	public ArrayList<Magasin> listeDesMagasins() throws SQLException{
 		try(PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")){
 			ResultSet rs = ps.executeQuery();
 			ArrayList<Magasin> entreprise=new ArrayList<>();
 			while (rs.next()) {
-				entreprise.add(new Magasin(rs.getString("nommag"),rs.getString("villemag"),rs.getInt("idmag")));				
+				Magasin magasin = new Magasin(rs.getString("nommag"),rs.getString("villemag"),rs.getInt("idmag"));
+				entreprise.add(magasin);		
 			}
 			return entreprise;
 		}
 	}
 	
+	Map<Livre, Integer> listeLivreUnMagasin(long id) throws SQLException {
+    String requete = "SELECT DISTINCT isbn, titre, datepubli, prix, nbpages, qte FROM LIVRE NATURAL JOIN POSSEDER WHERE idmag = ?";
+    
+    try (PreparedStatement ps = laConnexion.prepareStatement(requete)){
+        ps.setLong(1, id);
+        ResultSet rs = ps.executeQuery();
+        Map<Livre, Integer> livresUnMagasin = new HashMap<>();
+
+        while (rs.next()){
+            long isbn = 0L;
+            String isbnStr = rs.getString("isbn");
+            if (isbnStr != null) isbn = Long.parseLong(isbnStr);
+
+            String titre = rs.getString("titre");
+
+            String datepubli = rs.getString("datepubli");
+
+            double prix = 0.0;
+            String prixStr = rs.getString("prix");
+            if (prixStr != null) prix = Double.parseDouble(prixStr);
+
+            int nbpages = 0;
+            String nbpagesStr = rs.getString("nbpages");
+            if (nbpagesStr != null) nbpages = Integer.parseInt(nbpagesStr);
+
+            int quantite = 0;
+            String qteStr = rs.getString("qte");
+            if (qteStr != null) quantite = Integer.parseInt(qteStr);
+
+			if (!(quantite == 0)){
+				Livre livre = new Livre(isbn, titre, datepubli, prix, nbpages, null, null, null);
+            livresUnMagasin.put(livre, quantite);
+			} 
+        }
+
+        return livresUnMagasin;
+    }
+}
+
 	String rapportMessage() throws SQLException{
 		return "rapportMessage A faire";
 	}

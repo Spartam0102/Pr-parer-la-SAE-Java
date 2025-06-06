@@ -1,3 +1,6 @@
+package Exception; 
+import App.*; 
+
 public class VendeurDejaExistantException extends Exception{
     
     public VendeurDejaExistantException(Vendeur vendeur){

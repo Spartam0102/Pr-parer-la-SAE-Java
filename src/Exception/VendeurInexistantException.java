@@ -1,3 +1,5 @@
+package Exception; 
+
 public class VendeurInexistantException extends Exception{
     
     public VendeurInexistantException(){

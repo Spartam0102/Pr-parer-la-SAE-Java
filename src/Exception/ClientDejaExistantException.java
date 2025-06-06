@@ -1,3 +1,6 @@
+package Exception; 
+import App.*; 
+
 public class ClientDejaExistantException extends Exception{
     
     public ClientDejaExistantException(Client client){

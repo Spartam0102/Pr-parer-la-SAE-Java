@@ -1,3 +1,5 @@
+package Exception; 
+
 public class CommandeInexistantException extends Exception{
     
     public CommandeInexistantException(){

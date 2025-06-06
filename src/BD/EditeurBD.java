@@ -1,12 +1,13 @@
+package BD; 
+import App.*; 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.AbstractMap;
 import java.util.Map;
 
-public class EntrepriseBD {
+public class EditeurBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	EntrepriseBD(ConnexionMySQL laConnexion){
+	EditeurBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 

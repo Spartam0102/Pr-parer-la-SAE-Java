@@ -1,31 +1,26 @@
+package BD; 
+import App.*; 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.AbstractMap;
 import java.util.Map;
 
-public class ClientBD {
+public class PersonneBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	ClientBD(ConnexionMySQL laConnexion){
+	PersonneBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-	Client recupererClient(int id) throws SQLException{
-		PreparedStatement ps = laConnexion.prepareStatement("select * from CLIENT;");
-		ResultSet rs = ps.executeQuery();
-		while (rs.next()){
-			
-			if (rs.getInt(1) == id){
-				Client client = new Client(
-					rs.getString("nomcli"),
-					rs.getString("prenomCli"),
-					null,
-					id,
-					rs.getString("adressecli") + rs.getString("codepostal") + rs.getString("villecli"));
-					return client;
-			}				
+	int maxMagasin() throws SQLException{
+		int maxNum=0;
+		this.st=this.laConnexion.createStatement();
+		ResultSet resultat=st.executeQuery("SELECT MAX(idmag) maxn FROM MAGASIN;");
+		if(resultat.next()){
+			maxNum=resultat.getInt("maxn");
+
 		}
-		return null;
+		return maxNum;
+
 	}
 
 	/*
