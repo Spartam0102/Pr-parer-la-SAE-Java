@@ -1,3 +1,6 @@
+package Exception; 
+import App.*; 
+
 public class LivreEnRuptureDeStockException extends Exception{
     
     public LivreEnRuptureDeStockException(Livre livre){

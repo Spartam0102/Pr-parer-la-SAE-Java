@@ -1,3 +1,5 @@
+package Exception; 
+
 public class MagasinInexistantException extends Exception{
     
     public MagasinInexistantException(){

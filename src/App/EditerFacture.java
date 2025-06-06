@@ -1,3 +1,6 @@
+package App; 
+import BD.*; 
+
 import java.sql.*;
 import java.util.Scanner;
 import java.io.*;

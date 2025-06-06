@@ -1,13 +1,14 @@
+package BD; 
+import App.*; 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.AbstractMap;
 import java.util.Map;
 
 public class LivreBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
 
-	LivreBD(ConnexionMySQL laConnexion) {
+	public LivreBD(ConnexionMySQL laConnexion) {
 		this.laConnexion = laConnexion;
 	}
 
@@ -25,7 +26,7 @@ public class LivreBD {
 		return resultat;
 	}
 
-	String insererLivre(Livre l) throws SQLException {
+	public String insererLivre(Livre l) throws SQLException {
 		PreparedStatement ps = this.laConnexion.prepareStatement("insert into LIVRE values (?,?,?,?,?)");
 		PreparedStatement id = this.laConnexion.prepareStatement("insert into ECRIRE values (?,?)");
 		PreparedStatement it = this.laConnexion.prepareStatement("insert into THEMES values (?,?)");

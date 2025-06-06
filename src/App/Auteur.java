@@ -1,3 +1,6 @@
+package App; 
+
+
 public class Auteur extends Personne {
 
     private int idedit;

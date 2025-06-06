@@ -1,16 +1,17 @@
+package BD; 
+import App.*; 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.AbstractMap;
 import java.util.Map;
 
-public class MagasinBD {
+public class VendeurBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	MagasinBD(ConnexionMySQL laConnexion){
+	VendeurBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-	int maxNumMagasin() throws SQLException{
+	int maxMagasin() throws SQLException{
 		int maxNum=0;
 		this.st=this.laConnexion.createStatement();
 		ResultSet resultat=st.executeQuery("SELECT MAX(idmag) maxn FROM MAGASIN;");
@@ -22,21 +23,28 @@ public class MagasinBD {
 
 	}
 
-
-	int insererMagasin( Magasin m) throws  SQLException{
-		PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?)"); 
+	/*
+	int insererJoueur( Joueur j) throws  SQLException{
+		PreparedStatement ps = this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)"); 
 		
-		int numJoueur = this.maxNumMagasin()+1; 
+		int numJoueur = this.maxNumJoueur()+1; 
 		ps.setInt(1,numJoueur);
-		ps.setString(2, m.getNom());
-		ps.setString(3, m.getVille());
-		ps.executeUpdate();	
- 
+		ps.setString(2, j.getPseudo());
+		ps.setString(3, j.getMotdepasse());	
+		if (j.isAbonne())
+			ps.setString(4, "O");
+		else 
+			ps.setString(4, "N");
+			
+		ps.setString(5, ""+j.getMain());
+		ps.setInt(6, j.getNiveau());
+
+		ps.executeUpdate(); 
 		return numJoueur; 
 
 	}
 
-	/*
+
 	void effacerJoueur(int num) throws SQLException {
     PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
     ps.setInt(1, num);

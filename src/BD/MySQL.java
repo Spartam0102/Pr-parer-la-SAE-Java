@@ -1,3 +1,5 @@
+package BD; 
+
 import java.sql.*;
 
 public class MySQL implements AutoCloseable {

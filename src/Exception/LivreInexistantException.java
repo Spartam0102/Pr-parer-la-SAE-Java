@@ -1,3 +1,5 @@
+package Exception; 
+
 public class LivreInexistantException extends Exception{
     
     public LivreInexistantException(){
