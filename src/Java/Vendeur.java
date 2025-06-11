@@ -1,4 +1,5 @@
 package Java; 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Vendeur extends Personne {
@@ -52,6 +53,27 @@ public class Vendeur extends Personne {
         nouvelleCommande.modifierStock();
         return nouvelleCommande;
     }
+
+   public boolean retirerLivrePanierEtAjouterAuMagasin(Client client, Livre livre, int quantite) {
+    Map<Livre, Integer> panierClient = client.getPanier();
+
+    if (!panierClient.containsKey(livre) || panierClient.get(livre) < quantite) {
+        return false; 
+    }
+
+    int nouvelleQuantite = panierClient.get(livre) - quantite;
+    if (nouvelleQuantite == 0) {
+        panierClient.remove(livre);
+    } else {
+        panierClient.put(livre, nouvelleQuantite);
+    }
+
+    Map<Livre, Integer> livresAAjouter = new HashMap<>();
+    livresAAjouter.put(livre, quantite);
+    magasin.ajouterLivres(livresAAjouter);
+
+    return true;
+}
 
     private int generateUniqueCommandeId() {
         int nextCommandeId = 1;

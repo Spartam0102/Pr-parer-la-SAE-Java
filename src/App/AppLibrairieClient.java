@@ -19,7 +19,7 @@ public class AppLibrairieClient {
         this.clientBD = new ClientBD(connexionMySQL);
     }
 
-    public Client menuClientConexion(){
+    public Client menuClientConnexion(){
         System.out.println("\nConnexion :");
         System.out.println("========================");
         System.out.print("Votre id > ");
@@ -43,16 +43,16 @@ public class AppLibrairieClient {
 
 
     public void menuClient() {
-        Client client = this.menuClientConexion();
+        Client client = this.menuClientConnexion();
         while (client == null){
-            client = this.menuClientConexion();
+            client = this.menuClientConnexion();
         }
         boolean menu3 = false;
         while (!menu3 && !quitterApp) {
             System.out.println("+-------------------------+");
             System.out.println("| Client " + client.getIdCli() + "               |");
             System.out.println("+-------------------------+");
-            System.out.println("| I: Infos Personelles    |");
+            System.out.println("| I: Infos Personnelles    |");
             System.out.println("| A: Afficher magasins    |");
             System.out.println("| V: Voir mon panier      |");
             System.out.println("| M: Menu précédent       |");

@@ -7,7 +7,7 @@ import java.util.Map;
 public class VendeurBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	VendeurBD(ConnexionMySQL laConnexion){
+	public VendeurBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
@@ -22,6 +22,32 @@ public class VendeurBD {
 		return maxNum;
 
 	}
+
+	public Vendeur recupererVendeur(int id) throws SQLException {
+    String sql = "SELECT * FROM VENDEUR WHERE idVen = ?";
+    try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            int idMagasin = rs.getInt("idmag");  
+
+            Magasin magasin = null;
+            if (idMagasin > 0) {
+                magasin = new Magasin(null, null, idMagasin);  
+            }
+
+            return new Vendeur(
+                rs.getString("nomVen"),
+                rs.getString("prenomVen"),
+                null,
+                id,
+                magasin
+            );
+        }
+    }
+    return null;
+}
+
 
 	/*
 	int insererJoueur( Joueur j) throws  SQLException{
