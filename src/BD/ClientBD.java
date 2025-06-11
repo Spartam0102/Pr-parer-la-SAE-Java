@@ -22,7 +22,7 @@ public class ClientBD {
 					rs.getString("prenomCli"),
 					null,
 					id,
-					rs.getString("adressecli") + rs.getString("codepostal") + rs.getString("villecli"));
+					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
 					return client;
 			}				
 		}
