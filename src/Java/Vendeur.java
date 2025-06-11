@@ -1,5 +1,4 @@
-package App; 
-
+package Java; 
 import java.util.Map;
 
 public class Vendeur extends Personne {

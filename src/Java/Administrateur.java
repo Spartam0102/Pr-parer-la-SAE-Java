@@ -1,4 +1,4 @@
-package App; 
+package Java; 
 
 public class Administrateur extends Personne {
 

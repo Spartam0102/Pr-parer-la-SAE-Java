@@ -1,5 +1,5 @@
 package Exception; 
-import App.*; 
+import Java.*; 
 
 public class LivreEnRuptureDeStockException extends Exception{
     
