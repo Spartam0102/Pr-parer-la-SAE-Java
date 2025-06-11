@@ -102,7 +102,8 @@ public class AppLibrairie {
                 AppLibrairieClient clientMenu = new AppLibrairieClient(magasinBD, LivreBD, connexionMySQL);
                 clientMenu.menuClient();
             } else if (commande.equals("v")) {
-                menuVendeur();
+                AppLibrairieVendeur vendeurMenu = new AppLibrairieVendeur(magasinBD, connexionMySQL);
+                vendeurMenu.menuVendeur();
             } else if (commande.equals("a")) {
                 AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, LivreBD);
                 adminMenu.menuAdministrateur();
