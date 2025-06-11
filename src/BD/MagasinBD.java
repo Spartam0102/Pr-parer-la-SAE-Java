@@ -1,5 +1,5 @@
 package BD; 
-import App.*; 
+import Java.*; 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,7 +12,7 @@ public class MagasinBD {
 		this.laConnexion=laConnexion;
 	}
 
-	int maxNumMagasin() throws SQLException{
+	public int maxNumMagasin() throws SQLException{
 		int maxNum=0;
 		this.st=this.laConnexion.createStatement();
 		ResultSet resultat=st.executeQuery("SELECT MAX(idmag) maxn FROM MAGASIN;");
@@ -39,7 +39,7 @@ public class MagasinBD {
 	}
 
 	
-	void effacerMagasin(int num) throws SQLException {
+	public void effacerMagasin(int num) throws SQLException {
     PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");
     ps.setInt(1, num);
     ps.executeUpdate();
@@ -129,7 +129,7 @@ void majJoueur(Joueur j) throws SQLException {
 		}
 	}
 	
-	Map<Livre, Integer> listeLivreUnMagasin(long id) throws SQLException {
+	public Map<Livre, Integer> listeLivreUnMagasin(long id) throws SQLException {
     String requete = "SELECT DISTINCT isbn, titre, datepubli, prix, nbpages, qte FROM LIVRE NATURAL JOIN POSSEDER WHERE idmag = ?";
     
     try (PreparedStatement ps = laConnexion.prepareStatement(requete)){

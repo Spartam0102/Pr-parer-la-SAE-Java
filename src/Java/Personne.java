@@ -1,5 +1,4 @@
-package App; 
-
+package Java; 
 public abstract class Personne{
     
     private String nom;

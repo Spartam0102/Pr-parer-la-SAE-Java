@@ -1,6 +1,5 @@
 package BD; 
-
-import App.*; 
+import Java.*; 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,11 +7,11 @@ import java.util.Map;
 public class ClientBD {
 	ConnexionMySQL laConnexion;
 	Statement st;
-	ClientBD(ConnexionMySQL laConnexion){
+	public ClientBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-	Client recupererClient(int id) throws SQLException{
+	public Client recupererClient(int id) throws SQLException{
 		PreparedStatement ps = laConnexion.prepareStatement("select * from CLIENT;");
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()){

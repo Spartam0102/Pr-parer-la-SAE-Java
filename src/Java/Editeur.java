@@ -1,5 +1,4 @@
-package App; 
-
+package Java; 
 
 public class Editeur {
 
