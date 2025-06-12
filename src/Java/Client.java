@@ -60,6 +60,14 @@ public class Client extends Personne{
     public Map<Livre, Integer> consulterCatalogue(Magasin magasin){
         return magasin.getStockLivre();
     }
+
+    public void setPanier(Map<Livre, Integer> panier) {
+        this.panier = panier;
+    }
+
+    public void reunitialiserPanier() {
+        this.panier = new HashMap<>();
+    }
     
     @Override
     public boolean equals(Object obj) {
