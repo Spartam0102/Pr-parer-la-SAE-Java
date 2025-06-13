@@ -24,21 +24,37 @@ public class VendeurBD {
 	}
 
 	public void creerVendeur(Vendeur vendeur) throws SQLException {
-    String sql = "INSERT INTO VENDEUR (nomVen, prenomVen, idmag) VALUES (?, ?, ?)";
+    int nextId = getNextIdVendeur(); // Génére l'ID manuellement
+    String sql = "INSERT INTO VENDEUR (idVen, nomVen, prenomVen, idmag) VALUES (?, ?, ?, ?)";
     try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
-        ps.setString(1, vendeur.getNom());
-        ps.setString(2, vendeur.getPrenom());
+        ps.setInt(1, nextId);
+        ps.setString(2, vendeur.getNom());
+        ps.setString(3, vendeur.getPrenom());
         if (vendeur.getMagasin() != null) {
-            ps.setInt(3, vendeur.getMagasin().getIdMagasin());
+            ps.setInt(4, vendeur.getMagasin().getIdMagasin());
         } else {
-            ps.setNull(3, Types.INTEGER);
+            ps.setNull(4, Types.INTEGER);
         }
         ps.executeUpdate();
     }
 }
 
 
-	public Vendeur recupererVendeur(int id) throws SQLException {
+	private int getNextIdVendeur() throws SQLException {
+    String sql = "SELECT MAX(idVen) AS maxId FROM VENDEUR";
+    try (PreparedStatement ps = laConnexion.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+            return rs.getInt("maxId") + 1;
+        }
+    }
+    return 1; // Si aucun vendeur n’existe encore
+}
+
+
+	
+
+public Vendeur recupererVendeur(int id) throws SQLException {
     String sql = "SELECT * FROM VENDEUR WHERE idVen = ?";
     try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
         ps.setInt(1, id);

@@ -102,6 +102,7 @@ public class AppLibrairieClient {
                 centrerTexte(String.format("║    🏬  Afficher magasins...........................................[A] ║"), largeurConsole),
                 centrerTexte(String.format("║    🛒  Commander...................................................[C] ║"), largeurConsole),
                 centrerTexte(String.format("║    🛒  Panier .....................................................[P] ║"), largeurConsole),
+                centrerTexte(String.format("║    💡  Recommandations.............................................[R] ║"), largeurConsole),
                 centrerTexte(String.format("║    ❌  Quitter.....................................................[Q] ║"), largeurConsole),
                 centrerTexte("║                                                                        ║", largeurConsole),
                 centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
@@ -122,6 +123,7 @@ public class AppLibrairieClient {
                     attendreEntree();
                 }
                 case "a" -> menuMagasins(client);
+                case "r" -> menuRecommandations(client);
                 case "p" -> menuPanier(client);
                 case "q" -> {
                     quitterApp = true;
@@ -135,6 +137,71 @@ public class AppLibrairieClient {
         }
     }
 
+    public void menuRecommandations(Client client) {
+    clearConsole();
+    int largeurConsole = getLargeurConsole();
+
+    String[] titre = {
+        "╔════════════════════════════════════════════════════════════════╗",
+        "║                      RECOMMANDATIONS                           ║",
+        "╚════════════════════════════════════════════════════════════════╝",
+        ""
+    };
+
+    for (int i = 0; i < titre.length; i++) {
+        titre[i] = centrerTexte(titre[i], largeurConsole);
+    }
+
+    try {
+        machineAEcrireLigneParLigne(titre, 100);
+        
+        List<Livre> recommandations = livreRecommander(client.getIdCli());
+        
+        if (recommandations.isEmpty()) {
+            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+            System.out.println(centrerTexte("║    💡  Aucune recommandation disponible pour le moment               ║", largeurConsole));
+            System.out.println(centrerTexte("║        Essayez d'acheter quelques livres pour obtenir des suggestions ║", largeurConsole));
+            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+            System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+        } else {
+            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+            System.out.println(centrerTexte("║    💡  Livres recommandés pour vous :                                ║", largeurConsole));
+            System.out.println(centrerTexte("║        (Basés sur les goûts de clients similaires)                   ║", largeurConsole));
+            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+            
+            for (int i = 0; i < Math.min(recommandations.size(), 10); i++) {
+                Livre livre = recommandations.get(i);
+                String nom = livre.getNomLivre();
+                if (nom.length() > 50) {
+                    nom = nom.substring(0, 47) + "...";
+                }
+                String ligne = "║    📚  " + nom;
+                int esp = largeurConsole - ligne.length() - 3;
+                ligne += " ".repeat(Math.max(0, esp)) + "║";
+                System.out.println(centrerTexte(ligne, largeurConsole));
+                pause(200);
+            }
+            
+            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+            System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+        }
+        
+    } catch (SQLException e) {
+        System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+        System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+        System.out.println(centrerTexte("║    ❌  Erreur lors de la récupération des recommandations            ║", largeurConsole));
+        System.out.println(centrerTexte("║        " + e.getMessage(), largeurConsole));
+        System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+        System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    
+    attendreEntree();
+}
+    
     public void menuPanier(Client client) {
         boolean menuActif = true;
         int largeurConsole = getLargeurConsole();
@@ -557,43 +624,52 @@ public class AppLibrairieClient {
         scanner.nextLine();
     }
 
-    /*
-    public List<Livre> livreRecommander(int id){
-        List<Livre> livreDuClient = clientBD.recupererToutLivreClient(id);
-        List<Client> listeToutClients = clientBD.recuperToutClient();
-        List<Livre> meuilleurListeLivre = maxlivreEnCommum(livreDuClient, listeToutClients);
-        List<Livre> res = differenceDeLivre(livreDuClient, meuilleurListeLivre);
-    }
+    
+   public List<Livre> livreRecommander(int id) throws SQLException {
+    List<Livre> livresDuClient = clientBD.recupererToutLivreClient(id);
+    List<Client> tousLesClients = clientBD.recuperToutClient();
+    List<Livre> meilleureListe = maxLivreEnCommun(livresDuClient, tousLesClients, id);
+    return differenceDeLivre(livresDuClient, meilleureListe);
+}
 
-    public List<Livre> differenceDeLivre(List<Livre> liste1, List<Livre> liste2){
-        List<Livre> res = new ArrayList<>();
-        for (Livre livre : liste2){
-            if (!liste1.contains(livre)){
-                res.add(livre);
-            }
-        }
-        return res;
-    }
-
-    public List<Livre> maxlivreEnCommum(List<Livre> listeDuClient, List<Client> listeClient){
-        List<Livre> res;
-        int max = 0;
-        for (Client client : listeClient){
-            List<Livre> listeLivres = clientBD.recupererToutLivreClient(client.getIdCli());
-            if (livreEnCommum(listeDuClient, listeLivres) > max){
-                max = livreEnCommum(listeDuClient, listeLivres);
-                res = listeLivres;
-            }
-        }
-        return res;
-    }
-
-    public int livreEnCommum(List<Livre> liste1,  List<Livre> liste2){
-        int res = 0;
-        for(Livre livre : liste2){
-            if(liste1.contains(livre)){res++;}
-        return res;
+public List<Livre> differenceDeLivre(List<Livre> liste1, List<Livre> liste2) {
+    List<Livre> res = new ArrayList<>();
+    for (Livre livre : liste2) {
+        if (!liste1.contains(livre)) {
+            res.add(livre);
         }
     }
-    */
+    return res;
+}
+
+public List<Livre> maxLivreEnCommun(List<Livre> livresDuClient, List<Client> listeClients, int idClientCourant) throws SQLException {
+    List<Livre> res = new ArrayList<>();
+    int max = 0;
+
+    for (Client client : listeClients) {
+        if (client.getIdCli() == idClientCourant) continue; // ne pas se comparer à soi-même
+
+        List<Livre> livresAutreClient = clientBD.recupererToutLivreClient(client.getIdCli());
+        int commun = livreEnCommun(livresDuClient, livresAutreClient);
+
+        if (commun > max) {
+            max = commun;
+            res = livresAutreClient;
+        }
+    }
+
+    return res;
+}
+
+public int livreEnCommun(List<Livre> liste1, List<Livre> liste2) {
+    int res = 0;
+    for (Livre livre : liste2) {
+        if (liste1.contains(livre)) {
+            res++;
+        }
+    }
+    return res;
+}
+
+    
 }
