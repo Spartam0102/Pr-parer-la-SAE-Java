@@ -2,6 +2,7 @@ package BD;
 import Java.*; 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ClientBD {
@@ -27,6 +28,31 @@ public class ClientBD {
 			}				
 		}
 		return null;
+	}
+
+	public List<Livre> recupererToutLivreClient(int id) throws SQLException{
+		List<Livre> res = new ArrayList<>();
+		PreparedStatement commandesDuCLient = laConnexion.prepareStatement("select * from COMMANDE natural join DETAILCOMMANDE where idcli = ;");
+		commandesDuCLient.setInt(1,id);
+		ResultSet rsCommande = commandesDuCLient.executeQuery();
+		while(rsCommande.next()){
+			PreparedStatement livreDeLaCommande = laConnexion.prepareStatement("select * from LIVRE where isbn = ?");
+			commandesDuCLient.setLong(1, rsCommande.getLong("isbn"));
+			ResultSet rsLivre = livreDeLaCommande.executeQuery();
+			while (rsLivre.next()) {
+				Livre livre = new Livre(rsLivre.getLong("isbn"), 
+										rsLivre.getString("titre"), 
+										rsLivre.getString("datepubli"), 
+										rsLivre.getDouble("prix"),
+										rsLivre.getInt("nbpages"),
+										null,
+										null,
+										null);
+				res.add(livre);
+					
+			}
+		}
+		return res;
 	}
 
 	/*
