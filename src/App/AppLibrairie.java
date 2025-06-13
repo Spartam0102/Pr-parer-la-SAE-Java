@@ -228,7 +228,8 @@ public void menuConnexion() throws NumberFormatException, SQLException {
                 vendeurMenu.menuVendeur();
                 break;
             case "a":
-                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD);
+                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD, connexionMySQL);
+
                 adminMenu.menuAdministrateur();
                 break;
             default:
