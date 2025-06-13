@@ -86,26 +86,19 @@ public class MagasinBD {
     	}
 	}
 
-	public void modifierStockEtPrixLivre(long isbn, int idMagasin, int nouvelleQuantite, double nouveauPrix) throws SQLException {
-    // Mise à jour de la quantité dans la table POSSEDER
+	public void modifierStock(long isbn, int idMagasin, int nouvelleQuantite) throws SQLException {
     String updateQte = "UPDATE POSSEDER SET qte = ? WHERE isbn = ? AND idmag = ?";
     try (PreparedStatement psQte = laConnexion.prepareStatement(updateQte)) {
         psQte.setInt(1, nouvelleQuantite);
         psQte.setLong(2, isbn);
         psQte.setInt(3, idMagasin);
+        
         int rowsUpdated = psQte.executeUpdate();
         if (rowsUpdated == 0) {
-            throw new SQLException("Aucune ligne modifiée dans POSSEDER : l'association livre-magasin est introuvable.");
+            throw new SQLException("Aucune ligne modifiée : l'association livre-magasin est introuvable.");
         }
     }
-
-    // Mise à jour du prix dans la table LIVRE (si le prix change globalement)
-    String updatePrix = "UPDATE LIVRE SET prix = ? WHERE isbn = ?";
-    try (PreparedStatement psPrix = laConnexion.prepareStatement(updatePrix)) {
-        psPrix.setDouble(1, nouveauPrix);
-        psPrix.setLong(2, isbn);
-        psPrix.executeUpdate();
-    }
 }
+
 
 }

@@ -1,6 +1,7 @@
 package Java; 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Livre {
 
@@ -70,22 +71,24 @@ public class Livre {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Livre)) {
-            return false;
-        }
-        Livre tmp = (Livre) obj;
-        return this.idLivre == tmp.idLivre && this.prix == tmp.prix && this.nbPage == tmp.nbPage
-                && this.nomLivre.equals(tmp.nomLivre) && this.dateDePublication.equals(tmp.dateDePublication)
-                && this.classifications.equals(tmp.classifications) && this.editeur.equals(tmp.editeur)
-                && this.auteur.equals(tmp.auteur);
+public boolean equals(Object obj) {
+    if (this == obj) {
+        return true;
     }
+    if (obj == null || !(obj instanceof Livre)) {
+        return false;
+    }
+    Livre tmp = (Livre) obj;
+
+    return this.idLivre == tmp.idLivre
+        && Double.compare(this.prix, tmp.prix) == 0
+        && this.nbPage == tmp.nbPage
+        && Objects.equals(this.nomLivre, tmp.nomLivre)
+        && Objects.equals(this.dateDePublication, tmp.dateDePublication)
+        && Objects.equals(this.classifications, tmp.classifications)
+        && Objects.equals(this.editeur, tmp.editeur)
+        && Objects.equals(this.auteur, tmp.auteur);
+}
 /* 
     @Override
     public String toString() {

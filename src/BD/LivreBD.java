@@ -26,6 +26,20 @@ public class LivreBD {
 		return resultat;
 	}
 
+	public void modifierStock(long isbn, int idMagasin, int nouvelleQte) throws SQLException {
+    String updateQte = "UPDATE POSSEDER SET qte = ? WHERE isbn = ? AND idmag = ?";
+    try (PreparedStatement ps = laConnexion.prepareStatement(updateQte)) {
+        ps.setInt(1, nouvelleQte);
+        ps.setLong(2, isbn);
+        ps.setInt(3, idMagasin);
+        int rowsUpdated = ps.executeUpdate();
+        if (rowsUpdated == 0) {
+            throw new SQLException("Aucune ligne modifiée : association livre-magasin introuvable.");
+        }
+    }
+}
+
+	
 	public String insererLivre(Livre l) throws SQLException {
 		PreparedStatement ps = this.laConnexion.prepareStatement("insert into LIVRE values (?,?,?,?,?)");
 		PreparedStatement id = this.laConnexion.prepareStatement("insert into ECRIRE values (?,?)");
@@ -68,6 +82,56 @@ public class LivreBD {
 		return res;
 
 	}
+
+	public int getStockLivreMagasin(long isbn, int idMagasin) throws SQLException {
+    String query = "SELECT qte FROM POSSEDER WHERE isbn = ? AND idmag = ?";
+    try (PreparedStatement ps = laConnexion.prepareStatement(query)) {
+        ps.setLong(1, isbn);
+        ps.setInt(2, idMagasin);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("qte");
+            } else {
+                return 0; // ou -1 si tu préfères indiquer que c'est introuvable
+            }
+        }
+    }
+}
+
+public ArrayList<Livre> listeDesLivres(int idMagasin) throws SQLException {
+    ArrayList<Livre> livres = new ArrayList<>();
+
+    String query = """
+        SELECT l.*
+        FROM LIVRE l
+        JOIN POSSEDER p ON l.isbn = p.isbn
+        WHERE p.idmag = ?
+    """;
+
+    try (PreparedStatement ps = laConnexion.prepareStatement(query)) {
+        ps.setInt(1, idMagasin);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Livre l = new Livre(
+                    rs.getLong("isbn"),
+                    rs.getString("titre"),
+                    rs.getString("datepubli"),
+                    rs.getDouble("prix"),
+                    rs.getInt("nbpages"),
+                    new ArrayList<>(), // classifications
+                    new ArrayList<>(), // éditeurs
+                    new ArrayList<>()  // auteurs
+                );
+                livres.add(l);
+            }
+        }
+    }
+
+    return livres;
+}
+
+
+
 
 	/*
 	 * void effacerJoueur(int num) throws SQLException {
