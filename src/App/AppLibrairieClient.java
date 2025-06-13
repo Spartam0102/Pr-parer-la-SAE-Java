@@ -543,27 +543,11 @@ public class AppLibrairieClient {
         }
     }
 
-
     private void pause(int millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        }
-    }
-
-    private void voirPanier(Client client){
-        if (client.getPanier().isEmpty()) {
-            System.out.println("Panier vide.");
-            attendreEntree();
-        }
-        else {
-            for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()) {
-                String livre = coupleLivre.getKey().getNomLivre();
-                int quantite = coupleLivre.getValue();
-                System.out.println(livre + " (" + quantite + ")\n");
-            }
-            attendreEntree();
         }
     }
 
@@ -573,15 +557,7 @@ public class AppLibrairieClient {
         scanner.nextLine();
     }
 
-
-    private void attendre(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
+    /*
     public List<Livre> livreRecommander(int id){
         List<Livre> livreDuClient = clientBD.recupererToutLivreClient(id);
         List<Client> listeToutClients = clientBD.recuperToutClient();
@@ -619,7 +595,5 @@ public class AppLibrairieClient {
         return res;
         }
     }
-
+    */
 }
-
-
