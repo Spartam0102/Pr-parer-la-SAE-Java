@@ -4,6 +4,7 @@ import BD.*;
 import Java.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -571,4 +572,54 @@ public class AppLibrairieClient {
         System.out.println("\nAppuyez sur Entrée pour continuer...");
         scanner.nextLine();
     }
+
+
+    private void attendre(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public List<Livre> livreRecommander(int id){
+        List<Livre> livreDuClient = clientBD.recupererToutLivreClient(id);
+        List<Client> listeToutClients = clientBD.recuperToutClient();
+        List<Livre> meuilleurListeLivre = maxlivreEnCommum(livreDuClient, listeToutClients);
+        List<Livre> res = differenceDeLivre(livreDuClient, meuilleurListeLivre);
+    }
+
+    public List<Livre> differenceDeLivre(List<Livre> liste1, List<Livre> liste2){
+        List<Livre> res = new ArrayList<>();
+        for (Livre livre : liste2){
+            if (!liste1.contains(livre)){
+                res.add(livre);
+            }
+        }
+        return res;
+    }
+
+    public List<Livre> maxlivreEnCommum(List<Livre> listeDuClient, List<Client> listeClient){
+        List<Livre> res;
+        int max = 0;
+        for (Client client : listeClient){
+            List<Livre> listeLivres = clientBD.recupererToutLivreClient(client.getIdCli());
+            if (livreEnCommum(listeDuClient, listeLivres) > max){
+                max = livreEnCommum(listeDuClient, listeLivres);
+                res = listeLivres;
+            }
+        }
+        return res;
+    }
+
+    public int livreEnCommum(List<Livre> liste1,  List<Livre> liste2){
+        int res = 0;
+        for(Livre livre : liste2){
+            if(liste1.contains(livre)){res++;}
+        return res;
+        }
+    }
+
 }
+
+
