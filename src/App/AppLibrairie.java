@@ -196,10 +196,10 @@ public void menuConnexion() throws NumberFormatException, SQLException {
         String[] menu = {
     centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
     centrerTexte("║                                                                        ║", largeurConsole),
-    centrerTexte("║     🔑  Client.....................................................[C] ║", largeurConsole),
-    centrerTexte("║     👨‍💼  Vendeur....................................................[V] ║", largeurConsole),
-    centrerTexte("║     🛠️  Administrateur..........................................[A]    ║", largeurConsole),
-    centrerTexte("║     ↩️  Retour...................................................[R]   ║", largeurConsole),
+    centrerTexte("║     🔑   Client....................................................[C] ║", largeurConsole),
+    centrerTexte("  ║    👨‍💼  Vendeur...................................................[V] ║", largeurConsole),
+    centrerTexte("  ║     🛠️    Administrateur............................................[A] ║", largeurConsole),
+    centrerTexte(" ║     ↩️    Retour....................................................[R] ║", largeurConsole),
     centrerTexte("║                                                                        ║", largeurConsole),
     centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
 };
