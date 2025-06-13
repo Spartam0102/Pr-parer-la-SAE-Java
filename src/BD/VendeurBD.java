@@ -23,6 +23,21 @@ public class VendeurBD {
 
 	}
 
+	public void creerVendeur(Vendeur vendeur) throws SQLException {
+    String sql = "INSERT INTO VENDEUR (nomVen, prenomVen, idmag) VALUES (?, ?, ?)";
+    try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
+        ps.setString(1, vendeur.getNom());
+        ps.setString(2, vendeur.getPrenom());
+        if (vendeur.getMagasin() != null) {
+            ps.setInt(3, vendeur.getMagasin().getIdMagasin());
+        } else {
+            ps.setNull(3, Types.INTEGER);
+        }
+        ps.executeUpdate();
+    }
+}
+
+
 	public Vendeur recupererVendeur(int id) throws SQLException {
     String sql = "SELECT * FROM VENDEUR WHERE idVen = ?";
     try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
@@ -49,104 +64,7 @@ public class VendeurBD {
 }
 
 
-	/*
-	int insererJoueur( Joueur j) throws  SQLException{
-		PreparedStatement ps = this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)"); 
-		
-		int numJoueur = this.maxNumJoueur()+1; 
-		ps.setInt(1,numJoueur);
-		ps.setString(2, j.getPseudo());
-		ps.setString(3, j.getMotdepasse());	
-		if (j.isAbonne())
-			ps.setString(4, "O");
-		else 
-			ps.setString(4, "N");
-			
-		ps.setString(5, ""+j.getMain());
-		ps.setInt(6, j.getNiveau());
-
-		ps.executeUpdate(); 
-		return numJoueur; 
-
-	}
-
-
-	void effacerJoueur(int num) throws SQLException {
-    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
-    ps.setInt(1, num);
-    ps.executeUpdate();
-}
-
-    void majJoueur(Joueur j)throws SQLException{
-		throw new SQLException("méthode majJoueur à implémenter");
-    }
-
-    Joueur rechercherJoueurParNum(int num) throws SQLException {
-    PreparedStatement ps = this.laConnexion.prepareStatement("SELECT * FROM JOUEUR WHERE numJoueur = ?");
-    ps.setInt(1, num);
-    ResultSet rs = ps.executeQuery();
-
-    if (rs.next()) {
-        String pseudo = rs.getString("pseudo");
-        String motdepasse = rs.getString("motdepasse");
-        boolean abonne = rs.getString("abonne").equalsIgnoreCase("O");
-        String main = rs.getString("main");
-        int niveau = rs.getInt("niveau");
-
-        return new Joueur(num, pseudo, motdepasse, abonne, main.charAt(0), niveau);
-    } else {
-        return null; 
-    }
-}
-	 */
-
-/* 
-	int insererJoueur( Joueur j) throws  SQLException{
-		PreparedStatement ps=this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)");
-		int numJoueur=this.maxNumJoueur()+1;
-		ps.setInt(1,numJoueur);
-		ps.setString(2, j.getPseudo());
-		ps.setString(3, j.getMotdepasse());
-		if(j.isAbonne()){
-			ps.setString(4,"0");
-		}else{
-			ps.setString(4, "N");
-		}
-		ps.setString(5,""+j.getMain());
-		ps.setInt(6, j.getNiveau());
-
-		ps.executeUpdate();
-
-		return numJoueur;
-	}
-
-
-void effacerJoueur(int num) throws SQLException {
-    String sql = "DELETE FROM JOUEUR WHERE numJoueur = ?";
-    PreparedStatement ps = this.laConnexion.prepareStatement(sql);
-    ps.setInt(1, num);
-    ps.executeUpdate();
-}
-void majJoueur(Joueur j) throws SQLException {
-    String sql = "UPDATE JOUEUR SET pseudo = ?, motdepasse = ?, abonne = ?, main = ?, niveau = ? WHERE numJoueur = ?";
-    PreparedStatement ps = this.laConnexion.prepareStatement(sql);
-    ps.setString(1, j.getPseudo());
-    ps.setString(2, j.getMotdepasse());
-		if(j.isAbonne()){
-			ps.setString(4,"0");
-		}else{
-			ps.setString(4, "N");
-		}
-    ps.setString(4, String.valueOf(j.getMain()));
-    ps.setInt(5, j.getNiveau());
-    ps.setInt(6, j.getNumJoueur());
-    ps.executeUpdate();
-}
-
-    Joueur rechercherJoueurParNum(int num)throws SQLException{
-    	throw new SQLException("méthode rechercherJoueurParNum à implémenter");
-    }
-*/
+	
 	ArrayList<Magasin> listeDesMagasins() throws SQLException{
 		try(PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")){
 			ResultSet rs = ps.executeQuery();

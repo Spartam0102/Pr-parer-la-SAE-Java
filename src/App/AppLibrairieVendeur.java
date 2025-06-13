@@ -56,7 +56,6 @@ public class AppLibrairieVendeur {
         clearConsole();
 
         String titre = "Vendeur n°" + vendeur.getIdVendeur();
-        // Construction correcte de la ligne de titre sur 68 caractères
         String ligneTitre = "║  " + titre;
         if (ligneTitre.length() > 68) {
             ligneTitre = ligneTitre.substring(0, 68);

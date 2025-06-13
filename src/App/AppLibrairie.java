@@ -106,7 +106,7 @@ public class AppLibrairie {
             }
 
             try {
-                machineAEcrireLigneParLigne(titreAnime, 100); // 100ms entre chaque ligne
+                machineAEcrireLigneParLigne(titreAnime, 100);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -196,10 +196,10 @@ public void menuConnexion() throws NumberFormatException, SQLException {
         String[] menu = {
     centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
     centrerTexte("║                                                                        ║", largeurConsole),
-    centrerTexte("║     🔑  Client..........................................................[C] ║", largeurConsole),
-    centrerTexte("║     👨‍💼  Vendeur......................................................[V] ║", largeurConsole),
-    centrerTexte("║     🛠️  Administrateur..............................................[A]    ║", largeurConsole),
-    centrerTexte("║     ↩️  Retour........................................................[R]   ║", largeurConsole),
+    centrerTexte("║     🔑   Client....................................................[C] ║", largeurConsole),
+    centrerTexte("  ║    👨‍💼  Vendeur...................................................[V] ║", largeurConsole),
+    centrerTexte("  ║     🛠️    Administrateur............................................[A] ║", largeurConsole),
+    centrerTexte(" ║     ↩️    Retour....................................................[R] ║", largeurConsole),
     centrerTexte("║                                                                        ║", largeurConsole),
     centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
 };
@@ -228,7 +228,8 @@ public void menuConnexion() throws NumberFormatException, SQLException {
                 vendeurMenu.menuVendeur();
                 break;
             case "a":
-                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD);
+                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD, connexionMySQL);
+
                 adminMenu.menuAdministrateur();
                 break;
             default:
