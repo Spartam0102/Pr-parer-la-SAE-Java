@@ -13,6 +13,8 @@ public class AppLibrairie {
     private ConnexionMySQL connexionMySQL;
     private MagasinBD magasinBD;
     private LivreBD livreBD;  // Fixed variable name consistency
+    private StatistiqueBD statistiqueBD;
+
     private boolean connexionEtablie = false;
 
     
@@ -31,6 +33,7 @@ public class AppLibrairie {
             this.connexionMySQL.connecter();
             this.magasinBD = new MagasinBD(this.connexionMySQL);
             this.livreBD = new LivreBD(this.connexionMySQL);  // Fixed variable name
+            this.statistiqueBD = new StatistiqueBD(this.connexionMySQL);
             this.connexionEtablie = true;
             System.out.println("Connexion à la base de données établie avec succès !");
         } catch (ClassNotFoundException ex) {
@@ -228,7 +231,7 @@ public void menuConnexion() throws NumberFormatException, SQLException {
                 vendeurMenu.menuVendeur();
                 break;
             case "a":
-                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD, connexionMySQL);
+                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD,statistiqueBD, connexionMySQL);
 
                 adminMenu.menuAdministrateur();
                 break;
