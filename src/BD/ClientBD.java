@@ -2,6 +2,7 @@ package BD;
 import Java.*; 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -30,11 +31,51 @@ public class ClientBD {
 		return null;
 	}
 
+
+	public List<Livre> recupererToutLivreClient(int id) throws SQLException{
+		List<Livre> res = new ArrayList<>();
+		PreparedStatement commandesDuCLient = laConnexion.prepareStatement("select * from COMMANDE natural join DETAILCOMMANDE where idcli = ;");
+		commandesDuCLient.setInt(1,id);
+		ResultSet rsCommande = commandesDuCLient.executeQuery();
+		while(rsCommande.next()){
+			PreparedStatement livreDeLaCommande = laConnexion.prepareStatement("select * from LIVRE where isbn = ?");
+			commandesDuCLient.setLong(1, rsCommande.getLong("isbn"));
+			ResultSet rsLivre = livreDeLaCommande.executeQuery();
+			while (rsLivre.next()) {
+				Livre livre = new Livre(rsLivre.getLong("isbn"), 
+										rsLivre.getString("titre"), 
+										rsLivre.getString("datepubli"), 
+										rsLivre.getDouble("prix"),
+										rsLivre.getInt("nbpages"),
+										null,
+										null,
+										null);
+				res.add(livre);
+					
+			}
+		}
+		return res;
+	}
+
+	/*
+	int insererJoueur( Joueur j) throws  SQLException{
+		PreparedStatement ps = this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)"); 
+		
+		int numJoueur = this.maxNumJoueur()+1; 
+		ps.setInt(1,numJoueur);
+		ps.setString(2, j.getPseudo());
+		ps.setString(3, j.getMotdepasse());	
+		if (j.isAbonne())
+			ps.setString(4, "O");
+		else 
+			ps.setString(4, "N");
+
 	public Map<Livre, Integer> recupererPanier(int id) throws SQLException{
 		PreparedStatement ps = laConnexion.prepareStatement("select * from LIVRE natural join PANIER where idCli=" + id + ";");
 		ResultSet rs = ps.executeQuery();
 		Map<Livre, Integer> panier = new HashMap<>();
 		while (rs.next()){
+
 			
 			long isbn = Long.parseLong(rs.getString("isbn"));
 			int quantite = Integer.parseInt(rs.getString("quantite"));

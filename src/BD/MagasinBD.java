@@ -43,7 +43,9 @@ public class MagasinBD {
     PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");
     ps.setInt(1, num);
     ps.executeUpdate();
+
  }
+
 
 	public ArrayList<Magasin> listeDesMagasins() throws SQLException{
 		try(PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")){
@@ -66,52 +68,21 @@ public class MagasinBD {
         Map<Livre, Integer> livresUnMagasin = new HashMap<>();
 
         while (rs.next()){
-            long isbn = 0L;
-            String isbnStr = rs.getString("isbn");
-            if (isbnStr != null) isbn = Long.parseLong(isbnStr);
-
-            String titre = rs.getString("titre");
-
-            String datepubli = rs.getString("datepubli");
-
-            double prix = 0.0;
-            String prixStr = rs.getString("prix");
-            if (prixStr != null) prix = Double.parseDouble(prixStr);
-
-            int nbpages = 0;
-            String nbpagesStr = rs.getString("nbpages");
-            if (nbpagesStr != null) nbpages = Integer.parseInt(nbpagesStr);
-
-            int quantite = 0;
-            String qteStr = rs.getString("qte");
-            if (qteStr != null) quantite = Integer.parseInt(qteStr);
-
+            int quantite = rs.getInt("qte");
 			if (!(quantite == 0)){
-				Livre livre = new Livre(isbn, titre, datepubli, prix, nbpages, null, null, null);
+				Livre livre = new Livre(rs.getLong("isbn"), 
+										rs.getString("titre"), 
+										rs.getString("datepubli"), 
+										rs.getDouble("prix"),
+										rs.getInt("nbpages"),
+										null,
+										null,
+										null);
             livresUnMagasin.put(livre, quantite);
 			} 
         }
 
         return livresUnMagasin;
-    }
-}
-
-	String rapportMessage() throws SQLException{
-		return "rapportMessage A faire";
+    	}
 	}
-	
-	String rapportMessageComplet() throws SQLException{
-		return "rapportMessageComplet A faire";	
-	}
-
-	ArrayList<Map.Entry<String, Integer>> nbMsgParJour() throws SQLException{
-		// Pour créer une valeur pouvant être ajoutée à l'ArrayList<Map.Entry<String, Integer>>
-		// faire un new AbstractMap.SimpleEntry<>("coucou",45)
-		throw new SQLException("méthode nbMsgParJour à implémenter");
-	}
-	ArrayList<Map.Entry<String, Integer>> nbMain() throws SQLException{
-		// Pour créer une valeur pouvant être ajoutée à l'ArrayList<Map.Entry<String, Integer>>
-		// faire un new AbstractMap.SimpleEntry<>("coucou",45)
-		throw new SQLException("méthode nbMain à implémenter");
-	}	
 }
