@@ -9,7 +9,9 @@
             "name": "Executable",
             "request": "launch",
             "mainClass": "App.Executable",
-            "projectName": "Pr-parer-la-SAE-Java_3e6ac9f4"
+
+            "projectName": "Pr-parer-la-SAE-Java_a9dc1267"
+
         },
         {
             "type": "java",

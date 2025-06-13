@@ -24,80 +24,102 @@ public class AppLibrairieVendeur {
 
     public Vendeur menuvendeurConnexion() {
         System.out.println("\nConnexion :");
-        System.out.println("========================");
         System.out.print("Votre id > ");
         try {
-            String idStr = System.console().readLine();
+            String idStr = System.console() != null ? System.console().readLine() : scanner.nextLine();
             int id = Integer.parseInt(idStr);
             Vendeur vendeur = vendeurBD.recupererVendeur(id);
             if (vendeur == null) {
-                System.out.println("Cet id n'existe pas");
+                System.out.println("Cet id n'existe pas.");
+                return null;
             }
             return vendeur;
         } catch (NumberFormatException e) {
-            System.out.println("Veuillez rentrer un entier");
+            System.out.println("Veuillez rentrer un entier.");
+            return null;
         } catch (SQLException e) {
             System.out.println("Erreur lors de la récupération du vendeur : " + e.getMessage());
+            return null;
         }
-        return null;
     }
 
-    public void menuVendeur() {
-        Vendeur vendeur = this.menuvendeurConnexion();
-        while (vendeur == null) {
-            vendeur = this.menuvendeurConnexion();
+    public void menuVendeur() throws NumberFormatException, SQLException {
+    Vendeur vendeur = null;
+    while (vendeur == null) {
+        vendeur = menuvendeurConnexion();
+    }
+
+    boolean menuActif = true;
+    int largeurConsole = getLargeurConsole();
+
+    while (menuActif && !quitterApp) {
+        clearConsole();
+
+        String titre = "Vendeur n°" + vendeur.getIdVendeur();
+        // Construction correcte de la ligne de titre sur 68 caractères
+        String ligneTitre = "║  " + titre;
+        if (ligneTitre.length() > 68) {
+            ligneTitre = ligneTitre.substring(0, 68);
+        } else if (ligneTitre.length() < 68) {
+            ligneTitre += " ".repeat(68 - ligneTitre.length());
+        }
+        ligneTitre += "║";
+
+        String[] header = {
+            "╔════════════════════════════════════════════════════════════════════════╗",
+            ligneTitre,
+            "╚════════════════════════════════════════════════════════════════════════╝",
+            ""
+        };
+        for (int i = 0; i < header.length; i++) {
+            header[i] = centrerTexte(header[i], largeurConsole);
+        }
+        try {
+            machineAEcrireLigneParLigne(header, 100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
-        boolean menu3 = false;
-        while (!menu3 && !quitterApp) {
-            System.out.println("+-------------------------+");
-            System.out.println("| Vendeur " + vendeur.getIdVendeur() + "               |");
-            System.out.println("+-------------------------+");
-            System.out.println("| I: Infos Personnelles   |");
-            System.out.println("| A: Afficher magasins    |");
-            System.out.println("| V: Voir un panier       |");
-            System.out.println("| T: Transferer un livre  |");
-            System.out.println("| M: Menu précédent       |");
-            System.out.println("| Q: Quitter              |");
-            System.out.println("+-------------------------+");
+        System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+        System.out.println(centrerTexte("║  👤 Infos Perso...................................................[1] ║", largeurConsole));
+        System.out.println(centrerTexte("║  🏬 Afficher magasins............................................[2] ║", largeurConsole));
+        System.out.println(centrerTexte("║  🛒 Voir un panier...............................................[3] ║", largeurConsole));
+        System.out.println(centrerTexte("║  🔄 Transférer un livre..........................................[4] ║", largeurConsole));
+        System.out.println(centrerTexte("║  ↩️  Menu précédent...............................................[M] ║", largeurConsole));
+        System.out.println(centrerTexte("║  ❌ Quitter.......................................................[Q] ║", largeurConsole));
+        System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+        System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
 
-            String commande = lireCommande();
+        String cmd = lireCommande();
 
-            switch (commande) {
-                case "i":
-                    System.out.println(vendeur);
-                    break;
-
-                case "a":
-                    menuMagasins(vendeur);
-                    break;
-
-                case "v":
-                    voirPanierClient();
-                    break;
-
-                case "t":
-                    transfererLivreEntreMagasins(vendeur);
-                    break;
-
-
-                case "m":
-                    menu3 = true;
-                    break;
-
-                case "q":
-                    quitterApp = true;
-                    menu3 = true;
-                    break;
-
-                default:
-                    System.out.println("Commande invalide.");
-                    break;
+        switch (cmd) {
+            case "1" -> {
+                System.out.println(centrerTexte(vendeur.toString(), largeurConsole));
+                pause();
+            }
+            case "2" -> menuMagasins(vendeur);
+            case "3" -> voirPanierClient();
+            case "4" -> transfererLivreEntreMagasins(vendeur);
+            case "m" -> menuActif = false;
+            case "q" -> {
+                quitterApp = true;
+                menuActif = false;
+            }
+            default -> {
+                System.out.println("\n>>> Commande invalide.");
+                attendre(1500);
             }
         }
     }
+}
+
+
 
     private void voirPanierClient() {
+        clearConsole();
+        System.out.println("╔══════════════════════════════╗");
+        System.out.println("║         Voir Panier          ║");
+        System.out.println("╚══════════════════════════════╝");
         System.out.print("ID du client > ");
         try {
             int idClient = Integer.parseInt(scanner.nextLine());
@@ -109,6 +131,7 @@ public class AppLibrairieVendeur {
                 if (panier.isEmpty()) {
                     System.out.println("Le panier du client est vide.");
                 } else {
+                    System.out.println("\nContenu du panier :");
                     for (Map.Entry<Livre, Integer> entry : panier.entrySet()) {
                         System.out.println(entry.getKey().getNomLivre() + " (" + entry.getValue() + ")");
                     }
@@ -119,180 +142,294 @@ public class AppLibrairieVendeur {
         } catch (SQLException e) {
             System.out.println("Erreur SQL : " + e.getMessage());
         }
-        attendreEntree();
+        pause();
     }
 
+    public void menuMagasins(Vendeur vendeur) throws NumberFormatException, SQLException {
+        boolean menuActif = true;
+        int largeurConsole = getLargeurConsole();
+
+        while (menuActif && !quitterApp) {
+            clearConsole();
+
+            String[] header = {
+                "╔════════════════════════════════════════════════════════════════════════╗",
+                centrerTexte("║           📚  Liste des Magasins                                   ║", 72),
+                "╠════════════════════════════════════════════════════════════════════════╣"
+            };
+
+            for (String ligne : header) {
+                System.out.println(centrerTexte(ligne, largeurConsole));
+            }
+
+            try {
+                List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
+                for (int i = 0; i < listeMagasins.size(); i++) {
+                    String nom = listeMagasins.get(i).getNom();
+                    if (nom.length() > 58) nom = nom.substring(0, 55) + "...";
+                    String ligneMagasin = String.format("║  %2d : %-58s║", i + 1, nom);
+                    System.out.println(centrerTexte(ligneMagasin, largeurConsole));
+                }
+            } catch (SQLException e) {
+                System.out.println(centrerTexte("Erreur lors de la récupération des magasins : " + e.getMessage(), largeurConsole));
+                pause();
+                return;
+            }
+
+            String[] footer = {
+                "╠════════════════════════════════════════════════════════════════════════╣",
+                "║  ↩️  Menu précédent...................................................[M] ║",
+                "║  ❌ Quitter...........................................................[Q] ║",
+                "╚════════════════════════════════════════════════════════════════════════╝"
+            };
+
+            for (String ligne : footer) {
+                System.out.println(centrerTexte(ligne, largeurConsole));
+            }
+
+            String cmd = lireCommande();
+
+            if (cmd.matches("[1-" + magasinBD.listeDesMagasins().size() + "]")) {
+                int choix = Integer.parseInt(cmd);
+                try {
+                    menuUnMagasin(magasinBD.listeDesMagasins().get(choix - 1), vendeur);
+                } catch (SQLException e) {
+                    System.out.println(centrerTexte("Erreur lors de l'ouverture du magasin : " + e.getMessage(), largeurConsole));
+                    pause();
+                }
+            } else {
+                switch (cmd) {
+                    case "m" -> menuActif = false;
+                    case "q" -> {
+                        quitterApp = true;
+                        menuActif = false;
+                    }
+                    default -> {
+                        System.out.println("\n>>> Commande invalide.");
+                        attendre(1500);
+                    }
+                }
+            }
+        }
+    }
 
     private void menuUnMagasin(Magasin magasin, Vendeur vendeur) {
-    boolean quitterMagasin = false;
-    while (!quitterMagasin && !quitterApp) {
-        System.out.println("+------------------------------+");
-        System.out.println("| Magasin : " + magasin.getNom());
-        System.out.println("+------------------------------+");
-        System.out.println("| M: Menu précédent             |");
-        System.out.println("| Q: Quitter                   |");
-        System.out.println("+------------------------------+");
+        boolean menuActif = true;
+        int largeurConsole = getLargeurConsole();
 
-        String commande = lireCommande();
+        while (menuActif && !quitterApp) {
+            clearConsole();
 
-        switch (commande) {
-            case "m":
-                quitterMagasin = true;
-                break;
+            String nom = magasin.getNom();
+            if (nom.length() > 58) nom = nom.substring(0, 55) + "...";
 
-            case "q":
-                quitterApp = true;
-                quitterMagasin = true;
-                break;
+            String[] titre = {
+                "╔════════════════════════════════════════════════════════════════════════╗",
+                ("║  " + nom).substring(0, Math.min(nom.length() + 4, 68)) + " ".repeat(68 - nom.length() - 4) + "║",
+                "╚════════════════════════════════════════════════════════════════════════╝",
+                ""
+            };
+            for (int i = 0; i < titre.length; i++) {
+                titre[i] = centrerTexte(titre[i], largeurConsole);
+            }
+            try {
+                machineAEcrireLigneParLigne(titre, 100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
 
-            default:
-                System.out.println("Commande invalide.");
-                break;
-        }
-    }
-}
+            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte("║  🏪 Infos Magasin...................................................[I] ║", largeurConsole));
+            System.out.println(centrerTexte("║  📦 Voir stock......................................................[S] ║", largeurConsole));
+            System.out.println(centrerTexte("║  ↩️  Menu précédent.................................................[M] ║", largeurConsole));
+            System.out.println(centrerTexte("║  ❌ Quitter..........................................................[Q] ║", largeurConsole));
+            System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+            System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
 
+            String cmd = lireCommande().toLowerCase();
 
-    
-private void transfererLivreEntreMagasins(Vendeur vendeur) {
-    try {
-        // Étape 1 : Choix du magasin source (doit être le magasin du vendeur ? ou un autre magasin ?)
-        System.out.println("Sélectionnez le magasin source :");
-        List<Magasin> magasins = magasinBD.listeDesMagasins();
-        if (magasins.isEmpty()) {
-            System.out.println("Aucun magasin disponible.");
-            attendreEntree();
-            return;
-        }
-        for (int i = 0; i < magasins.size(); i++) {
-            System.out.println((i + 1) + ". " + magasins.get(i).getNom());
-        }
-        System.out.print("Numéro du magasin source > ");
-        int indexMagasinSource = Integer.parseInt(scanner.nextLine()) - 1;
-        if (indexMagasinSource < 0 || indexMagasinSource >= magasins.size()) {
-            System.out.println("Choix invalide.");
-            attendreEntree();
-            return;
-        }
-        Magasin magasinSource = magasins.get(indexMagasinSource);
-
-        // Étape 2 : Afficher le stock du magasin source
-        Map<Livre, Integer> stockSource = magasinBD.listeLivreUnMagasin(magasinSource.getIdMagasin());
-
-        if (stockSource.isEmpty()) {
-            System.out.println("Le magasin source n'a aucun livre en stock.");
-            attendreEntree();
-            return;
-        }
-        Livre[] livresStock = new Livre[stockSource.size()];
-        int i = 0;
-        System.out.println("Livres disponibles dans le magasin source :");
-        for (Map.Entry<Livre, Integer> entry : stockSource.entrySet()) {
-            System.out.println((i + 1) + ". " + entry.getKey().getNomLivre() + " (" + entry.getValue() + ")");
-            livresStock[i] = entry.getKey();
-            i++;
-        }
-        System.out.print("Numéro du livre à transférer > ");
-        int indexLivre = Integer.parseInt(scanner.nextLine()) - 1;
-        if (indexLivre < 0 || indexLivre >= livresStock.length) {
-            System.out.println("Choix invalide.");
-            attendreEntree();
-            return;
-        }
-        Livre livreChoisi = livresStock[indexLivre];
-
-        System.out.print("Quantité à transférer > ");
-        int quantite = Integer.parseInt(scanner.nextLine());
-        if (quantite <= 0 || quantite > stockSource.get(livreChoisi)) {
-            System.out.println("Quantité invalide.");
-            attendreEntree();
-            return;
-        }
-
-        // Étape 3 : Choix du magasin destination
-        System.out.println("Sélectionnez le magasin destination :");
-        for (int j = 0; j < magasins.size(); j++) {
-            if (j != indexMagasinSource) {
-                System.out.println((j + 1) + ". " + magasins.get(j).getNom());
+            switch (cmd) {
+                case "i" -> {
+                    System.out.println(centrerTexte(magasin.toString(), largeurConsole));
+                    pause();
+                }
+                case "s" -> {
+                    try {
+                        Map<Livre, Integer> stock = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
+                        afficherStock(stock);
+                    } catch (SQLException e) {
+                        System.out.println(centrerTexte("Erreur lors de la récupération du stock : " + e.getMessage(), largeurConsole));
+                        pause();
+                    }
+                }
+                case "m" -> menuActif = false;
+                case "q" -> {
+                    quitterApp = true;
+                    menuActif = false;
+                }
+                default -> {
+                    System.out.println("\n>>> Commande invalide.");
+                    attendre(1500);
+                }
             }
         }
-        System.out.print("Numéro du magasin destination > ");
-        int indexMagasinDestination = Integer.parseInt(scanner.nextLine()) - 1;
-        if (indexMagasinDestination < 0 || indexMagasinDestination >= magasins.size() || indexMagasinDestination == indexMagasinSource) {
-            System.out.println("Choix invalide.");
-            attendreEntree();
-            return;
-        }
-        Magasin magasinDestination = magasins.get(indexMagasinDestination);
-
-        // Étape 4 : Effectuer le transfert via la méthode du vendeur
-        Map<Livre, Integer> livresATransferer = Map.of(livreChoisi, quantite);
-        vendeur.transfererLivre(magasinDestination, livresATransferer);
-        System.out.println("Transfert effectué avec succès.");
-        attendreEntree();
-
-    } catch (NumberFormatException e) {
-        System.out.println("Entrée invalide.");
-        attendreEntree();
-    } catch (Exception e) {
-        System.out.println("Erreur : " + e.getMessage());
-        attendreEntree();
     }
-}
-    
 
-public void menuMagasins(Vendeur vendeur) {
-    boolean menu3 = false;
-    while (!menu3 && !quitterApp) {
-        System.out.println("+-------------------------+");
-        System.out.println("| Magasins                |");
-        System.out.println("+-------------------------+");
+     private String centrerTexte(String texte, int largeurConsole) {
+        int espacement = Math.max(0, (largeurConsole - texte.length()) / 2);
+        return " ".repeat(espacement) + texte;
+    }
+    
+    private void machineAEcrireLigneParLigne(String[] lignes, int delai) throws InterruptedException {
+        for (String ligne : lignes) {
+            System.out.println(ligne);
+            Thread.sleep(delai);
+        }
+    }
+    
+    private void afficherStock(Map<Livre, Integer> stock) {
+        clearConsole();
+        System.out.println("╔══════════════════════════════╗");
+        System.out.println("║           Stock              ║");
+        System.out.println("╠══════════════════════════════╣");
+
+        if (stock.isEmpty()) {
+            System.out.println("║ (vide)                       ║");
+        } else {
+            for (Map.Entry<Livre, Integer> entry : stock.entrySet()) {
+                String nom = entry.getKey().getNomLivre();
+                int quantite = entry.getValue();
+                if (nom.length() > 20) nom = nom.substring(0, 17) + "...";
+                System.out.printf("║ %-20s (%2d)     ║\n", nom, quantite);
+            }
+        }
+        System.out.println("╚══════════════════════════════╝");
+        pause();
+    }
+
+    private void transfererLivreEntreMagasins(Vendeur vendeur) {
         try {
-            List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
-            int num = 0;
-            for (Magasin magasin : listeMagasins) {
-                String nomMagasin = magasin.getNom();
-                if (nomMagasin.length() >= 22) {
-                    nomMagasin = nomMagasin.substring(0, 20 - 3) + "...";
-                }
-                int longueurRestante = 21 - nomMagasin.length();
-                for (int y = 0; y < longueurRestante; y++) {
-                    nomMagasin += " ";
-                }
-                num += 1;
-                System.out.println("| " + num + ": " + nomMagasin + "|");
+            clearConsole();
+            System.out.println("╔══════════════════════════════╗");
+            System.out.println("║      Transfert de Livre      ║");
+            System.out.println("╚══════════════════════════════╝");
+            
+            System.out.println("Sélectionnez le magasin source :");
+            List<Magasin> magasins = magasinBD.listeDesMagasins();
+            if (magasins.isEmpty()) {
+                System.out.println("Aucun magasin disponible.");
+                pause();
+                return;
             }
-            System.out.println("| M: Menu précédent       |");
-            System.out.println("| Q: Quitter              |");
-            System.out.println("+-------------------------+");
-
-            String commande = lireCommande();
-
-            if (commande.matches("[1-" + listeMagasins.size() + "]")) {
-                int commandeInt = Integer.parseInt(commande);
-                menuUnMagasin(listeMagasins.get(commandeInt - 1), vendeur);
-            } else if (commande.equals("m")) {
-                menu3 = true;
-            } else if (commande.equals("q")) {
-                quitterApp = true;
-                menu3 = true;
-            } else {
-                System.out.println("Commande invalide.");
+            for (int i = 0; i < magasins.size(); i++) {
+                System.out.println((i + 1) + ". " + magasins.get(i).getNom());
             }
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération des magasins : " + e.getMessage());
+            System.out.print("Numéro du magasin source > ");
+            int indexMagasinSource = Integer.parseInt(scanner.nextLine()) - 1;
+            if (indexMagasinSource < 0 || indexMagasinSource >= magasins.size()) {
+                System.out.println("Choix invalide.");
+                pause();
+                return;
+            }
+            Magasin magasinSource = magasins.get(indexMagasinSource);
+
+            Map<Livre, Integer> stockSource = magasinBD.listeLivreUnMagasin(magasinSource.getIdMagasin());
+            if (stockSource.isEmpty()) {
+                System.out.println("Le magasin source n'a aucun livre en stock.");
+                pause();
+                return;
+            }
+            Livre[] livresStock = new Livre[stockSource.size()];
+            int i = 0;
+            System.out.println("Livres disponibles dans le magasin source :");
+            for (Map.Entry<Livre, Integer> entry : stockSource.entrySet()) {
+                System.out.println((i + 1) + ". " + entry.getKey().getNomLivre() + " (" + entry.getValue() + ")");
+                livresStock[i] = entry.getKey();
+                i++;
+            }
+            System.out.print("Numéro du livre à transférer > ");
+            int indexLivre = Integer.parseInt(scanner.nextLine()) - 1;
+            if (indexLivre < 0 || indexLivre >= livresStock.length) {
+                System.out.println("Choix invalide.");
+                pause();
+                return;
+            }
+            Livre livreChoisi = livresStock[indexLivre];
+
+            System.out.print("Quantité à transférer > ");
+            int quantite = Integer.parseInt(scanner.nextLine());
+            if (quantite <= 0 || quantite > stockSource.get(livreChoisi)) {
+                System.out.println("Quantité invalide.");
+                pause();
+                return;
+            }
+
+            System.out.println("Sélectionnez le magasin destination :");
+            for (int j = 0; j < magasins.size(); j++) {
+                if (j != indexMagasinSource) {
+                    System.out.println((j + 1) + ". " + magasins.get(j).getNom());
+                }
+            }
+            System.out.print("Numéro du magasin destination > ");
+            int indexMagasinDestination = Integer.parseInt(scanner.nextLine()) - 1;
+            if (indexMagasinDestination < 0 || indexMagasinDestination >= magasins.size() || indexMagasinDestination == indexMagasinSource) {
+                System.out.println("Choix invalide.");
+                pause();
+                return;
+            }
+            Magasin magasinDestination = magasins.get(indexMagasinDestination);
+
+            Map<Livre, Integer> livresATransferer = Map.of(livreChoisi, quantite);
+            vendeur.transfererLivre(magasinDestination, livresATransferer);
+            System.out.println("Transfert effectué avec succès.");
+            pause();
+
+        } catch (NumberFormatException e) {
+            System.out.println("Entrée invalide.");
+            pause();
+        } catch (Exception e) {
+            System.out.println("Erreur : " + e.getMessage());
+            pause();
         }
     }
-}
-
 
     private String lireCommande() {
-        System.out.print("Commande > ");
-        return scanner.nextLine().strip().toLowerCase();
+        String input = scanner.nextLine().strip().toLowerCase();
+        effacerDerniereLigne();
+        return input;
     }
 
-    private void attendreEntree() {
+    private void effacerDerniereLigne() {
+        System.out.print("\033[1A");  // remonter curseur d'une ligne
+        System.out.print("\033[2K");  // effacer la ligne
+    }
+
+    private void clearConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("clear").inheritIO().start().waitFor();
+            }
+        } catch (Exception e) {
+            for (int i = 0; i < 50; ++i) System.out.println();
+        }
+    }
+
+    private int getLargeurConsole() {
+        return 100; 
+    }
+    
+    private void pause() {
         System.out.println("\nAppuyez sur Entrée pour continuer...");
         scanner.nextLine();
+    }
+
+    private void attendre(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

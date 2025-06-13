@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class ClientBD {
 	ConnexionMySQL laConnexion;
@@ -29,6 +30,7 @@ public class ClientBD {
 		}
 		return null;
 	}
+
 
 	public List<Livre> recupererToutLivreClient(int id) throws SQLException{
 		List<Livre> res = new ArrayList<>();
@@ -67,92 +69,61 @@ public class ClientBD {
 			ps.setString(4, "O");
 		else 
 			ps.setString(4, "N");
+
+	public Map<Livre, Integer> recupererPanier(int id) throws SQLException{
+		PreparedStatement ps = laConnexion.prepareStatement("select * from LIVRE natural join PANIER where idCli=" + id + ";");
+		ResultSet rs = ps.executeQuery();
+		Map<Livre, Integer> panier = new HashMap<>();
+		while (rs.next()){
+
 			
-		ps.setString(5, ""+j.getMain());
-		ps.setInt(6, j.getNiveau());
+			long isbn = Long.parseLong(rs.getString("isbn"));
+			int quantite = Integer.parseInt(rs.getString("quantite"));
 
-		ps.executeUpdate(); 
-		return numJoueur; 
+			String titre = rs.getString("titre");
 
+			String datepubli = rs.getString("datepubli");
+
+			double prix = 0.0;
+			String prixStr = rs.getString("prix");
+			if (prixStr != null) prix = Double.parseDouble(prixStr);
+
+			int nbpages = 0;
+			String nbpagesStr = rs.getString("nbpages");
+			if (nbpagesStr != null) nbpages = Integer.parseInt(nbpagesStr);
+
+			Livre livre = new Livre(isbn, titre, datepubli, prix, nbpages, null, null, null);
+			panier.put(livre, quantite);						
+		}
+		return panier;
+	}
+ 
+	public void sauvegardePanierBD(Client client) throws SQLException {
+		int idCli = client.getIdCli();
+
+		String deleteSql = "DELETE FROM PANIER WHERE idCli = ?";
+		PreparedStatement ps1 = this.laConnexion.prepareStatement(deleteSql);
+		ps1.setInt(1, idCli);
+		ps1.executeUpdate();
+		ps1.close();
+
+		String insertSql = "INSERT INTO PANIER (idCli, isbn, quantite) VALUES (?, ?, ?)";
+		PreparedStatement ps2 = this.laConnexion.prepareStatement(insertSql);
+
+		for (Map.Entry<Livre, Integer> entree : client.getPanier().entrySet()){
+			Livre livre = entree.getKey();
+			int quantite = entree.getValue();
+
+			ps2.setInt(1, idCli);
+			ps2.setString(2, Long.toString(livre.getIdLivre()));
+			ps2.setInt(3, quantite);
+
+			ps2.executeUpdate();
+		}
+		ps2.close();
 	}
 
 
-	void effacerJoueur(int num) throws SQLException {
-    PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM JOUEUR WHERE numJoueur = ?");
-    ps.setInt(1, num);
-    ps.executeUpdate();
-}
-
-    void majJoueur(Joueur j)throws SQLException{
-		throw new SQLException("méthode majJoueur à implémenter");
-    }
-
-    Joueur rechercherJoueurParNum(int num) throws SQLException {
-    PreparedStatement ps = this.laConnexion.prepareStatement("SELECT * FROM JOUEUR WHERE numJoueur = ?");
-    ps.setInt(1, num);
-    ResultSet rs = ps.executeQuery();
-
-    if (rs.next()) {
-        String pseudo = rs.getString("pseudo");
-        String motdepasse = rs.getString("motdepasse");
-        boolean abonne = rs.getString("abonne").equalsIgnoreCase("O");
-        String main = rs.getString("main");
-        int niveau = rs.getInt("niveau");
-
-        return new Joueur(num, pseudo, motdepasse, abonne, main.charAt(0), niveau);
-    } else {
-        return null; 
-    }
-}
-	 */
-
-/* 
-	int insererJoueur( Joueur j) throws  SQLException{
-		PreparedStatement ps=this.laConnexion.prepareStatement("insert into JOUEUR values (?,?,?,?,?,?)");
-		int numJoueur=this.maxNumJoueur()+1;
-		ps.setInt(1,numJoueur);
-		ps.setString(2, j.getPseudo());
-		ps.setString(3, j.getMotdepasse());
-		if(j.isAbonne()){
-			ps.setString(4,"0");
-		}else{
-			ps.setString(4, "N");
-		}
-		ps.setString(5,""+j.getMain());
-		ps.setInt(6, j.getNiveau());
-
-		ps.executeUpdate();
-
-		return numJoueur;
-	}
-
-
-void effacerJoueur(int num) throws SQLException {
-    String sql = "DELETE FROM JOUEUR WHERE numJoueur = ?";
-    PreparedStatement ps = this.laConnexion.prepareStatement(sql);
-    ps.setInt(1, num);
-    ps.executeUpdate();
-}
-void majJoueur(Joueur j) throws SQLException {
-    String sql = "UPDATE JOUEUR SET pseudo = ?, motdepasse = ?, abonne = ?, main = ?, niveau = ? WHERE numJoueur = ?";
-    PreparedStatement ps = this.laConnexion.prepareStatement(sql);
-    ps.setString(1, j.getPseudo());
-    ps.setString(2, j.getMotdepasse());
-		if(j.isAbonne()){
-			ps.setString(4,"0");
-		}else{
-			ps.setString(4, "N");
-		}
-    ps.setString(4, String.valueOf(j.getMain()));
-    ps.setInt(5, j.getNiveau());
-    ps.setInt(6, j.getNumJoueur());
-    ps.executeUpdate();
-}
-
-    Joueur rechercherJoueurParNum(int num)throws SQLException{
-    	throw new SQLException("méthode rechercherJoueurParNum à implémenter");
-    }
-*/
 	ArrayList<Magasin> listeDesMagasins() throws SQLException{
 		try(PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")){
 			ResultSet rs = ps.executeQuery();
@@ -163,23 +134,4 @@ void majJoueur(Joueur j) throws SQLException {
 			return entreprise;
 		}
 	}
-	
-	String rapportMessage() throws SQLException{
-		return "rapportMessage A faire";
-	}
-	
-	String rapportMessageComplet() throws SQLException{
-		return "rapportMessageComplet A faire";	
-	}
-
-	ArrayList<Map.Entry<String, Integer>> nbMsgParJour() throws SQLException{
-		// Pour créer une valeur pouvant être ajoutée à l'ArrayList<Map.Entry<String, Integer>>
-		// faire un new AbstractMap.SimpleEntry<>("coucou",45)
-		throw new SQLException("méthode nbMsgParJour à implémenter");
-	}
-	ArrayList<Map.Entry<String, Integer>> nbMain() throws SQLException{
-		// Pour créer une valeur pouvant être ajoutée à l'ArrayList<Map.Entry<String, Integer>>
-		// faire un new AbstractMap.SimpleEntry<>("coucou",45)
-		throw new SQLException("méthode nbMain à implémenter");
-	}	
 }

@@ -43,7 +43,8 @@ public class MagasinBD {
     PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");
     ps.setInt(1, num);
     ps.executeUpdate();
-}
+
+ }
 
 
 	public ArrayList<Magasin> listeDesMagasins() throws SQLException{
