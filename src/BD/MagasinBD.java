@@ -2,6 +2,7 @@ package BD;
 import Java.*; 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -60,7 +61,7 @@ public class MagasinBD {
 	}
 	
 	public Map<Livre, Integer> listeLivreUnMagasin(long id) throws SQLException {
-    String requete = "SELECT DISTINCT isbn, titre, datepubli, prix, nbpages, qte FROM LIVRE NATURAL JOIN POSSEDER WHERE idmag = ?";
+    String requete = "SELECT DISTINCT isbn, titre, datepubli, prix, nbpages, qte, idmag FROM LIVRE NATURAL JOIN POSSEDER WHERE idmag = ?";
     
     try (PreparedStatement ps = laConnexion.prepareStatement(requete)){
         ps.setLong(1, id);
@@ -70,6 +71,7 @@ public class MagasinBD {
         while (rs.next()){
             int quantite = rs.getInt("qte");
 			if (!(quantite == 0)){
+				
 				Livre livre = new Livre(rs.getLong("isbn"), 
 										rs.getString("titre"), 
 										rs.getString("datepubli"), 
