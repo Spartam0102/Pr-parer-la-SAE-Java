@@ -38,5 +38,4 @@ public class ConnexionMySQL {
 	public PreparedStatement prepareStatement(String requete) throws SQLException{
 		return this.mysql.prepareStatement(requete);
 	}
-	
 }

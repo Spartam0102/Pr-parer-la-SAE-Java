@@ -44,9 +44,19 @@ public class AppLibrairieClient {
         try {
             String idStr = System.console() != null ? System.console().readLine() : scanner.nextLine();
             int id = Integer.parseInt(idStr);
-            Client client = clientBD.recupererClient(id);
-            if (client == null) {
-                System.out.println(centrerTexte("Cet id n'existe pas.", largeur));
+
+            try{
+                Client client = clientBD.recupererClient(id);
+                if (client == null){
+                    System.out.println("Cet id n'existe pas");
+                }
+                else{
+                    client.setPanier(clientBD.recupererPanier(id));
+                }
+                return client;
+            } catch(SQLException e){
+                System.out.println("Erreur lors de la récupération du client : " + e.getMessage());
+
                 return null;
             }
             return client;
@@ -75,11 +85,14 @@ public class AppLibrairieClient {
         for (int i = 0; i < titre.length; i++) {
             titre[i] = centrerTexte(titre[i], largeurConsole);
         }
+
         try {
             machineAEcrireLigneParLigne(titre, 100);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
+
         }
+
 
         try {
             List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
@@ -171,14 +184,17 @@ public class AppLibrairieClient {
                 System.out.println(centrerTexte(magasin.toString(), largeurConsole));
                 pause();
             }
+
             case "s" -> {
                 try {
+
                     Map<Livre, Integer> stock = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
                     afficherStock(stock);
                 } catch (SQLException e) {
                     System.out.println(centrerTexte("Erreur lors de la récupération du stock : " + e.getMessage(), largeurConsole));
                     pause();
                 }
+
             }
             case "m" -> menuActif = false;
             case "q" -> {
@@ -188,6 +204,7 @@ public class AppLibrairieClient {
             default -> {
                 System.out.println("\n>>> Commande invalide.");
                 attendre(1500);
+
             }
         }
     }
@@ -198,6 +215,7 @@ public class AppLibrairieClient {
         System.out.println("╔══════════════════════════════╗");
         System.out.println("║           Stock              ║");
         System.out.println("╠══════════════════════════════╣");
+
 
         if (stock.isEmpty()) {
             System.out.println("║ (vide)                       ║");
@@ -327,6 +345,144 @@ public void afficherPanier(Client client) {
     // ... conserver les autres méthodes (menuMagasins, menuUnMagasin, menuStock, afficherPanier, etc.)
     // Elles peuvent aussi être stylisées si tu veux que je continue
 
+
+    public void menuStock(Map<Livre, Integer> stock, Client client) {
+        boolean menu3 = false;
+        while (!menu3 && !quitterApp) {
+            System.out.println("+-------------------------+");
+            System.out.println("| Stock                   |");
+            System.out.println("+-------------------------+");
+            int num = 1;
+            for (Map.Entry<Livre, Integer> coupleLivre : stock.entrySet()) {
+                if (!(coupleLivre.getValue() == 0)){
+                    String livre = coupleLivre.getKey().getNomLivre();
+                    if (livre.length() >= 17){
+                        livre = livre.substring(0, 17 - 3) + "...";
+                    }
+                    int quantite = coupleLivre.getValue();
+                    int longueurRestante = 17 - livre.length();
+                    livre += " (" + quantite + ")";
+                    for (int y = 0; y < longueurRestante; y++) {
+                        livre += " ";
+                    }
+                    System.out.println("| " + num + ": " + livre + "|");
+                    num += 1;
+                }
+            }
+            System.out.println("+-------------------------+");
+            System.out.println("| Pour ajouter un livre à |");
+            System.out.println("| votre panier, entrez le |");
+            System.out.println("| numéro correspondant au |");
+            System.out.println("| livre                   |");
+            System.out.println("+-------------------------+");
+            System.out.println("| P: Panier               |");
+            System.out.println("| M: Menu précédent       |");
+            System.out.println("| Q: Quitter              |");
+            System.out.println("+-------------------------+");
+
+            String commande = lireCommande();
+
+            try{
+                int commandeInt = Integer.parseInt(commande);
+                int nbLivreDiff = stock.size();
+                if ((commandeInt > 0) && (commandeInt <= nbLivreDiff)) {
+                    Livre livre = null;
+                    int quantiteRestante = 0;
+                    int i = 0;
+                    int indexRecherche = commandeInt - 1;
+                    for (Map.Entry<Livre, Integer> couple : stock.entrySet()) {
+                        if (i == indexRecherche) {
+                            livre = couple.getKey();
+                            quantiteRestante = couple.getValue();
+                            break;
+                        }
+                        i++;
+                    }
+                    if (client.getPanier().get(livre) != null) {
+                        if (quantiteRestante <= client.getPanier().get(livre)) {
+                            System.out.println("Stock insuffisant");
+                            attendreEntree();
+                        }
+                        else {
+                            client.ajouterLivrePanier(livre);
+                        }
+                    }
+                    else {
+                        client.ajouterLivrePanier(livre);
+                        try{
+                            clientBD.sauvegardePanierBD(client);
+                        }
+                        catch(Exception e){
+                            System.out.println("Impossible de sauvegarder dans la bd");
+                            attendreEntree();}
+                    }
+                }
+                else{
+                    System.out.println("Le numéro de livre que vous avez saisie n'existe pas");
+                    attendreEntree();
+                }
+            }
+            catch(NumberFormatException e){
+                if (commande.equals("p")) {
+                    menuPanier(client);
+                } 
+                else if (commande.equals("m")) {
+                    menu3 = true;
+                }
+                else if (commande.equals("q")) {
+                    quitterApp = true;
+                    menu3 = true;
+                }   
+                else {
+                    System.out.println("Commande invalide.");
+                }
+            }
+        }
+    }
+
+    public void menuPanier(Client client) {
+        boolean menu3 = false;
+        while (!menu3 && !quitterApp) {
+            System.out.println("+-------------------------+");
+            System.out.println("| Client " + client.getIdCli() + "               |");
+            System.out.println("+-------------------------+");
+            System.out.println("| V: Voir mon panier      |");
+            System.out.println("| S: Supprimer Panier     |");
+            System.out.println("| C: Commander            |");
+            System.out.println("| M: Menu précédent       |");
+            System.out.println("| Q: Quitter              |");
+            System.out.println("+-------------------------+");
+
+            String commande = lireCommande();
+
+            if (commande.equals("v")) {
+                voirPanier(client);
+            }
+            else if (commande.equals("s")) {
+                client.reunitialiserPanier();
+                try{
+                    clientBD.sauvegardePanierBD(client);
+                }
+                catch(Exception e){
+                    System.out.println("Impossible de sauvegarder dans la bd");
+                    attendreEntree();}
+            }
+            else if (commande.equals("c")) {
+            } 
+            else if (commande.equals("m")) {
+                menu3 = true;
+            }
+            else if (commande.equals("q")) {
+                quitterApp = true;
+                menu3 = true;
+            }
+            else {
+                System.out.println("Commande invalide.");
+            }
+        }
+    }
+
+
     private String lireCommande() {
         String input = scanner.nextLine().strip().toLowerCase();
         effacerDerniereLigne();
@@ -350,7 +506,26 @@ public void afficherPanier(Client client) {
         }
     }
 
+
     private void pause() {
+
+    private void voirPanier(Client client){
+        if (client.getPanier().isEmpty()) {
+            System.out.println("Panier vide.");
+            attendreEntree();
+        }
+        else {
+            for (Map.Entry<Livre, Integer> coupleLivre : client.getPanier().entrySet()) {
+                String livre = coupleLivre.getKey().getNomLivre();
+                int quantite = coupleLivre.getValue();
+                System.out.println(livre + " (" + quantite + ")\n");
+            }
+            attendreEntree();
+        }
+    }
+
+    private void attendreEntree(){
+
         System.out.println("\nAppuyez sur Entrée pour continuer...");
         scanner.nextLine();
     }
