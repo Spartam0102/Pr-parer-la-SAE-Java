@@ -14,10 +14,14 @@ public class AppLibrairieAdmin {
     private boolean quitterApp = false;
     private Scanner scanner = new Scanner(System.in);
 
-    public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD) {
-        this.magasinBD = magasinBD;
-        this.livreBD = livreBD;
-    }
+    private ConnexionMySQL connexionMySQL; 
+
+public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, ConnexionMySQL connexionMySQL) {
+    this.magasinBD = magasinBD;
+    this.livreBD = livreBD;
+    this.connexionMySQL = connexionMySQL;
+}
+
 
     public void menuAdministrateur() {
         boolean menuActif = true;
@@ -162,16 +166,47 @@ public class AppLibrairieAdmin {
     }
 
     private void creerCompteVendeur() {
-        System.out.println("🧑‍💼 Création d'un compte vendeur...");
-        System.out.print("Nom d'utilisateur > ");
-        String nom = scanner.nextLine().strip();
+    System.out.println("🧑‍💼 Création d'un compte vendeur...");
 
-        System.out.print("Mot de passe > ");
-        String mdp = scanner.nextLine().strip();
+    System.out.print("Nom > ");
+    String nom = scanner.nextLine().strip();
 
-        // TODO: enregistrement réel en base
-        System.out.println("✅ Compte vendeur \"" + nom + "\" créé avec succès. (simulation)");
+    System.out.print("Prénom > ");
+    String prenom = scanner.nextLine().strip();
+
+    System.out.print("ID du magasin > ");
+    String idMagStr = scanner.nextLine().strip();
+
+    int idMagasin;
+    try {
+        idMagasin = Integer.parseInt(idMagStr);
+    } catch (NumberFormatException e) {
+        System.out.println("⚠️ ID de magasin invalide.");
+        return;
     }
+
+    try {
+        List<Magasin> magasins = magasinBD.listeDesMagasins();
+        Magasin magasinAssocie = magasins.stream()
+                .filter(m -> m.getIdMagasin() == idMagasin)
+                .findFirst()
+                .orElse(null);
+
+        if (magasinAssocie == null) {
+            System.out.println("❌ Aucun magasin trouvé avec l'ID fourni.");
+            return;
+        }
+
+        Vendeur vendeur = new Vendeur(nom, prenom, null, 0, magasinAssocie);
+        VendeurBD vendeurBD = new VendeurBD(connexionMySQL);
+        vendeurBD.creerVendeur(vendeur);
+
+        System.out.println("✅ Compte vendeur créé avec succès !");
+    } catch (SQLException e) {
+        System.out.println("❌ Erreur lors de la création du vendeur : " + e.getMessage());
+    }
+}
+
 
     private void gererStocksGlobaux() {
         System.out.println("📦 Gestion des stocks globaux (à implémenter)");
