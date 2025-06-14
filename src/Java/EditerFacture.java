@@ -1,5 +1,6 @@
-package Java; 
-import BD.*; 
+package Java;
+
+import BD.*;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -15,10 +16,18 @@ public class EditerFacture {
 
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
-                case "--serveur": serveur = args[++i]; break;
-                case "--bd": baseDeDonnees = args[++i]; break;
-                case "--login": login = args[++i]; break;
-                case "--requete": fichierRequete = args[++i]; break;
+                case "--serveur":
+                    serveur = args[++i];
+                    break;
+                case "--bd":
+                    baseDeDonnees = args[++i];
+                    break;
+                case "--login":
+                    login = args[++i];
+                    break;
+                case "--requete":
+                    fichierRequete = args[++i];
+                    break;
             }
         }
 
@@ -80,7 +89,9 @@ public class EditerFacture {
             if (!magasin.equals(magasinActuel)) {
                 if (magasinActuel != null) {
                     res.append("                                                                        --------\n");
-                    res.append(String.format("                                                                  Total%9.2f\n", totalCommande));
+                    res.append(String.format(
+                            "                                                                  Total%9.2f\n",
+                            totalCommande));
                     res.append("--------------------------------------------------------------------------------\n");
                     res.append(nbFactureMagasin).append(" factures éditées\n");
                     res.append(nbLivreMagasin).append(" livres vendus\n");
@@ -97,7 +108,9 @@ public class EditerFacture {
             if (!numcom.equals(commandeActuelle)) {
                 if (commandeActuelle != null && faire) {
                     res.append("                                                                        --------\n");
-                    res.append(String.format("                                                                  Total%9.2f\n", totalCommande));
+                    res.append(String.format(
+                            "                                                                  Total%9.2f\n",
+                            totalCommande));
                     res.append("--------------------------------------------------------------------------------\n");
                 }
 
@@ -106,7 +119,8 @@ public class EditerFacture {
                 res.append(nomcli).append(" ").append(prenomcli).append("\n");
                 res.append(adressecli).append("\n");
                 res.append(codepostal).append(" ").append(villecli).append("\n");
-                res.append("                        commande n°").append(numcom).append(" du ").append(datecom).append("\n");
+                res.append("                        commande n°").append(numcom).append(" du ").append(datecom)
+                        .append("\n");
                 res.append("      ISBN               Titre                               qte   prix    total\n");
 
                 commandeActuelle = numcom;
@@ -129,7 +143,8 @@ public class EditerFacture {
 
         if (commandeActuelle != null) {
             res.append("                                                                        --------\n");
-            res.append(String.format("                                                                  Total%9.2f\n", totalCommande));
+            res.append(String.format("                                                                  Total%9.2f\n",
+                    totalCommande));
             res.append("--------------------------------------------------------------------------------\n");
         }
 

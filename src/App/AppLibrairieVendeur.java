@@ -4,6 +4,7 @@ import BD.*;
 import Java.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -44,75 +45,163 @@ public class AppLibrairieVendeur {
     }
 
     public void menuVendeur() throws NumberFormatException, SQLException {
-    Vendeur vendeur = null;
-    while (vendeur == null) {
-        vendeur = menuvendeurConnexion();
+        Vendeur vendeur = null;
+        while (vendeur == null) {
+            vendeur = menuvendeurConnexion();
+        }
+
+        boolean menuActif = true;
+        int largeurConsole = getLargeurConsole();
+
+        while (menuActif && !quitterApp) {
+            clearConsole();
+
+            String titre = "Vendeur n°" + vendeur.getIdVendeur();
+            String ligneTitre = "║  " + titre;
+            if (ligneTitre.length() > 68) {
+                ligneTitre = ligneTitre.substring(0, 68);
+            } else if (ligneTitre.length() < 68) {
+                ligneTitre += " ".repeat(68 - ligneTitre.length());
+            }
+            ligneTitre += "║";
+
+            String[] header = {
+                    "╔════════════════════════════════════════════════════════════════════════╗",
+                    ligneTitre,
+                    "╚════════════════════════════════════════════════════════════════════════╝",
+                    ""
+            };
+            for (int i = 0; i < header.length; i++) {
+                header[i] = centrerTexte(header[i], largeurConsole);
+            }
+            try {
+                machineAEcrireLigneParLigne(header, 100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            System.out.println(centrerTexte(
+                    "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte("║  👤 Infos Perso...................................................[1] ║",
+                    largeurConsole));
+            System.out.println(centrerTexte("║  🏬 Afficher magasins............................................[2] ║",
+                    largeurConsole));
+            System.out.println(centrerTexte("║  🛒 Voir un panier...............................................[3] ║",
+                    largeurConsole));
+            System.out.println(centrerTexte(
+                    "║  🛒 Ajouter un livre...............................................[5] ║", largeurConsole));
+            System.out.println(centrerTexte("║  🔄 Transférer un livre..........................................[4] ║",
+                    largeurConsole));
+            System.out.println(centrerTexte("║  ↩️  Menu précédent...............................................[M] ║",
+                    largeurConsole));
+            System.out.println(centrerTexte("║  ❌ Quitter.......................................................[Q] ║",
+                    largeurConsole));
+            System.out.println(centrerTexte(
+                    "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+            System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
+
+            String cmd = lireCommande();
+
+            switch (cmd) {
+                case "1" -> {
+                    System.out.println(centrerTexte(vendeur.toString(), largeurConsole));
+                    pause();
+                }
+                case "2" -> menuMagasins(vendeur);
+                case "3" -> voirPanierClient();
+                case "4" -> transfererLivreEntreMagasins(vendeur);
+                case "5" -> ajouterLivre();
+                case "m" -> menuActif = false;
+                case "q" -> {
+                    quitterApp = true;
+                    menuActif = false;
+                }
+                default -> {
+                    System.out.println("\n>>> Commande invalide.");
+                    attendre(1500);
+                }
+            }
+        }
     }
 
-    boolean menuActif = true;
-    int largeurConsole = getLargeurConsole();
-
-    while (menuActif && !quitterApp) {
+    private void ajouterLivre() {
         clearConsole();
+        System.out.println("╔══════════════════════════════╗");
+        System.out.println("║       Ajouter un Livre       ║");
+        System.out.println("╚══════════════════════════════╝");
 
-        String titre = "Vendeur n°" + vendeur.getIdVendeur();
-        String ligneTitre = "║  " + titre;
-        if (ligneTitre.length() > 68) {
-            ligneTitre = ligneTitre.substring(0, 68);
-        } else if (ligneTitre.length() < 68) {
-            ligneTitre += " ".repeat(68 - ligneTitre.length());
-        }
-        ligneTitre += "║";
-
-        String[] header = {
-            "╔════════════════════════════════════════════════════════════════════════╗",
-            ligneTitre,
-            "╚════════════════════════════════════════════════════════════════════════╝",
-            ""
-        };
-        for (int i = 0; i < header.length; i++) {
-            header[i] = centrerTexte(header[i], largeurConsole);
-        }
         try {
-            machineAEcrireLigneParLigne(header, 100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
 
-        System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-        System.out.println(centrerTexte("║  👤 Infos Perso...................................................[1] ║", largeurConsole));
-        System.out.println(centrerTexte("║  🏬 Afficher magasins............................................[2] ║", largeurConsole));
-        System.out.println(centrerTexte("║  🛒 Voir un panier...............................................[3] ║", largeurConsole));
-        System.out.println(centrerTexte("║  🔄 Transférer un livre..........................................[4] ║", largeurConsole));
-        System.out.println(centrerTexte("║  ↩️  Menu précédent...............................................[M] ║", largeurConsole));
-        System.out.println(centrerTexte("║  ❌ Quitter.......................................................[Q] ║", largeurConsole));
-        System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
-        System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
-
-        String cmd = lireCommande();
-
-        switch (cmd) {
-            case "1" -> {
-                System.out.println(centrerTexte(vendeur.toString(), largeurConsole));
+            System.out.println("Sélectionnez un magasin pour ajouter le livre :");
+            List<Magasin> magasins = magasinBD.listeDesMagasins();
+            for (int i = 0; i < magasins.size(); i++) {
+                System.out.println((i + 1) + ". " + magasins.get(i).getNom());
+            }
+            System.out.print("Numéro du magasin > ");
+            int indexMagasin = Integer.parseInt(scanner.nextLine()) - 1;
+            if (indexMagasin < 0 || indexMagasin >= magasins.size()) {
+                System.out.println("Choix invalide.");
                 pause();
+                return;
             }
-            case "2" -> menuMagasins(vendeur);
-            case "3" -> voirPanierClient();
-            case "4" -> transfererLivreEntreMagasins(vendeur);
-            case "m" -> menuActif = false;
-            case "q" -> {
-                quitterApp = true;
-                menuActif = false;
+            Magasin magasinChoisi = magasins.get(indexMagasin);
+
+            System.out.print("Nom du livre > ");
+            String nom = scanner.nextLine();
+
+            System.out.print("Auteur(s) (séparés par des virgules) > ");
+            String auteursStr = scanner.nextLine();
+            List<String> auteurs = List.of(auteursStr.split("\\s*,\\s*"));
+
+            System.out.print("Genre(s) (séparés par des virgules) > ");
+            String genresStr = scanner.nextLine();
+            List<String> genres = List.of(genresStr.split("\\s*,\\s*"));
+
+            System.out.print("ID(s) éditeur(s) (séparés par des virgules) > ");
+            String editeursStr = scanner.nextLine();
+            List<Integer> editeurs = new ArrayList<>();
+            for (String idStr : editeursStr.split("\\s*,\\s*")) {
+                editeurs.add(Integer.parseInt(idStr));
             }
-            default -> {
-                System.out.println("\n>>> Commande invalide.");
-                attendre(1500);
+
+            System.out.print("Date de publication (année : AAAA) > ");
+            String datePublication = scanner.nextLine();
+
+            System.out.print("Nombre de pages > ");
+            int nbPages = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Prix (€) > ");
+            double prix = Double.parseDouble(scanner.nextLine());
+
+            System.out.print("Quantité > ");
+            int quantite = Integer.parseInt(scanner.nextLine());
+
+            if (quantite <= 0) {
+                System.out.println("Quantité invalide.");
+                pause();
+                return;
             }
+
+            Livre livre = new Livre(
+                    0,
+                    nom,
+                    datePublication,
+                    prix,
+                    nbPages,
+                    genres,
+                    editeurs,
+                    auteurs);
+
+            magasinBD.ajouterLivreDansMagasin(magasinChoisi.getIdMagasin(), livre, quantite);
+
+            System.out.println("Livre ajouté avec succès au magasin.");
+        } catch (NumberFormatException e) {
+            System.out.println("Entrée invalide (nombre attendu).");
+        } catch (SQLException e) {
+            System.out.println("Erreur SQL : " + e.getMessage());
         }
+        pause();
     }
-}
-
-
 
     private void voirPanierClient() {
         clearConsole();
@@ -152,9 +241,9 @@ public class AppLibrairieVendeur {
             clearConsole();
 
             String[] header = {
-                "╔════════════════════════════════════════════════════════════════════════╗",
-                centrerTexte("║           📚  Liste des Magasins                                   ║", 72),
-                "╠════════════════════════════════════════════════════════════════════════╣"
+                    "╔════════════════════════════════════════════════════════════════════════╗",
+                    centrerTexte("║           📚  Liste des Magasins                                   ║", 72),
+                    "╠════════════════════════════════════════════════════════════════════════╣"
             };
 
             for (String ligne : header) {
@@ -165,21 +254,23 @@ public class AppLibrairieVendeur {
                 List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
                 for (int i = 0; i < listeMagasins.size(); i++) {
                     String nom = listeMagasins.get(i).getNom();
-                    if (nom.length() > 58) nom = nom.substring(0, 55) + "...";
+                    if (nom.length() > 58)
+                        nom = nom.substring(0, 55) + "...";
                     String ligneMagasin = String.format("║  %2d : %-58s║", i + 1, nom);
                     System.out.println(centrerTexte(ligneMagasin, largeurConsole));
                 }
             } catch (SQLException e) {
-                System.out.println(centrerTexte("Erreur lors de la récupération des magasins : " + e.getMessage(), largeurConsole));
+                System.out.println(centrerTexte("Erreur lors de la récupération des magasins : " + e.getMessage(),
+                        largeurConsole));
                 pause();
                 return;
             }
 
             String[] footer = {
-                "╠════════════════════════════════════════════════════════════════════════╣",
-                "║  ↩️  Menu précédent...................................................[M] ║",
-                "║  ❌ Quitter...........................................................[Q] ║",
-                "╚════════════════════════════════════════════════════════════════════════╝"
+                    "╠════════════════════════════════════════════════════════════════════════╣",
+                    "║  ↩️  Menu précédent...................................................[M] ║",
+                    "║  ❌ Quitter...........................................................[Q] ║",
+                    "╚════════════════════════════════════════════════════════════════════════╝"
             };
 
             for (String ligne : footer) {
@@ -193,7 +284,8 @@ public class AppLibrairieVendeur {
                 try {
                     menuUnMagasin(magasinBD.listeDesMagasins().get(choix - 1), vendeur);
                 } catch (SQLException e) {
-                    System.out.println(centrerTexte("Erreur lors de l'ouverture du magasin : " + e.getMessage(), largeurConsole));
+                    System.out.println(
+                            centrerTexte("Erreur lors de l'ouverture du magasin : " + e.getMessage(), largeurConsole));
                     pause();
                 }
             } else {
@@ -220,13 +312,19 @@ public class AppLibrairieVendeur {
             clearConsole();
 
             String nom = magasin.getNom();
-            if (nom.length() > 58) nom = nom.substring(0, 55) + "...";
+            if (nom.length() > 58)
+                nom = nom.substring(0, 55) + "...";
+
+            String ligneDeBase = "║  " + nom;
+            int largeurContenu = 68;
+            String tronquee = ligneDeBase.substring(0, Math.min(ligneDeBase.length(), largeurContenu));
+            String padding = " ".repeat(largeurContenu - tronquee.length());
 
             String[] titre = {
-                "╔════════════════════════════════════════════════════════════════════════╗",
-                ("║  " + nom).substring(0, Math.min(nom.length() + 4, 68)) + " ".repeat(68 - nom.length() - 4) + "║",
-                "╚════════════════════════════════════════════════════════════════════════╝",
-                ""
+                    "╔════════════════════════════════════════════════════════════════════════╗",
+                    tronquee + padding + "║",
+                    "╚════════════════════════════════════════════════════════════════════════╝",
+                    ""
             };
             for (int i = 0; i < titre.length; i++) {
                 titre[i] = centrerTexte(titre[i], largeurConsole);
@@ -237,12 +335,18 @@ public class AppLibrairieVendeur {
                 Thread.currentThread().interrupt();
             }
 
-            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-            System.out.println(centrerTexte("║  🏪 Infos Magasin...................................................[I] ║", largeurConsole));
-            System.out.println(centrerTexte("║  📦 Voir stock......................................................[S] ║", largeurConsole));
-            System.out.println(centrerTexte("║  ↩️  Menu précédent.................................................[M] ║", largeurConsole));
-            System.out.println(centrerTexte("║  ❌ Quitter..........................................................[Q] ║", largeurConsole));
-            System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+            System.out.println(centrerTexte(
+                    "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte(
+                    "║  🏪 Infos Magasin...................................................[I] ║", largeurConsole));
+            System.out.println(centrerTexte(
+                    "║  📦 Voir stock......................................................[S] ║", largeurConsole));
+            System.out.println(centrerTexte(
+                    "║  ↩️  Menu précédent.................................................[M] ║", largeurConsole));
+            System.out.println(centrerTexte(
+                    "║  ❌ Quitter..........................................................[Q] ║", largeurConsole));
+            System.out.println(centrerTexte(
+                    "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
             System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
 
             String cmd = lireCommande().toLowerCase();
@@ -257,7 +361,8 @@ public class AppLibrairieVendeur {
                         Map<Livre, Integer> stock = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
                         afficherStock(stock);
                     } catch (SQLException e) {
-                        System.out.println(centrerTexte("Erreur lors de la récupération du stock : " + e.getMessage(), largeurConsole));
+                        System.out.println(centrerTexte("Erreur lors de la récupération du stock : " + e.getMessage(),
+                                largeurConsole));
                         pause();
                     }
                 }
@@ -274,18 +379,18 @@ public class AppLibrairieVendeur {
         }
     }
 
-     private String centrerTexte(String texte, int largeurConsole) {
+    private String centrerTexte(String texte, int largeurConsole) {
         int espacement = Math.max(0, (largeurConsole - texte.length()) / 2);
         return " ".repeat(espacement) + texte;
     }
-    
+
     private void machineAEcrireLigneParLigne(String[] lignes, int delai) throws InterruptedException {
         for (String ligne : lignes) {
             System.out.println(ligne);
             Thread.sleep(delai);
         }
     }
-    
+
     private void afficherStock(Map<Livre, Integer> stock) {
         clearConsole();
         System.out.println("╔══════════════════════════════╗");
@@ -298,7 +403,8 @@ public class AppLibrairieVendeur {
             for (Map.Entry<Livre, Integer> entry : stock.entrySet()) {
                 String nom = entry.getKey().getNomLivre();
                 int quantite = entry.getValue();
-                if (nom.length() > 20) nom = nom.substring(0, 17) + "...";
+                if (nom.length() > 20)
+                    nom = nom.substring(0, 17) + "...";
                 System.out.printf("║ %-20s (%2d)     ║\n", nom, quantite);
             }
         }
@@ -312,7 +418,7 @@ public class AppLibrairieVendeur {
             System.out.println("╔══════════════════════════════╗");
             System.out.println("║      Transfert de Livre      ║");
             System.out.println("╚══════════════════════════════╝");
-            
+
             System.out.println("Sélectionnez le magasin source :");
             List<Magasin> magasins = magasinBD.listeDesMagasins();
             if (magasins.isEmpty()) {
@@ -371,7 +477,8 @@ public class AppLibrairieVendeur {
             }
             System.out.print("Numéro du magasin destination > ");
             int indexMagasinDestination = Integer.parseInt(scanner.nextLine()) - 1;
-            if (indexMagasinDestination < 0 || indexMagasinDestination >= magasins.size() || indexMagasinDestination == indexMagasinSource) {
+            if (indexMagasinDestination < 0 || indexMagasinDestination >= magasins.size()
+                    || indexMagasinDestination == indexMagasinSource) {
                 System.out.println("Choix invalide.");
                 pause();
                 return;
@@ -399,8 +506,8 @@ public class AppLibrairieVendeur {
     }
 
     private void effacerDerniereLigne() {
-        System.out.print("\033[1A");  // remonter curseur d'une ligne
-        System.out.print("\033[2K");  // effacer la ligne
+        System.out.print("\033[1A");
+        System.out.print("\033[2K");
     }
 
     private void clearConsole() {
@@ -411,14 +518,15 @@ public class AppLibrairieVendeur {
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
         } catch (Exception e) {
-            for (int i = 0; i < 50; ++i) System.out.println();
+            for (int i = 0; i < 50; ++i)
+                System.out.println();
         }
     }
 
     private int getLargeurConsole() {
-        return 100; 
+        return 100;
     }
-    
+
     private void pause() {
         System.out.println("\nAppuyez sur Entrée pour continuer...");
         scanner.nextLine();

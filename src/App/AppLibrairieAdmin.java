@@ -15,15 +15,15 @@ public class AppLibrairieAdmin {
     private boolean quitterApp = false;
     private Scanner scanner = new Scanner(System.in);
 
-    private ConnexionMySQL connexionMySQL; 
+    private ConnexionMySQL connexionMySQL;
 
-public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD statistiqueBD, ConnexionMySQL connexionMySQL) {
-    this.magasinBD = magasinBD;
-    this.livreBD = livreBD;
-    this.connexionMySQL = connexionMySQL;
-    this.statistiqueBD = statistiqueBD;
-}
-
+    public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD statistiqueBD,
+            ConnexionMySQL connexionMySQL) {
+        this.magasinBD = magasinBD;
+        this.livreBD = livreBD;
+        this.connexionMySQL = connexionMySQL;
+        this.statistiqueBD = statistiqueBD;
+    }
 
     public void menuAdministrateur() {
         boolean menuActif = true;
@@ -33,10 +33,10 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD sta
             clearConsole();
 
             String[] titre = {
-                "╔════════════════════════════════════════════════════════════════╗",
-                "║                        ADMINISTRATEUR                         ║",
-                "╚════════════════════════════════════════════════════════════════╝",
-                ""
+                    "╔════════════════════════════════════════════════════════════════╗",
+                    "║                        ADMINISTRATEUR                         ║",
+                    "╚════════════════════════════════════════════════════════════════╝",
+                    ""
             };
 
             for (int i = 0; i < titre.length; i++) {
@@ -50,18 +50,30 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD sta
             }
 
             String[] menu = {
-                centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte("║     🏪  Afficher les magasins........................................[A] ║", largeurConsole),
-                centrerTexte("║     ➕  Ajouter un magasin............................................[J] ║", largeurConsole),
-                centrerTexte("║     ❌  Supprimer un magasin.........................................[U] ║", largeurConsole),
-                centrerTexte("║     👤  Créer un compte vendeur......................................[C] ║", largeurConsole),
-                centrerTexte("║     📦  Gérer les stocks globaux.....................................[G] ║", largeurConsole),
-                centrerTexte("║     📊  Consulter les statistiques ..................................[S] ║", largeurConsole),
-                centrerTexte("║     ↩️  Retour au menu précédent......................................[P] ║", largeurConsole),
-                centrerTexte("║     ❎  Quitter l'application.........................................[Q] ║", largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+                    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("║     🏪  Afficher les magasins........................................[A] ║",
+                            largeurConsole),
+                    centrerTexte("║     ➕  Ajouter un magasin............................................[J] ║",
+                            largeurConsole),
+                    centrerTexte("║     ❌  Supprimer un magasin.........................................[U] ║",
+                            largeurConsole),
+                    centrerTexte("║     👤  Créer un compte vendeur......................................[C] ║",
+                            largeurConsole),
+                    centrerTexte("║     📦  Gérer les stocks globaux.....................................[G] ║",
+                            largeurConsole),
+                    centrerTexte("║     📊  Consulter les statistiques ..................................[S] ║",
+                            largeurConsole),
+                    centrerTexte("║     ↩️  Retour au menu précédent......................................[P] ║",
+                            largeurConsole),
+                    centrerTexte("║     ❎  Quitter l'application.........................................[Q] ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
             };
 
             try {
@@ -168,153 +180,141 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD sta
     }
 
     private void creerCompteVendeur() {
-    System.out.println("🧑‍💼 Création d'un compte vendeur...");
+        System.out.println("🧑‍💼 Création d'un compte vendeur...");
 
-    System.out.print("Nom > ");
-    String nom = scanner.nextLine().strip();
+        System.out.print("Nom > ");
+        String nom = scanner.nextLine().strip();
 
-    System.out.print("Prénom > ");
-    String prenom = scanner.nextLine().strip();
+        System.out.print("Prénom > ");
+        String prenom = scanner.nextLine().strip();
 
-    System.out.print("ID du magasin > ");
-    String idMagStr = scanner.nextLine().strip();
-
-    int idMagasin;
-    try {
-        idMagasin = Integer.parseInt(idMagStr);
-    } catch (NumberFormatException e) {
-        System.out.println("⚠️ ID de magasin invalide.");
-        return;
-    }
-
-    try {
-        List<Magasin> magasins = magasinBD.listeDesMagasins();
-        Magasin magasinAssocie = magasins.stream()
-                .filter(m -> m.getIdMagasin() == idMagasin)
-                .findFirst()
-                .orElse(null);
-
-        if (magasinAssocie == null) {
-            System.out.println("❌ Aucun magasin trouvé avec l'ID fourni.");
-            return;
-        }
-
-        Vendeur vendeur = new Vendeur(nom, prenom, null, 0, magasinAssocie);
-        VendeurBD vendeurBD = new VendeurBD(connexionMySQL);
-        vendeurBD.creerVendeur(vendeur);
-
-        System.out.println("✅ Compte vendeur créé avec succès !");
-    } catch (SQLException e) {
-        System.out.println("❌ Erreur lors de la création du vendeur : " + e.getMessage());
-    }
-}
-
-
-    private void gererStocksGlobaux() {
-    try {
-        List<Magasin> magasins = magasinBD.listeDesMagasins();
-
-        if (magasins.isEmpty()) {
-            System.out.println("❌ Aucun magasin trouvé.");
-            return;
-        }
-
-        // Afficher les magasins
-        System.out.println("\n📍 Magasins disponibles :");
-        for (Magasin m : magasins) {
-            System.out.printf("- ID %d : %s (%s)\n", m.getIdMagasin(), m.getNom(), m.getVille());
-        }
-
-        // Demander le magasin ciblé
-        System.out.print("\nEntrez l'ID du magasin > ");
+        System.out.print("ID du magasin > ");
         String idMagStr = scanner.nextLine().strip();
+
         int idMagasin;
         try {
             idMagasin = Integer.parseInt(idMagStr);
         } catch (NumberFormatException e) {
-            System.out.println("⚠️ ID magasin invalide.");
+            System.out.println("⚠️ ID de magasin invalide.");
             return;
         }
 
-        // Vérifier que le magasin existe
-        Magasin magasinChoisi = magasins.stream()
-            .filter(m -> m.getIdMagasin() == idMagasin)
-            .findFirst()
-            .orElse(null);
-        if (magasinChoisi == null) {
-            System.out.println("❌ Magasin introuvable.");
-            return;
-        }
-
-        // Obtenir les livres de ce magasin
-        List<Livre> livres = livreBD.listeDesLivres(idMagasin);
-
-        if (livres.isEmpty()) {
-            System.out.println("📭 Aucun livre dans ce magasin.");
-            return;
-        }
-
-        System.out.println("\n📚 Livres disponibles dans le magasin " + magasinChoisi.getNom() + " :");
-        for (Livre livre : livres) {
-            int stock = livreBD.getStockLivreMagasin(livre.getIdLivre(), idMagasin);
-            System.out.printf("- %s (ISBN : %d) : %d en stock\n", livre.getNomLivre(), livre.getIdLivre(), stock);
-        }
-
-        // Choisir le livre
-        System.out.print("\nEntrez l'ISBN du livre à modifier > ");
-        String isbnStr = scanner.nextLine().strip();
-        long isbn;
         try {
-            isbn = Long.parseLong(isbnStr);
-        } catch (NumberFormatException e) {
-            System.out.println("⚠️ ISBN invalide.");
-            return;
-        }
+            List<Magasin> magasins = magasinBD.listeDesMagasins();
+            Magasin magasinAssocie = magasins.stream()
+                    .filter(m -> m.getIdMagasin() == idMagasin)
+                    .findFirst()
+                    .orElse(null);
 
-        Livre livreChoisi = livres.stream()
-            .filter(l -> l.getIdLivre() == isbn)
-            .findFirst()
-            .orElse(null);
-        if (livreChoisi == null) {
-            System.out.println("❌ Livre introuvable dans ce magasin.");
-            return;
-        }
-
-        // Nouvelle quantité
-        System.out.print("Entrez la nouvelle quantité en stock > ");
-        String qteStr = scanner.nextLine().strip();
-        int nouvelleQte;
-        try {
-            nouvelleQte = Integer.parseInt(qteStr);
-            if (nouvelleQte < 0) {
-                System.out.println("⚠️ La quantité ne peut pas être négative.");
+            if (magasinAssocie == null) {
+                System.out.println("❌ Aucun magasin trouvé avec l'ID fourni.");
                 return;
             }
-        } catch (NumberFormatException e) {
-            System.out.println("⚠️ Quantité invalide.");
-            return;
+
+            Vendeur vendeur = new Vendeur(nom, prenom, null, 0, magasinAssocie);
+            VendeurBD vendeurBD = new VendeurBD(connexionMySQL);
+            vendeurBD.creerVendeur(vendeur);
+
+            System.out.println("✅ Compte vendeur créé avec succès !");
+        } catch (SQLException e) {
+            System.out.println("❌ Erreur lors de la création du vendeur : " + e.getMessage());
         }
-
-        // Mise à jour
-        livreBD.modifierStock(isbn, idMagasin, nouvelleQte);
-        System.out.println("✅ Stock mis à jour avec succès.");
-
-    } catch (SQLException e) {
-        System.out.println("❌ Erreur lors de la gestion des stocks : " + e.getMessage());
     }
-}
 
+    private void gererStocksGlobaux() {
+        try {
+            List<Magasin> magasins = magasinBD.listeDesMagasins();
 
+            if (magasins.isEmpty()) {
+                System.out.println("❌ Aucun magasin trouvé.");
+                return;
+            }
+
+            System.out.println("\n📍 Magasins disponibles :");
+            for (Magasin m : magasins) {
+                System.out.printf("- ID %d : %s (%s)\n", m.getIdMagasin(), m.getNom(), m.getVille());
+            }
+
+            System.out.print("\nEntrez l'ID du magasin > ");
+            String idMagStr = scanner.nextLine().strip();
+            int idMagasin;
+            try {
+                idMagasin = Integer.parseInt(idMagStr);
+            } catch (NumberFormatException e) {
+                System.out.println("⚠️ ID magasin invalide.");
+                return;
+            }
+
+            Magasin magasinChoisi = magasins.stream()
+                    .filter(m -> m.getIdMagasin() == idMagasin)
+                    .findFirst()
+                    .orElse(null);
+            if (magasinChoisi == null) {
+                System.out.println("❌ Magasin introuvable.");
+                return;
+            }
+
+            List<Livre> livres = livreBD.listeDesLivres(idMagasin);
+
+            if (livres.isEmpty()) {
+                System.out.println("📭 Aucun livre dans ce magasin.");
+                return;
+            }
+
+            System.out.println("\n📚 Livres disponibles dans le magasin " + magasinChoisi.getNom() + " :");
+            for (Livre livre : livres) {
+                int stock = livreBD.getStockLivreMagasin(livre.getIdLivre(), idMagasin);
+                System.out.printf("- %s (ISBN : %d) : %d en stock\n", livre.getNomLivre(), livre.getIdLivre(), stock);
+            }
+
+            System.out.print("\nEntrez l'ISBN du livre à modifier > ");
+            String isbnStr = scanner.nextLine().strip();
+            long isbn;
+            try {
+                isbn = Long.parseLong(isbnStr);
+            } catch (NumberFormatException e) {
+                System.out.println("⚠️ ISBN invalide.");
+                return;
+            }
+
+            Livre livreChoisi = livres.stream()
+                    .filter(l -> l.getIdLivre() == isbn)
+                    .findFirst()
+                    .orElse(null);
+            if (livreChoisi == null) {
+                System.out.println("❌ Livre introuvable dans ce magasin.");
+                return;
+            }
+
+            System.out.print("Entrez la nouvelle quantité en stock > ");
+            String qteStr = scanner.nextLine().strip();
+            int nouvelleQte;
+            try {
+                nouvelleQte = Integer.parseInt(qteStr);
+                if (nouvelleQte < 0) {
+                    System.out.println("⚠️ La quantité ne peut pas être négative.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("⚠️ Quantité invalide.");
+                return;
+            }
+
+            livreBD.modifierStock(isbn, idMagasin, nouvelleQte);
+            System.out.println("✅ Stock mis à jour avec succès.");
+
+        } catch (SQLException e) {
+            System.out.println("❌ Erreur lors de la gestion des stocks : " + e.getMessage());
+        }
+    }
 
     private void consulterStatistiques() {
         System.out.println("📊 Consultation des statistiques de vente (à implémenter)");
-                AppStatistiques statMenu = new AppStatistiques(magasinBD, livreBD,statistiqueBD, connexionMySQL);
+        AppStatistiques statMenu = new AppStatistiques(magasinBD, livreBD, statistiqueBD, connexionMySQL);
 
-                statMenu.menuStatistiques();
-                
+        statMenu.menuStatistiques();
+
     }
-
-    // ======================= OUTILS =============================
 
     private void machineAEcrireLigneParLigne(String[] lignes, int delayMillis) throws InterruptedException {
         for (String ligne : lignes) {
@@ -355,12 +355,14 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD sta
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
         } catch (Exception e) {
-            for (int i = 0; i < 50; ++i) System.out.println();
+            for (int i = 0; i < 50; ++i)
+                System.out.println();
         }
     }
 
     private String centrerTexte(String texte, int largeurTotale) {
-        if (texte.length() >= largeurTotale) return texte;
+        if (texte.length() >= largeurTotale)
+            return texte;
         int espaces = (largeurTotale - texte.length()) / 2;
         return " ".repeat(espaces) + texte;
     }

@@ -1,21 +1,61 @@
-package BD; 
-import Java.*; 
+package BD;
+
+import Java.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 public class ClientBD {
-	ConnexionMySQL laConnexion;
-	Statement st;
-	public ClientBD(ConnexionMySQL laConnexion){
-		this.laConnexion=laConnexion;
+	private ConnexionMySQL laConnexion;
+
+	public ClientBD(ConnexionMySQL laConnexion) {
+		this.laConnexion = laConnexion;
+	}
+
+	public Client recupererClient(int id) throws SQLException {
+		PreparedStatement ps = laConnexion.prepareStatement("select * from CLIENT where idcli = ?;");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+
+		while (rs.next()) {
+
+			Client client = new Client(
+					rs.getString("nomcli"),
+					rs.getString("prenomCli"),
+					null,
+					id,
+					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
+			return client;
+		}
+		return null;
+	}
+
+	public List<Client> recuperToutClient() throws SQLException {
+		List<Client> res = new ArrayList<>();
+		PreparedStatement toutlesClients = laConnexion.prepareStatement("select * from CLIENT;");
+		ResultSet rs = toutlesClients.executeQuery();
+
+		while (rs.next()) {
+
+			Client client = new Client(
+					rs.getString("nomcli"),
+					rs.getString("prenomCli"),
+					null,
+					rs.getInt("idcli"),
+					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
+			res.add(client);
+		}
+		return res;
 	}
 
 	public Map<Livre, Integer> recupererPanier(int id) throws SQLException {
-		PreparedStatement ps = laConnexion.prepareStatement("select * from LIVRE natural join PANIER where idCli=" + id + ";");
+		PreparedStatement ps = laConnexion
+				.prepareStatement("select * from LIVRE natural join PANIER where idCli=" + id + ";");
 		ResultSet rs = ps.executeQuery();
 		Map<Livre, Integer> panier = new HashMap<>();
+
 		while (rs.next()) {
 
 			long isbn = Long.parseLong(rs.getString("isbn"));
@@ -30,8 +70,8 @@ public class ClientBD {
 			if (prixStr != null)
 				prix = Double.parseDouble(prixStr);
 
-				int nbpages = 0;
-				String nbpagesStr = rs.getString("nbpages");
+			int nbpages = 0;
+			String nbpagesStr = rs.getString("nbpages");
 			if (nbpagesStr != null)
 				nbpages = Integer.parseInt(nbpagesStr);
 
@@ -66,59 +106,32 @@ public class ClientBD {
 		ps2.close();
 	}
 
-	public Client recupererClient(int id) throws SQLException{
-		PreparedStatement ps = laConnexion.prepareStatement("select * from CLIENT where idcli = ?;");
-		ps.setInt(1, id);
-		ResultSet rs = ps.executeQuery();
-		while (rs.next()){
-			Client client = new Client(
-				rs.getString("nomcli"),
-				rs.getString("prenomCli"),
-				null,
-				id,
-				rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
-				return client;		
-		}
-		return null;
-	}
-
-
-	public List<Livre> recupererToutLivreClient(int id) throws SQLException{
+	public List<Livre> recupererToutLivreClient(int id) throws SQLException {
 		List<Livre> res = new ArrayList<>();
-		PreparedStatement commandesDuCLient = laConnexion.prepareStatement("select * from COMMANDE natural join DETAILCOMMANDE where idcli = ?;");
-		commandesDuCLient.setInt(1,id);
+
+		PreparedStatement commandesDuCLient = laConnexion
+				.prepareStatement("select * from COMMANDE natural join DETAILCOMMANDE where idcli = ?;");
+		commandesDuCLient.setInt(1, id);
 		ResultSet rsCommande = commandesDuCLient.executeQuery();
-		while(rsCommande.next()){
+
+		while (rsCommande.next()) {
+
 			PreparedStatement livreDeLaCommande = laConnexion.prepareStatement("select * from LIVRE where isbn = ?;");
 			livreDeLaCommande.setLong(1, rsCommande.getLong("isbn"));
 			ResultSet rsLivre = livreDeLaCommande.executeQuery();
-			while (rsLivre.next()) {
-				Livre livre = new Livre(rsLivre.getLong("isbn"), 
-										rsLivre.getString("titre"), 
-										rsLivre.getString("datepubli"), 
-										rsLivre.getDouble("prix"),
-										rsLivre.getInt("nbpages"),
-										null,
-										null,
-										null);
-				res.add(livre);	
-			}
-		}
-		return res;
-	}
 
-	public List<Client> recuperToutClient() throws SQLException{
-		List<Client> res = new ArrayList<>();
-		PreparedStatement toutlesClients = laConnexion.prepareStatement("select * from CLIENT;");
-		ResultSet rs = toutlesClients.executeQuery();
-		while(rs.next()){
-			Client client = new Client(
-				rs.getString("nomcli"),
-				rs.getString("prenomCli"),
-				null,
-				rs.getInt("idcli"),
-				rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
-			res.add(client);
+			while (rsLivre.next()) {
+
+				Livre livre = new Livre(rsLivre.getLong("isbn"),
+						rsLivre.getString("titre"),
+						rsLivre.getString("datepubli"),
+						rsLivre.getDouble("prix"),
+						rsLivre.getInt("nbpages"),
+						null,
+						null,
+						null);
+				res.add(livre);
+			}
 		}
 		return res;
 	}

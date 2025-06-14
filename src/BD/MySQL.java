@@ -1,4 +1,4 @@
-package BD; 
+package BD;
 
 import java.sql.*;
 
@@ -11,7 +11,6 @@ public class MySQL implements AutoCloseable {
         } catch (ClassNotFoundException e) {
             throw new SQLException("Pilote MariaDB introuvable.");
         }
-
         String url = "jdbc:mariadb://" + host + "/" + database;
         this.connection = DriverManager.getConnection(url, user, password);
         System.out.println("Connexion réussie !");
