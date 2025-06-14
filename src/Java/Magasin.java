@@ -78,6 +78,18 @@ public class Magasin {
         return "Le magasin " + this.nom + " est situé " + this.ville + " et possède l'ID " + this.idMagasin;
     }
 
+    public void setIdMagasin(int idMagasin) {
+        this.idMagasin = idMagasin;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
