@@ -11,15 +11,17 @@ public class AppLibrairieAdmin {
 
     private MagasinBD magasinBD;
     private LivreBD livreBD;
+    private StatistiqueBD statistiqueBD;
     private boolean quitterApp = false;
     private Scanner scanner = new Scanner(System.in);
 
     private ConnexionMySQL connexionMySQL; 
 
-public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, ConnexionMySQL connexionMySQL) {
+public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD statistiqueBD, ConnexionMySQL connexionMySQL) {
     this.magasinBD = magasinBD;
     this.livreBD = livreBD;
     this.connexionMySQL = connexionMySQL;
+    this.statistiqueBD = statistiqueBD;
 }
 
 
@@ -55,7 +57,7 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, ConnexionMySQL co
                 centrerTexte("║     ❌  Supprimer un magasin.........................................[U] ║", largeurConsole),
                 centrerTexte("║     👤  Créer un compte vendeur......................................[C] ║", largeurConsole),
                 centrerTexte("║     📦  Gérer les stocks globaux.....................................[G] ║", largeurConsole),
-                centrerTexte("║     📊  Consulter les statistiques de vente..........................[S] ║", largeurConsole),
+                centrerTexte("║     📊  Consulter les statistiques ..................................[S] ║", largeurConsole),
                 centrerTexte("║     ↩️  Retour au menu précédent......................................[P] ║", largeurConsole),
                 centrerTexte("║     ❎  Quitter l'application.........................................[Q] ║", largeurConsole),
                 centrerTexte("║                                                                        ║", largeurConsole),
@@ -306,7 +308,10 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, ConnexionMySQL co
 
     private void consulterStatistiques() {
         System.out.println("📊 Consultation des statistiques de vente (à implémenter)");
-        // TODO: Afficher top livres, nombre de ventes, CA par magasin, etc.
+                AppStatistiques statMenu = new AppStatistiques(magasinBD, livreBD,statistiqueBD, connexionMySQL);
+
+                statMenu.menuStatistiques();
+                
     }
 
     // ======================= OUTILS =============================
