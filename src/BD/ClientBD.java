@@ -90,7 +90,7 @@ public class ClientBD {
 		ResultSet rsCommande = commandesDuCLient.executeQuery();
 		while(rsCommande.next()){
 			PreparedStatement livreDeLaCommande = laConnexion.prepareStatement("select * from LIVRE where isbn = ?;");
-			commandesDuCLient.setLong(1, rsCommande.getLong("isbn"));
+			livreDeLaCommande.setLong(1, rsCommande.getLong("isbn"));
 			ResultSet rsLivre = livreDeLaCommande.executeQuery();
 			while (rsLivre.next()) {
 				Livre livre = new Livre(rsLivre.getLong("isbn"), 
@@ -109,7 +109,7 @@ public class ClientBD {
 
 	public List<Client> recuperToutClient() throws SQLException{
 		List<Client> res = new ArrayList<>();
-		PreparedStatement toutlesClients = laConnexion.prepareStatement("select * from Client;");
+		PreparedStatement toutlesClients = laConnexion.prepareStatement("select * from CLIENT;");
 		ResultSet rs = toutlesClients.executeQuery();
 		while(rs.next()){
 			Client client = new Client(
@@ -123,4 +123,3 @@ public class ClientBD {
 		return res;
 	}
 }
-

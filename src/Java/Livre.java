@@ -1,6 +1,7 @@
 package Java; 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Livre {
 
@@ -69,43 +70,34 @@ public class Livre {
         this.magasins.add(magasin);
     }
 
+    public void setPrix(double prix) {
+        this.prix = prix;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Livre)) {
+        if (obj == null || !(obj instanceof Livre)) {
             return false;
         }
         Livre tmp = (Livre) obj;
-        return this.idLivre == tmp.idLivre && this.prix == tmp.prix && this.nbPage == tmp.nbPage
-                && this.nomLivre.equals(tmp.nomLivre) && this.dateDePublication.equals(tmp.dateDePublication)
-                && this.classifications.equals(tmp.classifications) && this.editeur.equals(tmp.editeur)
-                && this.auteur.equals(tmp.auteur);
+
+        return this.idLivre == tmp.idLivre
+            && Double.compare(this.prix, tmp.prix) == 0
+            && this.nbPage == tmp.nbPage
+            && Objects.equals(this.nomLivre, tmp.nomLivre)
+            && Objects.equals(this.dateDePublication, tmp.dateDePublication)
+            && Objects.equals(this.classifications, tmp.classifications)
+            && Objects.equals(this.editeur, tmp.editeur)
+            && Objects.equals(this.auteur, tmp.auteur);
     }
-/* 
+
     @Override
     public String toString() {
-        String res = "Le livre " + this.nomLivre + " d'id " + this.idLivre + ", Ã©crit par " + this.auteur.getPrenom()
-                + " " + this.auteur.getNom() + ", a Ã©tÃ© publiÃ© le " + this.dateDePublication
-                + " par " + this.editeur.getNomEdit() + ". Il coÃ»te " + this.prix + "â‚¬ et contient " + this.nbPage
-                + " pages. Il a comme classification";
-
-        if (this.magasins.isEmpty()) {
-            res += "dans aucun magasin";
-        } else if (this.magasins.size() == 1) {
-            res += "dans le magasin " + this.magasins.get(0);
-        } else {
-            res += "dans les magasins : ";
-            for (int i = 0; i < this.magasins.size() - 1; i += 1) {
-                res += this.magasins.get(i).getNom() + ", ";
-            }
-            res += "et " + this.magasins.get(this.magasins.size() - 1).getNom() + ".";
-        }
-        return res;
+        return "Le livre " + nomLivre + " (ID: " + idLivre + "), publié le " + dateDePublication +
+            ", compte " + nbPage + " pages. Son prix est de " + prix + " euros. ";
     }
-*/
+
 }

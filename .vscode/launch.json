@@ -6,9 +6,17 @@
     "configurations": [
         {
             "type": "java",
+            "name": "EditerFacture",
+            "request": "launch",
+            "mainClass": "Java.EditerFacture",
+            "projectName": "Pr-parer-la-SAE-Java_60793550"
+        },
+        {
+            "type": "java",
             "name": "Executable",
             "request": "launch",
             "mainClass": "App.Executable",
+
             "projectName": "Pr-parer-la-SAE-Java_1d8bc866"
         },
         {
@@ -16,6 +24,7 @@
             "name": "Executable",
             "request": "launch",
             "mainClass": "App.Executable",
+
             "projectName": "Pr-parer-la-SAE-Java_a9dc1267"
         },
         {

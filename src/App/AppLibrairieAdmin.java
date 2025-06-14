@@ -211,9 +211,100 @@ public AppLibrairieAdmin(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD sta
 
 
     private void gererStocksGlobaux() {
-        System.out.println("📦 Gestion des stocks globaux (à implémenter)");
-        // TODO: Implémenter affichage + modification stock pour chaque magasin/livre
+    try {
+        List<Magasin> magasins = magasinBD.listeDesMagasins();
+
+        if (magasins.isEmpty()) {
+            System.out.println("❌ Aucun magasin trouvé.");
+            return;
+        }
+
+        // Afficher les magasins
+        System.out.println("\n📍 Magasins disponibles :");
+        for (Magasin m : magasins) {
+            System.out.printf("- ID %d : %s (%s)\n", m.getIdMagasin(), m.getNom(), m.getVille());
+        }
+
+        // Demander le magasin ciblé
+        System.out.print("\nEntrez l'ID du magasin > ");
+        String idMagStr = scanner.nextLine().strip();
+        int idMagasin;
+        try {
+            idMagasin = Integer.parseInt(idMagStr);
+        } catch (NumberFormatException e) {
+            System.out.println("⚠️ ID magasin invalide.");
+            return;
+        }
+
+        // Vérifier que le magasin existe
+        Magasin magasinChoisi = magasins.stream()
+            .filter(m -> m.getIdMagasin() == idMagasin)
+            .findFirst()
+            .orElse(null);
+        if (magasinChoisi == null) {
+            System.out.println("❌ Magasin introuvable.");
+            return;
+        }
+
+        // Obtenir les livres de ce magasin
+        List<Livre> livres = livreBD.listeDesLivres(idMagasin);
+
+        if (livres.isEmpty()) {
+            System.out.println("📭 Aucun livre dans ce magasin.");
+            return;
+        }
+
+        System.out.println("\n📚 Livres disponibles dans le magasin " + magasinChoisi.getNom() + " :");
+        for (Livre livre : livres) {
+            int stock = livreBD.getStockLivreMagasin(livre.getIdLivre(), idMagasin);
+            System.out.printf("- %s (ISBN : %d) : %d en stock\n", livre.getNomLivre(), livre.getIdLivre(), stock);
+        }
+
+        // Choisir le livre
+        System.out.print("\nEntrez l'ISBN du livre à modifier > ");
+        String isbnStr = scanner.nextLine().strip();
+        long isbn;
+        try {
+            isbn = Long.parseLong(isbnStr);
+        } catch (NumberFormatException e) {
+            System.out.println("⚠️ ISBN invalide.");
+            return;
+        }
+
+        Livre livreChoisi = livres.stream()
+            .filter(l -> l.getIdLivre() == isbn)
+            .findFirst()
+            .orElse(null);
+        if (livreChoisi == null) {
+            System.out.println("❌ Livre introuvable dans ce magasin.");
+            return;
+        }
+
+        // Nouvelle quantité
+        System.out.print("Entrez la nouvelle quantité en stock > ");
+        String qteStr = scanner.nextLine().strip();
+        int nouvelleQte;
+        try {
+            nouvelleQte = Integer.parseInt(qteStr);
+            if (nouvelleQte < 0) {
+                System.out.println("⚠️ La quantité ne peut pas être négative.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("⚠️ Quantité invalide.");
+            return;
+        }
+
+        // Mise à jour
+        livreBD.modifierStock(isbn, idMagasin, nouvelleQte);
+        System.out.println("✅ Stock mis à jour avec succès.");
+
+    } catch (SQLException e) {
+        System.out.println("❌ Erreur lors de la gestion des stocks : " + e.getMessage());
     }
+}
+
+
 
     private void consulterStatistiques() {
         System.out.println("📊 Consultation des statistiques de vente (à implémenter)");
