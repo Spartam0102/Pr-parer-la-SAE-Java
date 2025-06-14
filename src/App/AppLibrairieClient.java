@@ -223,6 +223,7 @@ public class AppLibrairieClient {
                 centrerTexte("║    🛒  Voir mon panier.............................................[V] ║", largeurConsole),
                 centrerTexte("   ║    🗑️   Supprimer panier............................................[S] ║", largeurConsole),
                 centrerTexte("║    🛒  Commander...................................................[C] ║", largeurConsole),
+                centrerTexte("║    🛒  Voir anciennes commandes....................................[A] ║", largeurConsole),
                 centrerTexte("  ║    ↩️   Retour......................................................[R] ║", largeurConsole),
                 centrerTexte("║    ❌  Quitter.....................................................[Q] ║", largeurConsole),
                 centrerTexte("║                                                                        ║", largeurConsole),
@@ -254,6 +255,24 @@ public class AppLibrairieClient {
                     }
                 }
                 case "c" -> commander(client);
+                case "a" -> {
+                    try{
+                        List<Commande> lstCommandes = commandeBD.getCommandesParClient(client.getIdCli());
+                        if (lstCommandes.isEmpty()){
+                            System.out.println(centrerTexte("Aucune ancienne commande", largeurConsole));
+                            attendreEntree();
+                        }
+                        else{
+                            for (Commande cmmd : lstCommandes){
+                                System.out.println(centrerTexte(cmmd.toString(), largeurConsole));
+                            }
+                            attendreEntree();
+                        }
+                    }
+                    catch (SQLException e){
+                        System.out.println("Erreur lors de la recupération des anciennes commandes d'un client");
+                    }
+                }
                 case "r" -> menuActif = false;
                 case "q" -> {
                     quitterApp = true;
@@ -540,7 +559,7 @@ public class AppLibrairieClient {
                         client.ajouterLivrePanier(livre);
                         try{
                             clientBD.sauvegardePanierBD(client);
-                            System.out.println(centrerTexte("✔ Panier supprimé et sauvegardé avec succès.", largeurConsole));
+                            System.out.println(centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
                             pause(1500);
                         }
                         catch(Exception e){
@@ -576,17 +595,21 @@ public class AppLibrairieClient {
     public void commander(Client client) {
         int largeurConsole = getLargeurConsole();
 
+        if (client.getPanier().isEmpty()) {
+            System.out.println(centrerTexte("Veuillez d'abord ajouter des livres à votre panier", largeurConsole));
+        }
+
         try{
             int idCommande = commandeBD.genererNouvelIdCommande();
 
             LocalDate dateDeCommande = LocalDate.now();
             String dateStr = dateDeCommande.toString();
 
-            System.out.print("\n" + centrerTexte("Quelle est le mode de réception (Livraison : L / en Magasin : M) ? : ", largeurConsole));
+            System.out.print("\n" + centrerTexte("Quelle est le mode de réception (Livraison : C / en Magasin : M) ? : ", largeurConsole));
             String commande1 = lireCommande().toLowerCase();
             char modeDeReception;
-            while (!(commande1.equals("l") || commande1.equals("m"))) {
-                System.out.print("\n" + centrerTexte("Entrée invalide. Veuillez entrer 'L' ou 'M' : ", largeurConsole));
+            while (!(commande1.equals("c") || commande1.equals("m"))) {
+                System.out.print("\n" + centrerTexte("Entrée invalide. Veuillez entrer 'C' ou 'M' : ", largeurConsole));
                 commande1 = lireCommande().toLowerCase();
             }
             modeDeReception = commande1.toUpperCase().charAt(0);
@@ -622,7 +645,30 @@ public class AppLibrairieClient {
             }
 
             Commande commande = new Commande(idCommande, dateStr, modeDeReception, client, bonMagasin);
-            System.out.println(commande);
+
+            Map<Livre, Integer> panier = client.getPanier();
+            for (Map.Entry<Livre, Integer> entry : panier.entrySet()) {
+                commande.ajouterLivre(entry.getKey(), entry.getValue());
+            }
+
+            System.out.println(centrerTexte("Etes vous sur de vouloir passer commande ? (O/N)", largeurConsole));
+            String commandesur = lireCommande().toLowerCase();
+            while (!(commandesur.equals("o")) && !(commandesur.equals("n"))) {
+                System.out.println(centrerTexte("Veuillez rentrer soit O soit N", largeurConsole));
+                System.out.println(centrerTexte("Etes vous sur de vouloir passer commande ? (O/N)", largeurConsole));
+                commandesur = lireCommande().toLowerCase();
+            }
+
+            if (commandesur.equals("n")) {
+                System.out.println(centrerTexte("Commande annulée", largeurConsole));
+                pause(3000);
+                return;
+            }
+
+            commandeBD.enregistrerCommande(commande);
+            System.out.println("1");
+            client.reunitialiserPanier();
+
         }
         catch(SQLException e){
             System.out.println("Erreur sql" + e.getMessage());}
