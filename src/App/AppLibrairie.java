@@ -1,29 +1,23 @@
 package App;
 
 import BD.*;
-import Java.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class AppLibrairie {
 
     private ConnexionMySQL connexionMySQL;
     private MagasinBD magasinBD;
-    private LivreBD livreBD;  // Fixed variable name consistency
+    private LivreBD livreBD;
     private StatistiqueBD statistiqueBD;
 
     private boolean connexionEtablie = false;
 
-    
-    
     private boolean quitterApp = false;
-    private Scanner scanner = new Scanner(System.in); // Added scanner for input consistency
+    private Scanner scanner = new Scanner(System.in);
 
     public AppLibrairie() {
-        // Initialiser la connexion au démarrage
         initialiserConnexion();
     }
 
@@ -32,7 +26,7 @@ public class AppLibrairie {
             this.connexionMySQL = new ConnexionMySQL();
             this.connexionMySQL.connecter();
             this.magasinBD = new MagasinBD(this.connexionMySQL);
-            this.livreBD = new LivreBD(this.connexionMySQL);  // Fixed variable name
+            this.livreBD = new LivreBD(this.connexionMySQL);
             this.statistiqueBD = new StatistiqueBD(this.connexionMySQL);
             this.connexionEtablie = true;
             System.out.println("Connexion à la base de données établie avec succès !");
@@ -55,8 +49,8 @@ public class AppLibrairie {
     }
 
     private void effacerDerniereLigne() {
-        System.out.print("\033[1A");  // remonter curseur d'une ligne
-        System.out.print("\033[2K");  // effacer la ligne
+        System.out.print("\033[1A");
+        System.out.print("\033[2K");
     }
 
     private void clearConsole() {
@@ -68,7 +62,8 @@ public class AppLibrairie {
             }
         } catch (Exception e) {
             // fallback
-            for (int i = 0; i < 50; ++i) System.out.println();
+            for (int i = 0; i < 50; ++i)
+                System.out.println();
         }
     }
 
@@ -89,16 +84,15 @@ public class AppLibrairie {
             clearConsole();
 
             String[] titreAnime = {
-    "  _      _                  ______                              ",
-    " | |    (_)                |  ____|                             ",
-    " | |     ___   ___ __ ___  | |__  __  ___ __  _ __ ___  ___ ___ ",
-    " | |    | \\ \\ / / '__/ _ \\ |  __| \\ \\/ / '_ \\| '__/ _ \\/ __/ __|",
-    " | |____| |\\ V /| | |  __/ | |____ >  <| |_) | | |  __/\\__ \\__ \\",
-    " |______|_| \\_/ |_|  \\___| |______/_/\\_\\ .__/|_|  \\___||___/___/",
-    "                                       | |                      ",
-    "                                       |_|                      "
-};
-
+                    "  _      _                  ______                              ",
+                    " | |    (_)                |  ____|                             ",
+                    " | |     ___   ___ __ ___  | |__  __  ___ __  _ __ ___  ___ ___ ",
+                    " | |    | \\ \\ / / '__/ _ \\ |  __| \\ \\/ / '_ \\| '__/ _ \\/ __/ __|",
+                    " | |____| |\\ V /| | |  __/ | |____ >  <| |_) | | |  __/\\__ \\__ \\",
+                    " |______|_| \\_/ |_|  \\___| |______/_/\\_\\ .__/|_|  \\___||___/___/",
+                    "                                       | |                      ",
+                    "                                       |_|                      "
+            };
 
             int largeurConsole = getLargeurConsole();
 
@@ -113,14 +107,22 @@ public class AppLibrairie {
             }
 
             String[] menuAnime = {
-                centrerTexte("╔════════════════════════════════════════════════════════════════════════════════╗", largeurConsole),
-                centrerTexte("║                                                                                ║", largeurConsole),
-                centrerTexte("║                              MENU PRINCIPAL                                    ║", largeurConsole),
-                centrerTexte("║                                                                                ║", largeurConsole),
-                centrerTexte("║    🔐  Connexion au système..............................................[C]   ║", largeurConsole),
-                centrerTexte("║    ❌  Quitter l'application.............................................[Q]   ║", largeurConsole),
-                centrerTexte("║                                                                                ║", largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+                    centrerTexte("╔════════════════════════════════════════════════════════════════════════════════╗",
+                            largeurConsole),
+                    centrerTexte("║                                                                                ║",
+                            largeurConsole),
+                    centrerTexte("║                              MENU PRINCIPAL                                    ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                                ║",
+                            largeurConsole),
+                    centrerTexte("║    🔐  Connexion au système..............................................[C]   ║",
+                            largeurConsole),
+                    centrerTexte("║    ❌  Quitter l'application.............................................[Q]   ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                                ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
             };
 
             try {
@@ -146,183 +148,112 @@ public class AppLibrairie {
         }
     }
 
-
-private String centrerTexte(String texte, int largeurTotale) {
-    if (texte.length() >= largeurTotale) return texte;
-    int espaces = (largeurTotale - texte.length()) / 2;
-    return " ".repeat(espaces) + texte;
-}
-
-private int getLargeurConsole() {
-    try {
-        ProcessBuilder pb = new ProcessBuilder("sh", "-c", "tput cols");
-        Process p = pb.start();
-        p.waitFor();
-        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(p.getInputStream()))) {
-            String cols = br.readLine();
-            return Integer.parseInt(cols);
-        }
-    } catch (Exception e) {
-        
-        return 80;
+    private String centrerTexte(String texte, int largeurTotale) {
+        if (texte.length() >= largeurTotale)
+            return texte;
+        int espaces = (largeurTotale - texte.length()) / 2;
+        return " ".repeat(espaces) + texte;
     }
-}
 
-    
-
-public void menuConnexion() throws NumberFormatException, SQLException {
-    boolean menuActif = true;
-    int largeurConsole = getLargeurConsole();
-
-    while (menuActif && !quitterApp) {
-        clearConsole();
-
-        String[] titre = {
-            "╔════════════════════════════════════════════════════════════════╗",
-            "║                            CONNEXION                           ║",
-            "╚════════════════════════════════════════════════════════════════╝",
-            ""
-        };
-
-        for (int i = 0; i < titre.length; i++) {
-            titre[i] = centrerTexte(titre[i], largeurConsole);
-        }
-
+    private int getLargeurConsole() {
         try {
-            machineAEcrireLigneParLigne(titre, 100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+            ProcessBuilder pb = new ProcessBuilder("sh", "-c", "tput cols");
+            Process p = pb.start();
+            p.waitFor();
+            try (java.io.BufferedReader br = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(p.getInputStream()))) {
+                String cols = br.readLine();
+                return Integer.parseInt(cols);
+            }
+        } catch (Exception e) {
 
-        String[] menu = {
-    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
-    centrerTexte("║                                                                        ║", largeurConsole),
-    centrerTexte("║     🔑   Client....................................................[C] ║", largeurConsole),
-    centrerTexte("  ║    👨‍💼  Vendeur...................................................[V] ║", largeurConsole),
-    centrerTexte("  ║     🛠️    Administrateur............................................[A] ║", largeurConsole),
-    centrerTexte(" ║     ↩️    Retour....................................................[R] ║", largeurConsole),
-    centrerTexte("║                                                                        ║", largeurConsole),
-    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
-};
-
-
-        try {
-            machineAEcrireLigneParLigne(menu, 100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        System.out.print("\nEntrez votre choix : ");
-
-        String commande = lireCommande();
-
-        switch (commande) {
-            case "r":
-                menuActif = false;
-                break;
-            case "c":
-                AppLibrairieClient clientMenu = new AppLibrairieClient(magasinBD, livreBD, connexionMySQL);
-                clientMenu.menuClient();
-                break;
-            case "v":
-                AppLibrairieVendeur vendeurMenu = new AppLibrairieVendeur(magasinBD, connexionMySQL);
-                vendeurMenu.menuVendeur();
-                break;
-            case "a":
-                AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD,statistiqueBD, connexionMySQL);
-
-                adminMenu.menuAdministrateur();
-                break;
-            default:
-                System.out.println("\n>>> Commande invalide. Veuillez réessayer.");
-                attendre(1500);
+            return 80;
         }
     }
-}
 
+    public void menuConnexion() throws NumberFormatException, SQLException {
+        boolean menuActif = true;
+        int largeurConsole = getLargeurConsole();
 
-    // Removed duplicate menuVendeur method since it's handled by AppLibrairieVendeur class
+        while (menuActif && !quitterApp) {
+            clearConsole();
 
-    // Ajoute cette méthode pour afficher plusieurs lignes avec délai
-private void machineAEcrireLigneParLigne(String[] lignes, int delayMillis) throws InterruptedException {
-    for (String ligne : lignes) {
-        System.out.println(ligne);
-        Thread.sleep(delayMillis);
+            String[] titre = {
+                    "╔════════════════════════════════════════════════════════════════╗",
+                    "║                            CONNEXION                           ║",
+                    "╚════════════════════════════════════════════════════════════════╝",
+                    ""
+            };
+
+            for (int i = 0; i < titre.length; i++) {
+                titre[i] = centrerTexte(titre[i], largeurConsole);
+            }
+
+            try {
+                machineAEcrireLigneParLigne(titre, 100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            String[] menu = {
+                    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("║     🔑   Client....................................................[C] ║",
+                            largeurConsole),
+                    centrerTexte("  ║    👨‍💼  Vendeur...................................................[V] ║",
+                            largeurConsole),
+                    centrerTexte("  ║     🛠️    Administrateur............................................[A] ║",
+                            largeurConsole),
+                    centrerTexte(" ║     ↩️    Retour....................................................[R] ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
+            };
+
+            try {
+                machineAEcrireLigneParLigne(menu, 100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            System.out.print("\nEntrez votre choix : ");
+
+            String commande = lireCommande();
+
+            switch (commande) {
+                case "r":
+                    menuActif = false;
+                    break;
+                case "c":
+                    AppLibrairieClient clientMenu = new AppLibrairieClient(magasinBD, livreBD, connexionMySQL);
+                    clientMenu.menuClient();
+                    break;
+                case "v":
+                    AppLibrairieVendeur vendeurMenu = new AppLibrairieVendeur(magasinBD, connexionMySQL);
+                    vendeurMenu.menuVendeur();
+                    break;
+                case "a":
+                    AppLibrairieAdmin adminMenu = new AppLibrairieAdmin(magasinBD, livreBD, statistiqueBD,
+                            connexionMySQL);
+
+                    adminMenu.menuAdministrateur();
+                    break;
+                default:
+                    System.out.println("\n>>> Commande invalide. Veuillez réessayer.");
+                    attendre(1500);
+            }
+        }
     }
-}
 
-    
-    private void ajouterLivre() {
-        System.out.print("ISBN du livre > ");
-        String isbnL = scanner.nextLine();  // Using scanner instead of System.console()
-        long isbnLI = Long.parseLong(isbnL);
-
-        System.out.print("Titre du livre > ");
-        String titreL = scanner.nextLine();
-
-        System.out.print("Nombre de pages du livre > ");
-        String nbpagesL = scanner.nextLine();
-        int nbpagesLI = Integer.parseInt(nbpagesL);
-
-        System.out.print("Date de publication (YYYY-MM-DD) > ");
-        String datepubliL = scanner.nextLine();
-
-        System.out.print("Prix du livre > ");
-        String prixL = scanner.nextLine();
-        double prixLI = Double.parseDouble(prixL);
-
-        List<String> classification = new ArrayList<>();
-        boolean passer = true;
-        while (passer) {
-            System.out.print("Classification du livre (ou P pour passer) > ");
-            String commande = lireCommande();
-            if (commande.equals("p")) {
-                passer = false;
-            } else {
-                classification.add(commande);
-            }
+    private void machineAEcrireLigneParLigne(String[] lignes, int delayMillis) throws InterruptedException {
+        for (String ligne : lignes) {
+            System.out.println(ligne);
+            Thread.sleep(delayMillis);
         }
-
-        List<String> auteur = new ArrayList<>();
-        passer = true;
-        while (passer) {
-            System.out.println("Auteur du livre (ou P pour passer) > ");
-            String commande = lireCommande();
-            if (commande.equals("p")) {
-                passer = false;
-            } else {
-                auteur.add(commande);
-            }
-        }
-
-        List<Integer> editeur = new ArrayList<>();
-        passer = true;
-        while (passer) {
-            System.out.print("Éditeur du livre (ID ou P pour passer) > ");
-            String commande = lireCommande();
-            if (commande.equals("p")) {
-                passer = false;
-            } else {
-                try {
-                    int number = Integer.parseInt(commande);
-                    editeur.add(number);
-                } catch (NumberFormatException e) {
-                    System.out.println("Veuillez entrer un nombre valide ou 'P'.");
-                }
-            }
-        }
-
-        Livre nouveau = new Livre(isbnLI, titreL, datepubliL, prixLI, nbpagesLI, classification, editeur, auteur);
-
-        try {
-            String nb = livreBD.insererLivre(nouveau);  // Fixed variable name
-            System.out.println("\nLivre ajouté avec succès : " + nb);
-        } catch (SQLException ex) {
-            System.out.println("\nErreur lors de l'ajout du livre : " + ex.getMessage());
-        }
-
-        System.out.println("\nAppuyez sur Entrée pour revenir au menu vendeur...");
-        scanner.nextLine();
     }
 
     public void bienvenue() {
@@ -337,7 +268,7 @@ private void machineAEcrireLigneParLigne(String[] lignes, int delayMillis) throw
         System.out.println("│                Vas te faire enculer             │");
         System.out.println("│               Pourquoi t'as quitté ?            │");
         System.out.println("╰─────────────────────────────────────────────────╯");
-         System.out.println("...................../´¯¯/)");
+        System.out.println("...................../´¯¯/)");
         System.out.println("...................,/¯.../");
         System.out.println(".................../..../");
         System.out.println(".............../´¯/'..'/´¯¯`·¸");
@@ -345,19 +276,19 @@ private void machineAEcrireLigneParLigne(String[] lignes, int delayMillis) throw
         System.out.println("..........('(....´...´... ¯~/'..')");
         System.out.println("...........\\..............'...../");
         System.out.println("............\\....\\.........._.·´");
-        System.out.println(".............\\..............("); 
+        System.out.println(".............\\..............(");
         System.out.println("..............\\..............\\");
     }
 
     private String lireCommande() {
-        String mess = scanner.nextLine();  // Using scanner instead of System.console()
-        if (mess == null) mess = ""; // sécurité si console absente
+        String mess = scanner.nextLine();
+        if (mess == null)
+            mess = "";
         mess = mess.strip().toLowerCase();
         effacerDerniereLigne();
         return mess;
     }
 
-    // Méthode utilitaire pour faire une pause d'attente (en ms)
     private void attendre(int millis) {
         try {
             Thread.sleep(millis);

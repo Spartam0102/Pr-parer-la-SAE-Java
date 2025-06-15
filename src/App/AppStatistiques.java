@@ -1,7 +1,6 @@
 package App;
 
 import BD.*;
-import Java.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -9,19 +8,12 @@ import java.util.Scanner;
 
 public class AppStatistiques {
 
-    private MagasinBD magasinBD;
-    private LivreBD livreBD;
     private StatistiqueBD statistiqueBD;
     private boolean quitterApp = false;
     private Scanner scanner = new Scanner(System.in);
 
-    private ConnexionMySQL connexionMySQL;
-
     public AppStatistiques(MagasinBD magasinBD, LivreBD livreBD, StatistiqueBD statistiqueBD,
             ConnexionMySQL connexionMySQL) {
-        this.magasinBD = magasinBD;
-        this.livreBD = livreBD;
-        this.connexionMySQL = connexionMySQL;
         this.statistiqueBD = statistiqueBD;
     }
 
@@ -138,74 +130,68 @@ public class AppStatistiques {
         }
     }
 
-private void deuxiemeStat() {
-    try {
-        System.out.print("📝 Année > ");
-        String annee = scanner.nextLine().strip();
-        List<List<String>> tableau = statistiqueBD.deuxieme(annee);
-        clearConsole();
+    private void deuxiemeStat() {
+        try {
+            System.out.print("📝 Année > ");
+            String annee = scanner.nextLine().strip();
+            List<List<String>> tableau = statistiqueBD.deuxieme(annee);
+            clearConsole();
 
-        System.out.println("\n📋 Chiffre d'affaire par thème en " + annee + " :");
-        System.out.println("============================");
+            System.out.println("\n📋 Chiffre d'affaire par thème en " + annee + " :");
+            System.out.println("============================");
 
-        if (tableau.isEmpty()) {
-            System.out.println("❌ Aucune donnée trouvée pour cette année.");
-            return;
+            if (tableau.isEmpty()) {
+                System.out.println("❌ Aucune donnée trouvée pour cette année.");
+                return;
+            }
+
+            System.out.printf("%-15s │ %-15s%n", "Thème", "Montant (€)");
+            System.out.println("────────────────┼────────────────");
+
+            for (List<String> ligne : tableau) {
+                String theme = ligne.get(0);
+                String montant = ligne.get(1);
+                System.out.printf("%-15s │ %-15s%n", theme, montant);
+            }
+
+            System.out.println();
+
+        } catch (SQLException e) {
+            System.out.println("❌ Erreur : " + e.getMessage());
         }
-
-        System.out.printf("%-15s │ %-15s%n", "Thème", "Montant (€)");
-        System.out.println("────────────────┼────────────────");
-
-        for (List<String> ligne : tableau) {
-            String theme = ligne.get(0);
-            String montant = ligne.get(1);
-            System.out.printf("%-15s │ %-15s%n", theme, montant);
-        }
-
-        System.out.println();
-
-    } catch (SQLException e) {
-        System.out.println("❌ Erreur : " + e.getMessage());
     }
-}
 
-private void troisiemeStat() {
-    try {
-        System.out.print("📝 Année > ");
-        String annee = scanner.nextLine().strip();
-        List<List<String>> tableau = statistiqueBD.troisieme(annee);
-        clearConsole();
+    private void troisiemeStat() {
+        try {
+            System.out.print("📝 Année > ");
+            String annee = scanner.nextLine().strip();
+            List<List<String>> tableau = statistiqueBD.troisieme(annee);
+            clearConsole();
 
-        System.out.println("\n📋 Chiffre d'affaire par magasin et par mois en " + annee + " :");
-        System.out.println("============================");
+            System.out.println("\n📋 Chiffre d'affaire par magasin et par mois en " + annee + " :");
+            System.out.println("============================");
 
-        if (tableau.isEmpty()) {
-            System.out.println("❌ Aucune donnée trouvée pour cette année.");
-            return;
+            if (tableau.isEmpty()) {
+                System.out.println("❌ Aucune donnée trouvée pour cette année.");
+                return;
+            }
+
+            System.out.printf("%-4s │ %-20s │ %-15s%n", "Mois", "Magasin", "CA (€)");
+            System.out.println("─────┼──────────────────────┼────────────────");
+
+            for (List<String> ligne : tableau) {
+                String mois = ligne.get(0);
+                String magasin = ligne.get(1);
+                String ca = ligne.get(2);
+                System.out.printf("%-4s │ %-20s │ %-15s%n", mois, magasin, ca);
+            }
+
+            System.out.println();
+
+        } catch (SQLException e) {
+            System.out.println("❌ Erreur : " + e.getMessage());
         }
-
-        System.out.printf("%-4s │ %-20s │ %-15s%n", "Mois", "Magasin", "CA (€)");
-        System.out.println("─────┼──────────────────────┼────────────────");
-
-        for (List<String> ligne : tableau) {
-            String mois = ligne.get(0);
-            String magasin = ligne.get(1);
-            String ca = ligne.get(2);
-            System.out.printf("%-4s │ %-20s │ %-15s%n", mois, magasin, ca);
-        }
-
-        System.out.println();
-
-    } catch (SQLException e) {
-        System.out.println("❌ Erreur : " + e.getMessage());
     }
-}
-
-
-
-
-
-
 
     // ======================= OUTILS =============================
 

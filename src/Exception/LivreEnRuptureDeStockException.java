@@ -1,9 +1,10 @@
-package Exception; 
-import Java.*; 
+package Exception;
 
-public class LivreEnRuptureDeStockException extends Exception{
-    
-    public LivreEnRuptureDeStockException(Livre livre){
+import Java.*;
+
+public class LivreEnRuptureDeStockException extends Exception {
+
+    public LivreEnRuptureDeStockException(Livre livre) {
         super("Le livre " + livre + " est en rupture de stock");
     }
 }

@@ -1,10 +1,10 @@
-package Exception; 
-import Java.*; 
+package Exception;
 
-public class ClientDejaExistantException extends Exception{
-    
-    public ClientDejaExistantException(Client client){
+import Java.*;
+
+public class ClientDejaExistantException extends Exception {
+
+    public ClientDejaExistantException(Client client) {
         super("Le client " + client + " existe déjà");
     }
 }
-

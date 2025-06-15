@@ -15,6 +15,7 @@ public class AppLibrairieClient {
     private MagasinBD magasinBD;
     private CommandeBD commandeBD;
     private ClientBD clientBD;
+    private LivreBD livreBD;
     private boolean quitterApp = false;
     private Scanner scanner = new Scanner(System.in);
 
@@ -22,16 +23,18 @@ public class AppLibrairieClient {
         this.magasinBD = magasinBD;
         this.clientBD = new ClientBD(connexionMySQL);
         this.commandeBD = new CommandeBD(connexionMySQL);
+        this.livreBD = new LivreBD(connexionMySQL);
+        ;
     }
 
     public Client menuClientConnexion() {
         clearConsole();
         int largeur = getLargeurConsole();
         String[] titre = {
-            "╔════════════════════════════════════════════════════════════════╗",
-            "║                       CONNEXION CLIENT                         ║",
-            "╚════════════════════════════════════════════════════════════════╝",
-            ""
+                "╔════════════════════════════════════════════════════════════════╗",
+                "║                       CONNEXION CLIENT                         ║",
+                "╚════════════════════════════════════════════════════════════════╝",
+                ""
         };
 
         for (int i = 0; i < titre.length; i++) {
@@ -49,16 +52,15 @@ public class AppLibrairieClient {
             String idStr = System.console() != null ? System.console().readLine() : scanner.nextLine();
             int id = Integer.parseInt(idStr);
 
-            try{
+            try {
                 Client client = clientBD.recupererClient(id);
-                if (client == null){
+                if (client == null) {
                     System.out.println("Cet id n'existe pas");
-                }
-                else{
+                } else {
                     client.setPanier(clientBD.recupererPanier(id));
                 }
                 return client;
-            } catch(SQLException e){
+            } catch (SQLException e) {
                 System.out.println("Erreur lors de la récupération du client : " + e.getMessage());
 
                 return null;
@@ -82,10 +84,10 @@ public class AppLibrairieClient {
             clearConsole();
 
             String[] titre = {
-                "╔════════════════════════════════════════════════════════════════╗",
-                "║                         MENU CLIENT                            ║",
-                "╚════════════════════════════════════════════════════════════════╝",
-                ""
+                    "╔════════════════════════════════════════════════════════════════╗",
+                    "║                         MENU CLIENT                            ║",
+                    "╚════════════════════════════════════════════════════════════════╝",
+                    ""
             };
 
             for (int i = 0; i < titre.length; i++) {
@@ -99,16 +101,32 @@ public class AppLibrairieClient {
             }
 
             String[] menu = {
-                centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte(String.format("║    🧑  Infos personnelles..........................................[I] ║"), largeurConsole),
-                centrerTexte(String.format("║    🏬  Afficher magasins...........................................[A] ║"), largeurConsole),
-                centrerTexte(String.format("║    🛒  Commander...................................................[C] ║"), largeurConsole),
-                centrerTexte(String.format("║    🛒  Panier .....................................................[P] ║"), largeurConsole),
-                centrerTexte(String.format("║    💡  Recommandations.............................................[R] ║"), largeurConsole),
-                centrerTexte(String.format("║    ❌  Quitter.....................................................[Q] ║"), largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+                    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte(
+                            String.format("║    🧑  Infos personnelles..........................................[I] ║"),
+                            largeurConsole),
+                    centrerTexte(
+                            String.format("║    🏬  Afficher magasins...........................................[A] ║"),
+                            largeurConsole),
+                    centrerTexte(
+                            String.format("║    🛒  Commander...................................................[C] ║"),
+                            largeurConsole),
+                    centrerTexte(
+                            String.format("║    🛒  Panier .....................................................[P] ║"),
+                            largeurConsole),
+                    centrerTexte(
+                            String.format("║    💡  Recommandations.............................................[R] ║"),
+                            largeurConsole),
+                    centrerTexte(
+                            String.format("║    ❌  Quitter.....................................................[Q] ║"),
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
             };
 
             try {
@@ -142,70 +160,88 @@ public class AppLibrairieClient {
     }
 
     public void menuRecommandations(Client client) {
-    clearConsole();
-    int largeurConsole = getLargeurConsole();
+        clearConsole();
+        int largeurConsole = getLargeurConsole();
 
-    String[] titre = {
-        "╔════════════════════════════════════════════════════════════════╗",
-        "║                      RECOMMANDATIONS                           ║",
-        "╚════════════════════════════════════════════════════════════════╝",
-        ""
-    };
+        String[] titre = {
+                "╔════════════════════════════════════════════════════════════════╗",
+                "║                      RECOMMANDATIONS                           ║",
+                "╚════════════════════════════════════════════════════════════════╝",
+                ""
+        };
 
-    for (int i = 0; i < titre.length; i++) {
-        titre[i] = centrerTexte(titre[i], largeurConsole);
-    }
-
-    try {
-        machineAEcrireLigneParLigne(titre, 100);
-        
-        List<Livre> recommandations = livreRecommander(client.getIdCli());
-        
-        if (recommandations.isEmpty()) {
-            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-            System.out.println(centrerTexte("║    💡  Aucune recommandation disponible pour le moment               ║", largeurConsole));
-            System.out.println(centrerTexte("║        Essayez d'acheter quelques livres pour obtenir des suggestions ║", largeurConsole));
-            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-            System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
-        } else {
-            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-            System.out.println(centrerTexte("║    💡  Livres recommandés pour vous :                                ║", largeurConsole));
-            System.out.println(centrerTexte("║        (Basés sur les goûts de clients similaires)                   ║", largeurConsole));
-            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-            
-            for (int i = 0; i < Math.min(recommandations.size(), 10); i++) {
-                Livre livre = recommandations.get(i);
-                String nom = livre.getNomLivre();
-                if (nom.length() > 50) {
-                    nom = nom.substring(0, 47) + "...";
-                }
-                String ligne = "║    📚  " + nom;
-                int esp = largeurConsole - ligne.length() - 3;
-                ligne += " ".repeat(Math.max(0, esp)) + "║";
-                System.out.println(centrerTexte(ligne, largeurConsole));
-                pause(200);
-            }
-            
-            System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-            System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+        for (int i = 0; i < titre.length; i++) {
+            titre[i] = centrerTexte(titre[i], largeurConsole);
         }
-        
-    } catch (SQLException e) {
-        System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-        System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-        System.out.println(centrerTexte("║    ❌  Erreur lors de la récupération des recommandations            ║", largeurConsole));
-        System.out.println(centrerTexte("║        " + e.getMessage(), largeurConsole));
-        System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
-        System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
-    } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
+
+        try {
+            machineAEcrireLigneParLigne(titre, 100);
+
+            List<Livre> recommandations = livreRecommander(client.getIdCli());
+
+            if (recommandations.isEmpty()) {
+                System.out.println(centrerTexte(
+                        "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║                                                                        ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║    💡  Aucune recommandation disponible pour le moment               ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║        Essayez d'acheter quelques livres pour obtenir des suggestions ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║                                                                        ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+            } else {
+                System.out.println(centrerTexte(
+                        "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║                                                                        ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║    💡  Livres recommandés pour vous :                                ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║        (Basés sur les goûts de clients similaires)                   ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║                                                                        ║", largeurConsole));
+
+                for (int i = 0; i < Math.min(recommandations.size(), 10); i++) {
+                    Livre livre = recommandations.get(i);
+                    String nom = livre.getNomLivre();
+                    if (nom.length() > 50) {
+                        nom = nom.substring(0, 47) + "...";
+                    }
+                    String ligne = "║    📚  " + nom;
+                    int esp = largeurConsole - ligne.length() - 3;
+                    ligne += " ".repeat(Math.max(0, esp)) + "║";
+                    System.out.println(centrerTexte(ligne, largeurConsole));
+                    pause(200);
+                }
+
+                System.out.println(centrerTexte(
+                        "║                                                                        ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(centrerTexte(
+                    "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte(
+                    "║                                                                        ║", largeurConsole));
+            System.out.println(centrerTexte("║    ❌  Erreur lors de la récupération des recommandations            ║",
+                    largeurConsole));
+            System.out.println(centrerTexte("║        " + e.getMessage(), largeurConsole));
+            System.out.println(centrerTexte(
+                    "║                                                                        ║", largeurConsole));
+            System.out.println(centrerTexte(
+                    "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        attendreEntree();
     }
-    
-    attendreEntree();
-}
-    
+
     public void menuPanier(Client client) {
         boolean menuActif = true;
         int largeurConsole = getLargeurConsole();
@@ -214,20 +250,31 @@ public class AppLibrairieClient {
             clearConsole();
 
             String[] menu = {
-                centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole),
-                centrerTexte(String.format("║                        🧑 Client %-30s║", client.getIdCli()), largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole),
-                centrerTexte("", largeurConsole),
-                centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte("║    🛒  Voir mon panier.............................................[V] ║", largeurConsole),
-                centrerTexte("   ║    🗑️   Supprimer panier............................................[S] ║", largeurConsole),
-                centrerTexte("║    🛒  Commander...................................................[C] ║", largeurConsole),
-                centrerTexte("║    🛒  Voir anciennes commandes....................................[A] ║", largeurConsole),
-                centrerTexte("  ║    ↩️   Retour......................................................[R] ║", largeurConsole),
-                centrerTexte("║    ❌  Quitter.....................................................[Q] ║", largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+                    centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole),
+                    centrerTexte(String.format("║                        🧑 Client %-30s║", client.getIdCli()),
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole),
+                    centrerTexte("", largeurConsole),
+                    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("║    🛒  Voir mon panier.............................................[V] ║",
+                            largeurConsole),
+                    centrerTexte("   ║    🗑️   Supprimer panier............................................[S] ║",
+                            largeurConsole),
+                    centrerTexte("║    🛒  Commander...................................................[C] ║",
+                            largeurConsole),
+                    centrerTexte("║    🛒  Voir anciennes commandes....................................[A] ║",
+                            largeurConsole),
+                    centrerTexte("  ║    ↩️   Retour......................................................[R] ║",
+                            largeurConsole),
+                    centrerTexte("║    ❌  Quitter.....................................................[Q] ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
             };
 
             try {
@@ -243,33 +290,33 @@ public class AppLibrairieClient {
                 case "v" -> {
                     afficherPanier(client);
                 }
-                case "s" ->  {
+                case "s" -> {
                     client.reunitialiserPanier();
                     try {
                         clientBD.sauvegardePanierBD(client);
-                        System.out.println(centrerTexte("✔ Panier supprimé et sauvegardé avec succès.", largeurConsole));
+                        System.out
+                                .println(centrerTexte("✔ Panier supprimé et sauvegardé avec succès.", largeurConsole));
                         pause(2500);
                     } catch (Exception e) {
-                        System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.", largeurConsole));
+                        System.out.println(
+                                centrerTexte("✖ Impossible de sauvegarder dans la base de données.", largeurConsole));
                         attendreEntree();
                     }
                 }
                 case "c" -> commander(client);
                 case "a" -> {
-                    try{
+                    try {
                         List<Commande> lstCommandes = commandeBD.getCommandesParClient(client.getIdCli());
-                        if (lstCommandes.isEmpty()){
+                        if (lstCommandes.isEmpty()) {
                             System.out.println(centrerTexte("Aucune ancienne commande", largeurConsole));
                             attendreEntree();
-                        }
-                        else{
-                            for (Commande cmmd : lstCommandes){
+                        } else {
+                            for (Commande cmmd : lstCommandes) {
                                 System.out.println(centrerTexte(cmmd.toString(), largeurConsole));
                             }
                             attendreEntree();
                         }
-                    }
-                    catch (SQLException e){
+                    } catch (SQLException e) {
                         System.out.println("Erreur lors de la recupération des anciennes commandes d'un client");
                     }
                 }
@@ -294,10 +341,10 @@ public class AppLibrairieClient {
             clearConsole();
 
             String[] titre = {
-                "╔════════════════════════════════════════════════════════════════╗",
-                "║                           MAGASINS                             ║",
-                "╚════════════════════════════════════════════════════════════════╝",
-                ""
+                    "╔════════════════════════════════════════════════════════════════╗",
+                    "║                           MAGASINS                             ║",
+                    "╚════════════════════════════════════════════════════════════════╝",
+                    ""
             };
             for (int i = 0; i < titre.length; i++) {
                 titre[i] = centrerTexte(titre[i], largeurConsole);
@@ -310,8 +357,10 @@ public class AppLibrairieClient {
             }
 
             try {
-                System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-                System.out.println(centrerTexte("║                                                                        ║", largeurConsole));
+                System.out.println(centrerTexte(
+                        "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+                System.out.println(centrerTexte(
+                        "║                                                                        ║", largeurConsole));
                 List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
                 for (int i = 0; i < listeMagasins.size(); i++) {
                     String nom = listeMagasins.get(i).getNom();
@@ -320,20 +369,25 @@ public class AppLibrairieClient {
                     }
                     String ligne = "   ║     🛍️   " + nom;
                     int esp = largeurConsole - ligne.length() - 6;
-                    ligne += ".".repeat(Math.max(0, esp)) + "[" + (i+1) + "] ║";
+                    ligne += ".".repeat(Math.max(0, esp)) + "[" + (i + 1) + "] ║";
                     System.out.println(centrerTexte(ligne, largeurConsole));
                     pause(100);
                 }
 
                 String[] menu = {
-                    
-                    centrerTexte("║     🛒  Panier ....................................................[P] ║", largeurConsole),
-                    centrerTexte(" ║     ↩️   Retour ....................................................[R] ║", largeurConsole),
-                    centrerTexte("║     ❌  Quitter ...................................................[Q] ║", largeurConsole),
-                    centrerTexte("║                                                                        ║", largeurConsole),
-                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+
+                        centrerTexte("║     🛒  Panier ....................................................[P] ║",
+                                largeurConsole),
+                        centrerTexte(" ║     ↩️   Retour ....................................................[R] ║",
+                                largeurConsole),
+                        centrerTexte("║     ❌  Quitter ...................................................[Q] ║",
+                                largeurConsole),
+                        centrerTexte("║                                                                        ║",
+                                largeurConsole),
+                        centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                                largeurConsole)
                 };
-        
+
                 try {
                     machineAEcrireLigneParLigne(menu, 100);
                 } catch (InterruptedException e) {
@@ -362,7 +416,8 @@ public class AppLibrairieClient {
                 }
 
             } catch (SQLException e) {
-                System.out.println(centrerTexte("Erreur lors de la récupération des magasins : " + e.getMessage(), largeurConsole));
+                System.out.println(centrerTexte("Erreur lors de la récupération des magasins : " + e.getMessage(),
+                        largeurConsole));
                 pause(1500);
             }
         }
@@ -376,19 +431,22 @@ public class AppLibrairieClient {
             clearConsole();
 
             String nom = magasin.getNom();
-            if (nom.length() > 50) nom = nom.substring(0, 47) + "...";
+            if (nom.length() > 50)
+                nom = nom.substring(0, 47) + "...";
 
-            String texteCentre = String.format("%-62s", String.format("%" + (29 + nom.length()/2) + "s", nom));
+            String texteCentre = String.format("%-62s", String.format("%" + (29 + nom.length() / 2) + "s", nom));
 
             String ligneMagasin = "║  " + texteCentre + "║    ";
 
             ligneMagasin = centrerTexte(ligneMagasin, largeurConsole);
 
             String[] titre = {
-                centrerTexte("╔════════════════════════════════════════════════════════════════╗    ", largeurConsole),
-                ligneMagasin,
-                centrerTexte("╚════════════════════════════════════════════════════════════════╝    ", largeurConsole),
-                ""
+                    centrerTexte("╔════════════════════════════════════════════════════════════════╗    ",
+                            largeurConsole),
+                    ligneMagasin,
+                    centrerTexte("╚════════════════════════════════════════════════════════════════╝    ",
+                            largeurConsole),
+                    ""
             };
             for (int i = 0; i < titre.length; i++) {
                 titre[i] = centrerTexte(titre[i], largeurConsole);
@@ -400,15 +458,24 @@ public class AppLibrairieClient {
             }
 
             String[] menuAnime = {
-            centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole),
-            centrerTexte("║                                                                        ║", largeurConsole),
-            centrerTexte("║     🏪  Infos Magasin..............................................[I] ║", largeurConsole),
-            centrerTexte("║     📦  Voir stock.................................................[S] ║", largeurConsole),
-            centrerTexte("║     🛒  Panier ....................................................[P] ║", largeurConsole),
-            centrerTexte(" ║     ↩️   Retour ....................................................[R] ║", largeurConsole),
-            centrerTexte("║     ❌  Quitter....................................................[Q] ║", largeurConsole),
-            centrerTexte("║                                                                        ║", largeurConsole),
-            centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+                    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("║     🏪  Infos Magasin..............................................[I] ║",
+                            largeurConsole),
+                    centrerTexte("║     📦  Voir stock.................................................[S] ║",
+                            largeurConsole),
+                    centrerTexte("║     🛒  Panier ....................................................[P] ║",
+                            largeurConsole),
+                    centrerTexte(" ║     ↩️   Retour ....................................................[R] ║",
+                            largeurConsole),
+                    centrerTexte("║     ❌  Quitter....................................................[Q] ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
             };
 
             try {
@@ -432,7 +499,8 @@ public class AppLibrairieClient {
                         Map<Livre, Integer> stock = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
                         menuStock(stock, client);
                     } catch (SQLException e) {
-                        System.out.println(centrerTexte("Erreur lors de la récupération du stock : " + e.getMessage(), largeurConsole));
+                        System.out.println(centrerTexte("Erreur lors de la récupération du stock : " + e.getMessage(),
+                                largeurConsole));
                         pause(1500);
                     }
 
@@ -453,16 +521,17 @@ public class AppLibrairieClient {
     }
 
     public void menuStock(Map<Livre, Integer> stock, Client client) {
-        boolean menu3 = true;
-        while (menu3 && !quitterApp) {
+        boolean menuActif = true;
+        int largeurConsole = getLargeurConsole();
+
+        while (menuActif && !quitterApp) {
             clearConsole();
-            int largeurConsole = getLargeurConsole();
-            
+
             String[] titre = {
-                centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole),
-                centrerTexte("║                            STOCK                               ║", largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole),
-                ""
+                    centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole),
+                    centrerTexte("║                            STOCK                               ║", largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole),
+                    ""
             };
             try {
                 machineAEcrireLigneParLigne(titre, 100);
@@ -470,10 +539,10 @@ public class AppLibrairieClient {
                 Thread.currentThread().interrupt();
             }
 
-            
             int largeurLigne = 70;
             int num = 1;
-            System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
+            System.out.println(centrerTexte(
+                    "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
             for (Map.Entry<Livre, Integer> coupleLivre : stock.entrySet()) {
                 if (coupleLivre.getValue() > 0) {
                     String nomLivre = coupleLivre.getKey().getNomLivre();
@@ -487,13 +556,14 @@ public class AppLibrairieClient {
                     String quantiteStr = String.format("(x%d)", quantite);
 
                     int espaces = largeurLigne - (numero.length() + 1 + nomLivre.length() + quantiteStr.length());
-                    if (espaces < 0) espaces = 0;
+                    if (espaces < 0)
+                        espaces = 0;
 
                     String ligneLivre = String.format("║ %s %s%s%s ║",
-                        numero,
-                        nomLivre,
-                        " ".repeat(espaces),
-                        quantiteStr);
+                            numero,
+                            nomLivre,
+                            " ".repeat(espaces),
+                            quantiteStr);
 
                     System.out.println(centrerTexte(ligneLivre, largeurConsole));
                     System.out.flush();
@@ -503,14 +573,22 @@ public class AppLibrairieClient {
             }
 
             String[] menuAnime = {
-                centrerTexte("║════════════════════════════════════════════════════════════════════════║", largeurConsole),
-                centrerTexte("║ Entrez le numéro du livre pour l’ajouter à votre panier.               ║", largeurConsole),
-                centrerTexte("║════════════════════════════════════════════════════════════════════════║", largeurConsole),
-                centrerTexte("║     🛒  Panier ....................................................[P] ║", largeurConsole),
-                centrerTexte(" ║     ↩️   Retour ....................................................[R] ║", largeurConsole),
-                centrerTexte("║     ❌  Quitter....................................................[Q] ║", largeurConsole),
-                centrerTexte("║                                                                        ║", largeurConsole),
-                centrerTexte("╚════════════════════════════════════════════════════════════════════════╝", largeurConsole)
+                    centrerTexte("║════════════════════════════════════════════════════════════════════════║",
+                            largeurConsole),
+                    centrerTexte("║ Entrez le numéro du livre pour l’ajouter à votre panier.               ║",
+                            largeurConsole),
+                    centrerTexte("║════════════════════════════════════════════════════════════════════════║",
+                            largeurConsole),
+                    centrerTexte("║     🛒  Panier ....................................................[P] ║",
+                            largeurConsole),
+                    centrerTexte(" ║     ↩️   Retour ....................................................[R] ║",
+                            largeurConsole),
+                    centrerTexte("║     ❌  Quitter....................................................[Q] ║",
+                            largeurConsole),
+                    centrerTexte("║                                                                        ║",
+                            largeurConsole),
+                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                            largeurConsole)
             };
 
             try {
@@ -522,7 +600,7 @@ public class AppLibrairieClient {
             System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
             String commande = lireCommande().toLowerCase();
 
-            try{
+            try {
                 int commandeInt = Integer.parseInt(commande);
                 int nbLivreDiff = stock.size();
                 if ((commandeInt > 0) && (commandeInt <= nbLivreDiff)) {
@@ -542,47 +620,47 @@ public class AppLibrairieClient {
                         if (quantiteRestante <= client.getPanier().get(livre)) {
                             System.out.println("Stock insuffisant");
                             attendreEntree();
-                        }
-                        else {
+                        } else {
                             client.ajouterLivrePanier(livre);
-                            try{
-                            clientBD.sauvegardePanierBD(client);
-                            System.out.println(centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
-                            pause(1500);
+                            try {
+                                clientBD.sauvegardePanierBD(client);
+                                System.out.println(
+                                        centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
+                                pause(1500);
+                            } catch (Exception e) {
+                                System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.",
+                                        largeurConsole));
+                                attendreEntree();
                             }
-                            catch(Exception e){
-                                System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.", largeurConsole));
-                                attendreEntree();}
                         }
-                    }
-                    else {
+                    } else {
                         client.ajouterLivrePanier(livre);
-                        try{
+                        try {
                             clientBD.sauvegardePanierBD(client);
-                            System.out.println(centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
+                            System.out.println(
+                                    centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
                             pause(1500);
+                        } catch (Exception e) {
+                            System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.",
+                                    largeurConsole));
+                            attendreEntree();
                         }
-                        catch(Exception e){
-                            System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.", largeurConsole));
-                            attendreEntree();}
                     }
-                }
-                else{
+                } else {
                     System.out.println("Le numéro de livre que vous avez saisie n'existe pas");
                     attendreEntree();
                 }
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 switch (commande) {
                     case "p":
                         menuPanier(client);
                         break;
-                    case "m":
-                        menu3 = true;
+                    case "r":
+                        menuActif = false;
                         break;
                     case "q":
                         quitterApp = true;
-                        menu3 = true;
+                        menuActif = false;
                         break;
                     default:
                         System.out.println("Commande invalide.");
@@ -597,15 +675,18 @@ public class AppLibrairieClient {
 
         if (client.getPanier().isEmpty()) {
             System.out.println(centrerTexte("Veuillez d'abord ajouter des livres à votre panier", largeurConsole));
+            return;
         }
 
-        try{
+        try {
             int idCommande = commandeBD.genererNouvelIdCommande();
 
             LocalDate dateDeCommande = LocalDate.now();
             String dateStr = dateDeCommande.toString();
 
-            System.out.print("\n" + centrerTexte("Quelle est le mode de réception (Livraison : C / en Magasin : M) ? : ", largeurConsole));
+            System.out
+                    .print("\n" + centrerTexte("Quelle est le mode de réception (Livraison : C / en Magasin : M) ? : ",
+                            largeurConsole));
             String commande1 = lireCommande().toLowerCase();
             char modeDeReception;
             while (!(commande1.equals("c") || commande1.equals("m"))) {
@@ -615,15 +696,17 @@ public class AppLibrairieClient {
             modeDeReception = commande1.toUpperCase().charAt(0);
 
             List<Magasin> magasins = magasinBD.listeDesMagasins();
-            Magasin bonMagasin = null;
-            for (int i = 0 ; i < magasins.size() ; i++){
+            
+            for (int i = 0; i < magasins.size(); i++) {
                 System.out.println(centrerTexte(magasins.get(i).getNom() + " : [" + (i + 1) + "]", largeurConsole));
             }
-            System.out.print("\n" + centrerTexte("Dans quel magasin voulez-vous commander (entrer un entier) ? : ", largeurConsole));
+            System.out.print("\n"
+                    + centrerTexte("Dans quel magasin voulez-vous commander (entrer un entier) ? : ", largeurConsole));
             String commande2 = lireCommande().toLowerCase().trim();
 
+            Magasin bonMagasin = null;
             while (bonMagasin == null) {
-                try{
+                try {
                     for (Magasin mag : magasins) {
                         if (mag.getIdMagasin() == Integer.parseInt(commande2)) {
                             bonMagasin = new Magasin(mag.getNom(), mag.getVille(), mag.getIdMagasin());
@@ -633,13 +716,15 @@ public class AppLibrairieClient {
 
                     if (bonMagasin == null) {
                         System.out.println(centrerTexte("Magasin non trouvé. Veuillez réessayer.", largeurConsole));
-                        System.out.print("\n" + centrerTexte("Dans quel magasin voulez-vous commander ? : ", largeurConsole));
+                        System.out.print(
+                                "\n" + centrerTexte("Dans quel magasin voulez-vous commander ? : ", largeurConsole));
                         commande2 = lireCommande().toLowerCase().trim();
                     }
-                }
-                catch (NumberFormatException e) {
-                    System.out.println(centrerTexte("Entrée invalide. Vous devez saisir un nombre entier.", largeurConsole));
-                    System.out.print("\n" + centrerTexte("Dans quel magasin voulez-vous commander ? : ", largeurConsole));
+                } catch (NumberFormatException e) {
+                    System.out.println(
+                            centrerTexte("Entrée invalide. Vous devez saisir un nombre entier.", largeurConsole));
+                    System.out
+                            .print("\n" + centrerTexte("Dans quel magasin voulez-vous commander ? : ", largeurConsole));
                     commande2 = lireCommande().toLowerCase().trim();
                 }
             }
@@ -666,22 +751,27 @@ public class AppLibrairieClient {
             }
 
             commandeBD.enregistrerCommande(commande);
-            System.out.println("1");
+            livreBD.majQteApresCommande(client, bonMagasin);
             client.reunitialiserPanier();
+            clientBD.sauvegardePanierBD(client);
 
+        } catch (SQLException e) {
+            System.out.println("Erreur sql" + e.getMessage());
         }
-        catch(SQLException e){
-            System.out.println("Erreur sql" + e.getMessage());}
-            attendreEntree();
+        System.out.println(centrerTexte("Commande faite !", largeurConsole));
+        attendreEntree();
     }
 
     public void afficherPanier(Client client) {
         clearConsole();
         int largeurConsole = getLargeurConsole();
 
-        System.out.println(centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole));
-        System.out.println(centrerTexte("║                         PANIER CLIENT                          ║", largeurConsole));
-        System.out.println(centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole));
+        System.out.println(
+                centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole));
+        System.out.println(
+                centrerTexte("║                         PANIER CLIENT                          ║", largeurConsole));
+        System.out.println(
+                centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole));
 
         Map<Livre, Integer> panier = client.getPanier();
         if (panier.isEmpty()) {
@@ -730,7 +820,8 @@ public class AppLibrairieClient {
                 new ProcessBuilder("clear").inheritIO().start().waitFor();
             }
         } catch (Exception e) {
-            for (int i = 0; i < 50; ++i) System.out.println();
+            for (int i = 0; i < 50; ++i)
+                System.out.println();
         }
     }
 
@@ -742,13 +833,12 @@ public class AppLibrairieClient {
         }
     }
 
-    private void attendreEntree(){
+    private void attendreEntree() {
 
         System.out.println("\nAppuyez sur Entrée pour continuer...");
         scanner.nextLine();
     }
 
-    
     public List<Livre> livreRecommander(int id) throws SQLException {
         List<Livre> livresDuClient = clientBD.recupererToutLivreClient(id);
         List<Client> tousLesClients = clientBD.recuperToutClient();
@@ -766,12 +856,14 @@ public class AppLibrairieClient {
         return res;
     }
 
-    public List<Livre> maxLivreEnCommun(List<Livre> livresDuClient, List<Client> listeClients, int idClientCourant) throws SQLException {
+    public List<Livre> maxLivreEnCommun(List<Livre> livresDuClient, List<Client> listeClients, int idClientCourant)
+            throws SQLException {
         List<Livre> res = new ArrayList<>();
         int max = 0;
 
         for (Client client : listeClients) {
-            if (client.getIdCli() == idClientCourant) continue; // ne pas se comparer à soi-même
+            if (client.getIdCli() == idClientCourant)
+                continue;
 
             List<Livre> livresAutreClient = clientBD.recupererToutLivreClient(client.getIdCli());
             int commun = livreEnCommun(livresDuClient, livresAutreClient);
@@ -781,7 +873,6 @@ public class AppLibrairieClient {
                 res = livresAutreClient;
             }
         }
-
         return res;
     }
 
@@ -793,5 +884,5 @@ public class AppLibrairieClient {
             }
         }
         return res;
-    } 
+    }
 }

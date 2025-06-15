@@ -1,9 +1,10 @@
-package Exception; 
-import Java.*; 
+package Exception;
 
-public class VendeurDejaExistantException extends Exception{
-    
-    public VendeurDejaExistantException(Vendeur vendeur){
+import Java.*;
+
+public class VendeurDejaExistantException extends Exception {
+
+    public VendeurDejaExistantException(Vendeur vendeur) {
         super("Le vendeur " + vendeur + " existe déjà");
     }
 }
