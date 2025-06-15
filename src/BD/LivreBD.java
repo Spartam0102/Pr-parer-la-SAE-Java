@@ -42,44 +42,6 @@ public class LivreBD {
 		}
 	}
 
-	public String insererLivre(Livre l) throws SQLException {
-		PreparedStatement ps = this.laConnexion.prepareStatement("insert into LIVRE values (?,?,?,?,?)");
-		PreparedStatement id = this.laConnexion.prepareStatement("insert into ECRIRE values (?,?)");
-		PreparedStatement it = this.laConnexion.prepareStatement("insert into THEMES values (?,?)");
-		PreparedStatement iq = this.laConnexion.prepareStatement("insert into EDITER values (?,?)");
-		String res = "livre pas ajouter";
-
-		if (VerificationIsbn(l.getIdLivre() + "") == null) {
-
-			ps.setLong(1, l.getIdLivre());
-			ps.setString(2, l.getNomLivre());
-			ps.setInt(3, l.getNbPage());
-			ps.setString(4, l.getDateDePublication());
-			ps.setDouble(5, l.getPrix());
-			ps.executeUpdate();
-			res = "livre bien ajouter";
-
-			for (String aut : l.getAuteur()) {
-				id.setString(1, l.getIdLivre() + "");
-				id.setString(2, aut);
-				id.executeUpdate();
-			}
-
-			for (String the : l.getClassification()) {
-				it.setString(1, l.getIdLivre() + "");
-				it.setString(2, the);
-				it.executeUpdate();
-			}
-
-			for (int edi : l.getEditeur()) {
-				iq.setString(1, l.getIdLivre() + "");
-				iq.setInt(2, edi);
-				iq.executeUpdate();
-			}
-		}
-		return res;
-	}
-
 	public int getStockLivreMagasin(long isbn, int idMagasin) throws SQLException {
 		String query = "SELECT qte FROM POSSEDER WHERE isbn = ? AND idmag = ?";
 
@@ -123,19 +85,6 @@ public class LivreBD {
 			}
 		}
 		return livres;
-	}
-
-	public List<Magasin> listeDesMagasins() throws SQLException {
-		try (PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")) {
-
-			ResultSet rs = ps.executeQuery();
-			List<Magasin> entreprise = new ArrayList<>();
-
-			while (rs.next()) {
-				entreprise.add(new Magasin(rs.getString("nommag"), rs.getString("villemag"), rs.getInt("idmag")));
-			}
-			return entreprise;
-		}
 	}
 
 	public Livre trouverLivreParIsbn(long isbn) throws SQLException {

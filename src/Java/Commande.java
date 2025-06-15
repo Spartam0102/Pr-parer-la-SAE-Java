@@ -3,8 +3,6 @@ package Java;
 import java.util.Map;
 import java.util.HashMap;
 
-import Exception.LivreInexistantException;
-
 /**
  * La classe {@code Commande} représente une commande passée par un client dans un magasin.
  * Elle contient des informations comme la date, le mode de réception, les livres commandés,
@@ -136,18 +134,6 @@ public class Commande {
         for (Integer quantite : this.livresCommande.values()) {
             double quantiteDouble = quantite;
             this.prixTotal += quantiteDouble;
-        }
-    }
-
-    /**
-     * Modifie le stock du magasin en retirant les livres commandés.
-     * Si un livre est inexistant dans le stock, une exception est attrapée et affichée.
-     */
-    public void modifierStock() {
-        try {
-            this.magasin.supprimerLivres(this.livresCommande);
-        } catch (LivreInexistantException e) {
-            System.out.println(e.getMessage());
         }
     }
 

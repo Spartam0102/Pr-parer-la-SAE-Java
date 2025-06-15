@@ -53,15 +53,6 @@ public class Magasin {
     }
 
     /**
-     * Retourne le stock de livres du magasin.
-     * 
-     * @return map des livres avec leur quantité
-     */
-    public Map<Livre, Integer> getStockLivre() {
-        return stockLivre;
-    }
-
-    /**
      * Retourne le nom du magasin.
      * 
      * @return nom du magasin
@@ -151,18 +142,6 @@ public class Magasin {
                 int nouvelleQuantite = this.stockLivre.get(livre) - quantite;
                 this.stockLivre.put(livre, nouvelleQuantite);
             }
-        }
-    }
-
-    /**
-     * Ajoute un vendeur à la liste des vendeurs du magasin
-     * si ce vendeur n'est pas déjà présent.
-     * 
-     * @param vendeur vendeur à ajouter
-     */
-    public void ajouterVendeur(Vendeur vendeur) {
-        if (!(this.lesVendeurs.contains(vendeur))) {
-            this.lesVendeurs.add(vendeur);
         }
     }
 

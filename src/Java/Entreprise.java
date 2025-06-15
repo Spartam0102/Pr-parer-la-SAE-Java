@@ -57,15 +57,6 @@ public class Entreprise {
     }
 
     /**
-     * Ajoute un magasin à la liste des magasins de l'entreprise.
-     *
-     * @param magasin le magasin à ajouter
-     */
-    public void ajouterMagasin(Magasin magasin) {
-        this.listeMagasins.add(magasin);
-    }
-
-    /**
      * Vérifie si cette entreprise est égale à un autre objet.
      * Deux entreprises sont égales si elles ont le même nom et la même adresse.
      *

@@ -1,6 +1,5 @@
 package Java;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import Exception.LivreInexistantException;
@@ -48,38 +47,6 @@ public class Vendeur extends Personne {
     }
 
     /**
-     * Ajoute une quantité de livres au stock du magasin.
-     *
-     * @param livresAAjouter Map contenant les livres et leurs quantités à ajouter
-     */
-    public void ajouterLivres(Map<Livre, Integer> livresAAjouter) {
-        this.magasin.ajouterLivres(livresAAjouter);
-    }
-
-    /**
-     * Méthode prévue pour une mise à jour (non implémentée).
-     */
-    public void mettreAJour() {
-
-    }
-
-    /**
-     * Vérifie la disponibilité d'un livre dans le magasin du vendeur.
-     * Note : le paramètre 'magasin' n'est pas utilisé dans cette méthode.
-     *
-     * @param magasin Magasin dans lequel vérifier la disponibilité (non utilisé)
-     * @param livre  Livre à vérifier
-     * @return true si le livre est disponible dans le magasin du vendeur, false sinon
-     */
-    public boolean disponibiliteLivre(Magasin magasin, Livre livre) {
-        if (!this.magasin.getStockLivre().containsKey(livre)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    /**
      * Transfère des livres du magasin du vendeur vers un autre magasin.
      *
      * @param magasinArrivee    Magasin destinataire des livres
@@ -92,35 +59,6 @@ public class Vendeur extends Personne {
             System.out.println(e.getMessage());
         }
         magasinArrivee.ajouterLivres(LivresATransferer);
-    }
-
-    /**
-     * Retire une quantité de livres du panier d'un client et les ajoute au stock du magasin.
-     *
-     * @param client   Client dont on retire le livre
-     * @param livre    Livre à retirer
-     * @param quantite Quantité à retirer
-     * @return true si l'opération a réussi, false sinon
-     */
-    public boolean retirerLivrePanierEtAjouterAuMagasin(Client client, Livre livre, int quantite) {
-        Map<Livre, Integer> panierClient = client.getPanier();
-
-        if (!panierClient.containsKey(livre) || panierClient.get(livre) < quantite) {
-            return false;
-        }
-
-        int nouvelleQuantite = panierClient.get(livre) - quantite;
-        if (nouvelleQuantite == 0) {
-            panierClient.remove(livre);
-        } else {
-            panierClient.put(livre, nouvelleQuantite);
-        }
-
-        Map<Livre, Integer> livresAAjouter = new HashMap<>();
-        livresAAjouter.put(livre, quantite);
-        magasin.ajouterLivres(livresAAjouter);
-
-        return true;
     }
 
     /**

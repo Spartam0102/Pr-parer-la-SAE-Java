@@ -82,19 +82,19 @@ public class AppLibrairieVendeur {
 
             System.out.println(centrerTexte(
                     "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-            System.out.println(centrerTexte("║  👤 Infos Perso...................................................[1] ║",
+            System.out.println(centrerTexte("║   Infos Perso...................................................[1] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║  🏬 Afficher magasins............................................[2] ║",
+            System.out.println(centrerTexte("║   Afficher magasins.............................................[2] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║  🛒 Voir un panier...............................................[3] ║",
+            System.out.println(centrerTexte("║   Voir un panier................................................[3] ║",
                     largeurConsole));
             System.out.println(centrerTexte(
                     "║  🛒 Ajouter un livre...............................................[5] ║", largeurConsole));
-            System.out.println(centrerTexte("║  🔄 Transférer un livre..........................................[4] ║",
+            System.out.println(centrerTexte("║   Transférer un livre...........................................[4] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║  ↩️  Menu précédent...............................................[M] ║",
+            System.out.println(centrerTexte("║   Menu précédent................................................[M] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║  ❌ Quitter.......................................................[Q] ║",
+            System.out.println(centrerTexte("║   Quitter.......................................................[Q] ║",
                     largeurConsole));
             System.out.println(centrerTexte(
                     "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
@@ -242,7 +242,7 @@ public class AppLibrairieVendeur {
 
             String[] header = {
                     "╔════════════════════════════════════════════════════════════════════════╗",
-                    centrerTexte("║           📚  Liste des Magasins                                   ║", 72),
+                    centrerTexte("║              Liste des Magasins                                   ║", 72),
                     "╠════════════════════════════════════════════════════════════════════════╣"
             };
 
@@ -268,8 +268,8 @@ public class AppLibrairieVendeur {
 
             String[] footer = {
                     "╠════════════════════════════════════════════════════════════════════════╣",
-                    "║  ↩️  Menu précédent...................................................[M] ║",
-                    "║  ❌ Quitter...........................................................[Q] ║",
+                    "║     Menu précédent.................................................[M] ║",
+                    "║     Quitter........................................................[Q] ║",
                     "╚════════════════════════════════════════════════════════════════════════╝"
             };
 
@@ -338,13 +338,13 @@ public class AppLibrairieVendeur {
             System.out.println(centrerTexte(
                     "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
             System.out.println(centrerTexte(
-                    "║  🏪 Infos Magasin...................................................[I] ║", largeurConsole));
+                    "║    Infos Magasin...................................................[I] ║", largeurConsole));
             System.out.println(centrerTexte(
-                    "║  📦 Voir stock......................................................[S] ║", largeurConsole));
+                    "║    Voir stock......................................................[S] ║", largeurConsole));
             System.out.println(centrerTexte(
-                    "║  ↩️  Menu précédent.................................................[M] ║", largeurConsole));
+                    "║    Menu précédent..................................................[M] ║", largeurConsole));
             System.out.println(centrerTexte(
-                    "║  ❌ Quitter..........................................................[Q] ║", largeurConsole));
+                    "║    Quitter.........................................................[Q] ║", largeurConsole));
             System.out.println(centrerTexte(
                     "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
             System.out.print("\n" + centrerTexte("Entrez votre choix : ", largeurConsole));
