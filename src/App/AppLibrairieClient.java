@@ -106,22 +106,22 @@ public class AppLibrairieClient {
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
                     centrerTexte(
-                            String.format("║      Infos personnelles..........................................[I] ║"),
+                            String.format("║      Infos personnelles............................................[I] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║      Afficher magasins...........................................[A] ║"),
+                            String.format("║      Afficher magasins.............................................[A] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║      Commander...................................................[C] ║"),
+                            String.format("║      Commander.....................................................[C] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║      Panier .....................................................[P] ║"),
+                            String.format("║      Panier .......................................................[P] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║      Recommandations.............................................[R] ║"),
+                            String.format("║      Recommandations...............................................[R] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║      Quitter.....................................................[Q] ║"),
+                            String.format("║      Quitter.......................................................[Q] ║"),
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
@@ -251,7 +251,7 @@ public class AppLibrairieClient {
 
             String[] menu = {
                     centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole),
-                    centrerTexte(String.format("║                          Client %-30s║", client.getIdCli()),
+                    centrerTexte(String.format("║                           Client %-30s║", client.getIdCli()),
                             largeurConsole),
                     centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole),
                     centrerTexte("", largeurConsole),
@@ -267,7 +267,7 @@ public class AppLibrairieClient {
                             largeurConsole),
                     centrerTexte("║      Voir anciennes commandes.......................................[A] ║",
                             largeurConsole),
-                    centrerTexte("  ║    Retour.........................................................[R] ║",
+                    centrerTexte("║      Retour.........................................................[R] ║",
                             largeurConsole),
                     centrerTexte("║      Quitter........................................................[Q] ║",
                             largeurConsole),
@@ -367,8 +367,8 @@ public class AppLibrairieClient {
                     if (nom.length() > 50) {
                         nom = nom.substring(0, 47) + "...";
                     }
-                    String ligne = "   ║         " + nom;
-                    int esp = largeurConsole - ligne.length() - 6;
+                    String ligne = "║       " + nom;
+                    int esp = largeurConsole - ligne.length() - 11;
                     ligne += ".".repeat(Math.max(0, esp)) + "[" + (i + 1) + "] ║";
                     System.out.println(centrerTexte(ligne, largeurConsole));
                     pause(100);
@@ -468,7 +468,7 @@ public class AppLibrairieClient {
                             largeurConsole),
                     centrerTexte("║       Panier ......................................................[P] ║",
                             largeurConsole),
-                    centrerTexte(" ║      Retour ......................................................[R] ║",
+                    centrerTexte("║       Retour ......................................................[R] ║",
                             largeurConsole),
                     centrerTexte("║       Quitter......................................................[Q] ║",
                             largeurConsole),
@@ -581,7 +581,7 @@ public class AppLibrairieClient {
                             largeurConsole),
                     centrerTexte("║        Panier .....................................................[P] ║",
                             largeurConsole),
-                    centrerTexte(" ║       Retour .....................................................[R] ║",
+                    centrerTexte("║        Retour .....................................................[R] ║",
                             largeurConsole),
                     centrerTexte("║        Quitter.....................................................[Q] ║",
                             largeurConsole),

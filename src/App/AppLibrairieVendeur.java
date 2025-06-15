@@ -60,8 +60,8 @@ public class AppLibrairieVendeur {
             String ligneTitre = "║  " + titre;
             if (ligneTitre.length() > 68) {
                 ligneTitre = ligneTitre.substring(0, 68);
-            } else if (ligneTitre.length() < 68) {
-                ligneTitre += " ".repeat(68 - ligneTitre.length());
+            } else if (ligneTitre.length() < 73) {
+                ligneTitre += " ".repeat(73 - ligneTitre.length());
             }
             ligneTitre += "║";
 
@@ -82,19 +82,19 @@ public class AppLibrairieVendeur {
 
             System.out.println(centrerTexte(
                     "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
-            System.out.println(centrerTexte("║   Infos Perso...................................................[1] ║",
+            System.out.println(centrerTexte("║      Infos Perso...................................................[1] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║   Afficher magasins.............................................[2] ║",
+            System.out.println(centrerTexte("║      Afficher magasins.............................................[2] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║   Voir un panier................................................[3] ║",
+            System.out.println(centrerTexte("║      Voir un panier................................................[3] ║",
                     largeurConsole));
             System.out.println(centrerTexte(
-                    "║  🛒 Ajouter un livre...............................................[5] ║", largeurConsole));
-            System.out.println(centrerTexte("║   Transférer un livre...........................................[4] ║",
+                    "║      Ajouter un livre..............................................[5] ║", largeurConsole));
+            System.out.println(centrerTexte("║      Transférer un livre...........................................[4] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║   Menu précédent................................................[M] ║",
+            System.out.println(centrerTexte("║      Menu précédent................................................[M] ║",
                     largeurConsole));
-            System.out.println(centrerTexte("║   Quitter.......................................................[Q] ║",
+            System.out.println(centrerTexte("║      Quitter.......................................................[Q] ║",
                     largeurConsole));
             System.out.println(centrerTexte(
                     "╚════════════════════════════════════════════════════════════════════════╝", largeurConsole));
@@ -242,7 +242,7 @@ public class AppLibrairieVendeur {
 
             String[] header = {
                     "╔════════════════════════════════════════════════════════════════════════╗",
-                    centrerTexte("║              Liste des Magasins                                   ║", 72),
+                    centrerTexte("║                Liste des Magasins                                      ║", 72),
                     "╠════════════════════════════════════════════════════════════════════════╣"
             };
 
@@ -256,7 +256,7 @@ public class AppLibrairieVendeur {
                     String nom = listeMagasins.get(i).getNom();
                     if (nom.length() > 58)
                         nom = nom.substring(0, 55) + "...";
-                    String ligneMagasin = String.format("║  %2d : %-58s║", i + 1, nom);
+                    String ligneMagasin = String.format("║     %2d : %-58s    ║", i + 1, nom);
                     System.out.println(centrerTexte(ligneMagasin, largeurConsole));
                 }
             } catch (SQLException e) {
@@ -322,7 +322,7 @@ public class AppLibrairieVendeur {
 
             String[] titre = {
                     "╔════════════════════════════════════════════════════════════════════════╗",
-                    tronquee + padding + "║",
+                    tronquee + padding + "       ║",
                     "╚════════════════════════════════════════════════════════════════════════╝",
                     ""
             };

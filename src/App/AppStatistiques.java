@@ -46,13 +46,13 @@ public class AppStatistiques {
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
-                    centrerTexte("║     📊  Nombre de livres venus pour un magasins magasin..............[1] ║",
+                    centrerTexte("║        Nombre de livres venus pour un magasins magasin.............[1] ║",
                             largeurConsole),
-                    centrerTexte("║     📊  Chiffre d'affaire par thème en année.........................[2] ║",
+                    centrerTexte("║        Chiffre d'affaire par thème en année........................[2] ║",
                             largeurConsole),
-                    centrerTexte("║     📊  chiffre d'affaire par magasin et par mois en une année.......[3] ║",
+                    centrerTexte("║        chiffre d'affaire par magasin et par mois en une année......[3] ║",
                             largeurConsole),
-                    centrerTexte("║     ↩️   menu précédent.........................................[Q] ║",
+                    centrerTexte("║        menu précédent..............................................[Q] ║",
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
@@ -96,21 +96,21 @@ public class AppStatistiques {
 
     private void premierStat() {
         try {
-            System.out.print("📝 id du magasin > ");
+            System.out.print("id du magasin > ");
             String id = scanner.nextLine().strip();
             List<List<String>> tableau = statistiqueBD.premier(id);
             clearConsole();
 
-            System.out.println("\n📋 nombre de livre vendu par année :");
+            System.out.println("\nnombre de livre vendu par année :");
             System.out.println("============================");
 
             if (tableau.isEmpty()) {
-                System.out.println("❌ Aucune donnée trouvée pour ce magasin.");
+                System.out.println("Aucune donnée trouvée pour ce magasin.");
                 return;
             }
 
             String nomMagasin = tableau.get(0).get(0);
-            System.out.println("🏪 Magasin : " + nomMagasin);
+            System.out.println("Magasin : " + nomMagasin);
             System.out.println();
 
             System.out.printf("%-6s │ %-10s%n", "Année", "Ventes");
@@ -126,22 +126,22 @@ public class AppStatistiques {
             System.out.println();
 
         } catch (SQLException e) {
-            System.out.println("❌ Erreur : " + e.getMessage());
+            System.out.println(" Erreur : " + e.getMessage());
         }
     }
 
     private void deuxiemeStat() {
         try {
-            System.out.print("📝 Année > ");
+            System.out.print("Année > ");
             String annee = scanner.nextLine().strip();
             List<List<String>> tableau = statistiqueBD.deuxieme(annee);
             clearConsole();
 
-            System.out.println("\n📋 Chiffre d'affaire par thème en " + annee + " :");
+            System.out.println("\nChiffre d'affaire par thème en " + annee + " :");
             System.out.println("============================");
 
             if (tableau.isEmpty()) {
-                System.out.println("❌ Aucune donnée trouvée pour cette année.");
+                System.out.println("Aucune donnée trouvée pour cette année.");
                 return;
             }
 
@@ -157,22 +157,22 @@ public class AppStatistiques {
             System.out.println();
 
         } catch (SQLException e) {
-            System.out.println("❌ Erreur : " + e.getMessage());
+            System.out.println("Erreur : " + e.getMessage());
         }
     }
 
     private void troisiemeStat() {
         try {
-            System.out.print("📝 Année > ");
+            System.out.print(" Année > ");
             String annee = scanner.nextLine().strip();
             List<List<String>> tableau = statistiqueBD.troisieme(annee);
             clearConsole();
 
-            System.out.println("\n📋 Chiffre d'affaire par magasin et par mois en " + annee + " :");
+            System.out.println("\nChiffre d'affaire par magasin et par mois en " + annee + " :");
             System.out.println("============================");
 
             if (tableau.isEmpty()) {
-                System.out.println("❌ Aucune donnée trouvée pour cette année.");
+                System.out.println("Aucune donnée trouvée pour cette année.");
                 return;
             }
 
@@ -189,7 +189,7 @@ public class AppStatistiques {
             System.out.println();
 
         } catch (SQLException e) {
-            System.out.println("❌ Erreur : " + e.getMessage());
+            System.out.println(" Erreur : " + e.getMessage());
         }
     }
 
