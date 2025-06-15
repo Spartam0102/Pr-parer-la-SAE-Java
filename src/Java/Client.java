@@ -76,7 +76,7 @@ public class Client extends Personne {
     /**
      * Réinitialise le panier du client en le vidant.
      */
-    public void reunitialiserPanier() {
+    public void reinitialiserPanier() {
         this.panier = new HashMap<>();
     }
 

@@ -106,22 +106,22 @@ public class AppLibrairieClient {
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
                     centrerTexte(
-                            String.format("║    🧑  Infos personnelles..........................................[I] ║"),
+                            String.format("║      Infos personnelles..........................................[I] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║    🏬  Afficher magasins...........................................[A] ║"),
+                            String.format("║      Afficher magasins...........................................[A] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║    🛒  Commander...................................................[C] ║"),
+                            String.format("║      Commander...................................................[C] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║    🛒  Panier .....................................................[P] ║"),
+                            String.format("║      Panier .....................................................[P] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║    💡  Recommandations.............................................[R] ║"),
+                            String.format("║      Recommandations.............................................[R] ║"),
                             largeurConsole),
                     centrerTexte(
-                            String.format("║    ❌  Quitter.....................................................[Q] ║"),
+                            String.format("║      Quitter.....................................................[Q] ║"),
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
@@ -185,9 +185,9 @@ public class AppLibrairieClient {
                 System.out.println(centrerTexte(
                         "║                                                                        ║", largeurConsole));
                 System.out.println(centrerTexte(
-                        "║    💡  Aucune recommandation disponible pour le moment               ║", largeurConsole));
+                        "║         Aucune recommandation disponible pour le moment                ║", largeurConsole));
                 System.out.println(centrerTexte(
-                        "║        Essayez d'acheter quelques livres pour obtenir des suggestions ║", largeurConsole));
+                        "║         Essayez d'acheter quelques livres pour obtenir des suggestions ║", largeurConsole));
                 System.out.println(centrerTexte(
                         "║                                                                        ║", largeurConsole));
                 System.out.println(centrerTexte(
@@ -198,9 +198,9 @@ public class AppLibrairieClient {
                 System.out.println(centrerTexte(
                         "║                                                                        ║", largeurConsole));
                 System.out.println(centrerTexte(
-                        "║    💡  Livres recommandés pour vous :                                ║", largeurConsole));
+                        "║      Livres recommandés pour vous :                                    ║", largeurConsole));
                 System.out.println(centrerTexte(
-                        "║        (Basés sur les goûts de clients similaires)                   ║", largeurConsole));
+                        "║        (Basés sur les goûts de clients similaires)                     ║", largeurConsole));
                 System.out.println(centrerTexte(
                         "║                                                                        ║", largeurConsole));
 
@@ -228,7 +228,7 @@ public class AppLibrairieClient {
                     "╔════════════════════════════════════════════════════════════════════════╗", largeurConsole));
             System.out.println(centrerTexte(
                     "║                                                                        ║", largeurConsole));
-            System.out.println(centrerTexte("║    ❌  Erreur lors de la récupération des recommandations            ║",
+            System.out.println(centrerTexte("║     Erreur lors de la récupération des recommandations            ║",
                     largeurConsole));
             System.out.println(centrerTexte("║        " + e.getMessage(), largeurConsole));
             System.out.println(centrerTexte(
@@ -251,29 +251,29 @@ public class AppLibrairieClient {
 
             String[] menu = {
                     centrerTexte("╔════════════════════════════════════════════════════════════════╗", largeurConsole),
-                    centrerTexte(String.format("║                        🧑 Client %-30s║", client.getIdCli()),
+                    centrerTexte(String.format("║                          Client %-30s║", client.getIdCli()),
                             largeurConsole),
                     centrerTexte("╚════════════════════════════════════════════════════════════════╝", largeurConsole),
                     centrerTexte("", largeurConsole),
-                    centrerTexte("╔════════════════════════════════════════════════════════════════════════╗",
+                    centrerTexte("╔═════════════════════════════════════════════════════════════════════════╗",
                             largeurConsole),
-                    centrerTexte("║                                                                        ║",
+                    centrerTexte("║                                                                         ║",
                             largeurConsole),
-                    centrerTexte("║    🛒  Voir mon panier.............................................[V] ║",
+                    centrerTexte("║      Voir mon panier................................................[V] ║",
                             largeurConsole),
-                    centrerTexte("   ║    🗑️   Supprimer panier............................................[S] ║",
+                    centrerTexte("║      Supprimer panier...............................................[S] ║",
                             largeurConsole),
-                    centrerTexte("║    🛒  Commander...................................................[C] ║",
+                    centrerTexte("║      Commander......................................................[C] ║",
                             largeurConsole),
-                    centrerTexte("║    🛒  Voir anciennes commandes....................................[A] ║",
+                    centrerTexte("║      Voir anciennes commandes.......................................[A] ║",
                             largeurConsole),
-                    centrerTexte("  ║    ↩️   Retour......................................................[R] ║",
+                    centrerTexte("  ║    Retour.........................................................[R] ║",
                             largeurConsole),
-                    centrerTexte("║    ❌  Quitter.....................................................[Q] ║",
+                    centrerTexte("║      Quitter........................................................[Q] ║",
                             largeurConsole),
-                    centrerTexte("║                                                                        ║",
+                    centrerTexte("║                                                                         ║",
                             largeurConsole),
-                    centrerTexte("╚════════════════════════════════════════════════════════════════════════╝",
+                    centrerTexte("╚═════════════════════════════════════════════════════════════════════════╝",
                             largeurConsole)
             };
 
@@ -291,15 +291,15 @@ public class AppLibrairieClient {
                     afficherPanier(client);
                 }
                 case "s" -> {
-                    client.reunitialiserPanier();
+                    client.reinitialiserPanier();
                     try {
                         clientBD.sauvegardePanierBD(client);
                         System.out
-                                .println(centrerTexte("✔ Panier supprimé et sauvegardé avec succès.", largeurConsole));
+                                .println(centrerTexte("Panier supprimé et sauvegardé avec succès.", largeurConsole));
                         pause(2500);
                     } catch (Exception e) {
                         System.out.println(
-                                centrerTexte("✖ Impossible de sauvegarder dans la base de données.", largeurConsole));
+                                centrerTexte("Impossible de sauvegarder dans la base de données.", largeurConsole));
                         attendreEntree();
                     }
                 }
@@ -367,7 +367,7 @@ public class AppLibrairieClient {
                     if (nom.length() > 50) {
                         nom = nom.substring(0, 47) + "...";
                     }
-                    String ligne = "   ║     🛍️   " + nom;
+                    String ligne = "   ║         " + nom;
                     int esp = largeurConsole - ligne.length() - 6;
                     ligne += ".".repeat(Math.max(0, esp)) + "[" + (i + 1) + "] ║";
                     System.out.println(centrerTexte(ligne, largeurConsole));
@@ -376,11 +376,11 @@ public class AppLibrairieClient {
 
                 String[] menu = {
 
-                        centrerTexte("║     🛒  Panier ....................................................[P] ║",
+                        centrerTexte("║       Panier ......................................................[P] ║",
                                 largeurConsole),
-                        centrerTexte(" ║     ↩️   Retour ....................................................[R] ║",
+                        centrerTexte("║       Retour ......................................................[R] ║",
                                 largeurConsole),
-                        centrerTexte("║     ❌  Quitter ...................................................[Q] ║",
+                        centrerTexte("║       Quitter .....................................................[Q] ║",
                                 largeurConsole),
                         centrerTexte("║                                                                        ║",
                                 largeurConsole),
@@ -462,15 +462,15 @@ public class AppLibrairieClient {
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
-                    centrerTexte("║     🏪  Infos Magasin..............................................[I] ║",
+                    centrerTexte("║       Infos Magasin................................................[I] ║",
                             largeurConsole),
-                    centrerTexte("║     📦  Voir stock.................................................[S] ║",
+                    centrerTexte("║       Voir stock...................................................[S] ║",
                             largeurConsole),
-                    centrerTexte("║     🛒  Panier ....................................................[P] ║",
+                    centrerTexte("║       Panier ......................................................[P] ║",
                             largeurConsole),
-                    centrerTexte(" ║     ↩️   Retour ....................................................[R] ║",
+                    centrerTexte(" ║      Retour ......................................................[R] ║",
                             largeurConsole),
-                    centrerTexte("║     ❌  Quitter....................................................[Q] ║",
+                    centrerTexte("║       Quitter......................................................[Q] ║",
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
@@ -579,11 +579,11 @@ public class AppLibrairieClient {
                             largeurConsole),
                     centrerTexte("║════════════════════════════════════════════════════════════════════════║",
                             largeurConsole),
-                    centrerTexte("║     🛒  Panier ....................................................[P] ║",
+                    centrerTexte("║        Panier .....................................................[P] ║",
                             largeurConsole),
-                    centrerTexte(" ║     ↩️   Retour ....................................................[R] ║",
+                    centrerTexte(" ║       Retour .....................................................[R] ║",
                             largeurConsole),
-                    centrerTexte("║     ❌  Quitter....................................................[Q] ║",
+                    centrerTexte("║        Quitter.....................................................[Q] ║",
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
@@ -625,10 +625,10 @@ public class AppLibrairieClient {
                             try {
                                 clientBD.sauvegardePanierBD(client);
                                 System.out.println(
-                                        centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
+                                        centrerTexte("Livre ajouté à votre panier avec succès.", largeurConsole));
                                 pause(1500);
                             } catch (Exception e) {
-                                System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.",
+                                System.out.println(centrerTexte("Impossible de sauvegarder dans la base de données.",
                                         largeurConsole));
                                 attendreEntree();
                             }
@@ -638,10 +638,10 @@ public class AppLibrairieClient {
                         try {
                             clientBD.sauvegardePanierBD(client);
                             System.out.println(
-                                    centrerTexte("✔ Livre ajouté à votre panier avec succès.", largeurConsole));
+                                    centrerTexte("Livre ajouté à votre panier avec succès.", largeurConsole));
                             pause(1500);
                         } catch (Exception e) {
-                            System.out.println(centrerTexte("✖ Impossible de sauvegarder dans la base de données.",
+                            System.out.println(centrerTexte("Impossible de sauvegarder dans la base de données.",
                                     largeurConsole));
                             attendreEntree();
                         }
@@ -752,7 +752,7 @@ public class AppLibrairieClient {
 
             commandeBD.enregistrerCommande(commande);
             livreBD.majQteApresCommande(client, bonMagasin);
-            client.reunitialiserPanier();
+            client.reinitialiserPanier();
             clientBD.sauvegardePanierBD(client);
 
         } catch (SQLException e) {
