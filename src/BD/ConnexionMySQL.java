@@ -13,10 +13,10 @@ public class ConnexionMySQL {
 
 	public void connecter() throws SQLException {
 
-		String nomServeur = "localhost";
+		String nomServeur = "servinfo-maria";
 		String nomBase = "DBtrojnar";
-		String nomLogin = "root";
-		String motDePasse = "xefef";
+		String nomLogin = "trojnar";
+		String motDePasse = "trojnar";
 		this.mysql = DriverManager.getConnection("jdbc:mysql://" + nomServeur + ":3306/" + nomBase, nomLogin,
 				motDePasse);
 		this.connecte = this.mysql != null;
