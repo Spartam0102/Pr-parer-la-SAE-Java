@@ -1,14 +1,11 @@
 package IHM;
 
-import java.sql.SQLException;
-import java.util.Map;
-
-import BD.ClientBD;
 import BD.ConnexionMySQL;
-import BD.LivreBD;
 import BD.MagasinBD;
+import BD.LivreBD;
 import BD.StatistiqueBD;
-import Java.Client;
+import BD.ClientBD;
+import IHM.Controleur.ControleurSeConnecter;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,13 +25,12 @@ public class FenetreConnexion extends Application {
     private StatistiqueBD statistiqueBD;
     private ClientBD clientBD;
 
-  
     private void initialiserConnexion() {
         try {
             this.connexionMySQL = new ConnexionMySQL();
             this.connexionMySQL.connecter();
             this.magasinBD = new MagasinBD(this.connexionMySQL);
-            this.clientBD = new ClientBD(connexionMySQL); 
+            this.clientBD = new ClientBD(connexionMySQL);
             this.livreBD = new LivreBD(this.connexionMySQL);
             this.statistiqueBD = new StatistiqueBD(this.connexionMySQL);
             this.connexionEtablie = true;
@@ -42,7 +38,7 @@ public class FenetreConnexion extends Application {
         } catch (ClassNotFoundException ex) {
             System.out.println("Driver MySQL non trouvé !");
             this.connexionEtablie = false;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("Erreur de connexion à la base de données : " + e.getMessage());
             this.connexionEtablie = false;
         }
@@ -55,7 +51,7 @@ public class FenetreConnexion extends Application {
         BorderPane root = new BorderPane();
 
         ImageView logo = new ImageView(new Image("file:./img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
-        logo.setFitHeight(200); 
+        logo.setFitHeight(200);
         logo.setPreserveRatio(true);
         Pane conteneurLogo = new Pane(logo);
         BorderPane.setMargin(conteneurLogo, new Insets(10, 0, 0, 15));
@@ -84,18 +80,18 @@ public class FenetreConnexion extends Application {
         userfield.setPromptText("Nom d’utilisateur");
         userfield.setPrefWidth(450);
         userfield.setPrefHeight(50);
-        userfield.setStyle("-fx-background-radius: 18; -fx-border-radius: 18;" + 
-                                "-fx-border-color: black; -fx-border-width: 2;");
+        userfield.setStyle("-fx-background-radius: 18; -fx-border-radius: 18;" +
+                "-fx-border-color: black; -fx-border-width: 2;");
 
-        ImageView mdpIcon = new ImageView(new Image("file:./img/mdp_icon.png")); 
+        ImageView mdpIcon = new ImageView(new Image("file:./img/mdp_icon.png"));
         mdpIcon.setFitHeight(45);
         mdpIcon.setFitWidth(45);
         PasswordField mdpfield = new PasswordField();
         mdpfield.setPromptText("Mot de passe");
         mdpfield.setPrefWidth(450);
         mdpfield.setPrefHeight(50);
-        mdpfield.setStyle("-fx-background-radius: 18; -fx-border-radius: 18;" + 
-                                "-fx-border-color: black; -fx-border-width: 2;");
+        mdpfield.setStyle("-fx-background-radius: 18; -fx-border-radius: 18;" +
+                "-fx-border-color: black; -fx-border-width: 2;");
 
         grid.add(userIcon, 0, 3);
         grid.add(userfield, 1, 3);
@@ -112,52 +108,30 @@ public class FenetreConnexion extends Application {
         HBox.setMargin(checkbox, new Insets(10, 0, 0, 0));
         CheckBox voirMdp = new CheckBox("Afficher mot de passe");
         voirMdp.setStyle("-fx-text-fill: white;");
-        Text texteInscritpion = new Text("Vous n’avez pas encore de compte ? Inscription");
-        texteInscritpion.setStyle("-fx-fill: white;");
+        Text texteInscription = new Text("Vous n’avez pas encore de compte ? Inscription");
+        texteInscription.setStyle("-fx-fill: white;");
         VBox.setMargin(voirMdp, new Insets(10, 0, 10, 0));
-        VBox.setMargin(texteInscritpion, new Insets(10, 0, 0, 0));
-        checkbox.getChildren().addAll(voirMdp, texteInscritpion);
+        VBox.setMargin(texteInscription, new Insets(10, 0, 0, 0));
+        checkbox.getChildren().addAll(voirMdp, texteInscription);
 
         VBox boxConnection = new VBox();
         boxConnection.setAlignment(Pos.CENTER_RIGHT);
         Button boutonConnexion = new Button("Se connecter");
-        boutonConnexion.setStyle("-fx-background-color: #ff7d0f; -fx-text-fill: white; -fx-font-size: 18px;" + 
-                    "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
+        boutonConnexion.setStyle("-fx-background-color: #ff7d0f; -fx-text-fill: white; -fx-font-size: 18px;" +
+                "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
         boutonConnexion.setPrefHeight(45);
-
-        boutonConnexion.setOnAction(e -> {
-    try {
-        int idCli = Integer.parseInt(userfield.getText());
-        String mdpEntre = mdpfield.getText();
-
-        Map<String, String> infos = clientBD.recupererIdEtMotDePasse(idCli);
-
-        if (!infos.isEmpty() && infos.get("mdpC").equals(mdpEntre)) {
-    Stage stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
-    FenetreMagasins.afficher(stage, connexionMySQL); // tu dois avoir un objet ConnexionMySQL accessible
-}
-
-    } catch (NumberFormatException ex) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Format incorrect");
-        alert.setHeaderText("Identifiant invalide");
-        alert.setContentText("L'identifiant doit être un nombre.");
-        alert.showAndWait();
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-    }
-});
-
-
-
-        
         boutonConnexion.setPrefWidth(180);
+
         boxConnection.getChildren().add(boutonConnexion);
 
-        bottomBox.getChildren().addAll(checkbox, boutonConnexion);
+        bottomBox.getChildren().addAll(checkbox, boxConnection);
         cadre.getChildren().add(bottomBox);
 
         root.setCenter(cadre);
+
+        // --- UTILISATION DU CONTROLEUR ---
+        ControleurSeConnecter controleur = new ControleurSeConnecter(connexionMySQL);
+        controleur.gererConnexion(boutonConnexion, userfield, mdpfield);
 
         Scene scene = new Scene(root, 1200, 750);
         primaryStage.setTitle("Fenêtre connexion");
@@ -166,7 +140,6 @@ public class FenetreConnexion extends Application {
     }
 
     public static void main(String[] args) {
-    launch(args);
-}
-
+        launch(args);
+    }
 }

@@ -3,7 +3,7 @@ package IHM.Controleur;
 import IHM.FenetrePanier;
 import javafx.stage.Stage;
 
-public class ControleurStock {
+public class ControleurPanier {
 
     public static void allerStock(Stage stage) {
         try {

@@ -2,6 +2,7 @@ package IHM;
 
 
 import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurPanier;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -67,6 +68,11 @@ public class FenetreMagasins extends Application {
         boutonHome.setOnAction(e -> {
             Stage stage = (Stage) boutonHome.getScene().getWindow();
             ControleurHome.allerAccueil(stage);
+        });
+
+        boutonPanier.setOnAction(e -> {
+            Stage stage = (Stage) boutonPanier.getScene().getWindow();
+            ControleurPanier.allerStock(stage);
         });
 
         VBox conteneurDroit = new VBox(boutons);
@@ -170,7 +176,7 @@ public class FenetreMagasins extends Application {
         }
 
         Scene scene = new Scene(root, 1200, 750);
-        primaryStage.setTitle("Fenêtre un magasin");
+        primaryStage.setTitle("Fenêtre des magasins");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
