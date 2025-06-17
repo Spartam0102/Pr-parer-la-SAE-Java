@@ -17,10 +17,16 @@ public class Magasin {
     private String nom;
 
     /** Ville où se situe le magasin */
-    private String ville;
+    private String adresse;
 
     /** Identifiant unique du magasin */
     private int idMagasin;
+
+    private double note;
+
+    private String tel;
+
+
 
     /** Stock de livres avec les quantités disponibles */
     Map<Livre, Integer> stockLivre;
@@ -35,10 +41,12 @@ public class Magasin {
      * @param ville     ville où se situe le magasin
      * @param idMagasin identifiant unique du magasin
      */
-    public Magasin(String nom, String ville, int idMagasin) {
+    public Magasin(String nom, String adresse, int idMagasin, double note, String tel) {
         this.nom = nom;
-        this.ville = ville;
+        this.adresse = adresse;
         this.idMagasin = idMagasin;
+        this.note = note;
+        this.tel = tel;
         this.stockLivre = new HashMap<>();
         this.lesVendeurs = new ArrayList<>();
     }
@@ -62,21 +70,28 @@ public class Magasin {
     }
 
     /**
-     * Retourne la ville du magasin.
-     * 
-     * @return ville du magasin
-     */
-    public String getVille() {
-        return this.ville;
-    }
-
-    /**
      * Retourne la liste des vendeurs du magasin.
      * 
      * @return liste des vendeurs
      */
     public List<Vendeur> getLesVendeurs() {
-        return lesVendeurs;
+        return this.lesVendeurs;
+    }
+
+    public String getAdresse() {
+        return this.adresse;
+    }
+
+    public double getNote() {
+        return this.note;
+    }
+
+    public Map<Livre, Integer> getStockLivre() {
+        return this.stockLivre;
+    }
+
+    public String getTel() {
+        return this.tel;
     }
 
     /**
@@ -86,15 +101,6 @@ public class Magasin {
      */
     public void setIdMagasin(int idMagasin) {
         this.idMagasin = idMagasin;
-    }
-
-    /**
-     * Modifie la ville du magasin.
-     * 
-     * @param ville nouvelle ville
-     */
-    public void setVille(String ville) {
-        this.ville = ville;
     }
 
     /**
@@ -152,7 +158,7 @@ public class Magasin {
      */
     @Override
     public String toString() {
-        return "Le magasin " + this.nom + " est situé " + this.ville + " et possède l'ID " + this.idMagasin;
+        return "Le magasin " + this.nom + " est situé " + this.adresse + " et possède l'ID " + this.idMagasin;
     }
 
     /**
@@ -174,6 +180,6 @@ public class Magasin {
             return false;
         }
         Magasin tmp = (Magasin) obj;
-        return this.nom.equals(tmp.nom) && this.idMagasin == tmp.idMagasin && this.ville.equals(tmp.ville);
+        return this.nom.equals(tmp.nom) && this.idMagasin == tmp.idMagasin && this.adresse.equals(tmp.adresse);
     }
 }

@@ -56,7 +56,7 @@ public class VendeurBD {
 				Magasin magasin = null;
 
 				if (idMagasin > 0) {
-					magasin = new Magasin(null, null, idMagasin);
+					magasin = new Magasin(null, null, idMagasin, 0.0, null);
 				}
 				return new Vendeur(
 						rs.getString("nomVen"),

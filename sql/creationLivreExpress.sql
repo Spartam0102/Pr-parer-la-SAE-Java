@@ -87,7 +87,9 @@ CREATE TABLE MAGASIN (
   PRIMARY KEY (idmag),
   idmag    VARCHAR(42) NOT NULL,
   nommag   VARCHAR(42),
-  villemag VARCHAR(42)
+  adressemag VARCHAR(200),
+  telmag VARCHAR(4),
+  note FLOAT
 );
 
 CREATE TABLE POSSEDER (
