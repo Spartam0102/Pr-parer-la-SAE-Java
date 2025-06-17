@@ -64,7 +64,7 @@ public class MagasinBD {
 			try (ResultSet rs = ps.executeQuery()) {
 
 				if (rs.next()) {
-					return new Magasin(rs.getString("nommag"), rs.getString("villemag"), rs.getInt("idmag"));
+					return new Magasin(rs.getString("nommag"), rs.getString("adressemag"), rs.getInt("idmag"), rs.getDouble("note"), rs.getString("telmag"));
 				} else {
 					return null;
 				}
@@ -129,17 +129,17 @@ public class MagasinBD {
 		return isbnGenere;
 	}
 
-	public int insererMagasin(Magasin m) throws SQLException {
-		PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?)");
+	// public int insererMagasin(Magasin m) throws SQLException {
+	// 	PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?)");
 
-		int numJoueur = this.maxNumMagasin() + 1;
-		ps.setInt(1, numJoueur);
-		ps.setString(2, m.getNom());
-		ps.setString(3, m.getVille());
-		ps.executeUpdate();
+	// 	int numJoueur = this.maxNumMagasin() + 1;
+	// 	ps.setInt(1, numJoueur);
+	// 	ps.setString(2, m.getNom());
+	// 	ps.setString(3, m.getVille());
+	// 	ps.executeUpdate();
 
-		return numJoueur;
-	}
+	// 	return numJoueur;
+	// }
 
 	public void effacerMagasin(int num) throws SQLException {
 		PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");
@@ -148,14 +148,14 @@ public class MagasinBD {
 	}
 
 	public List<Magasin> listeDesMagasins() throws SQLException {
-		try (PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN;")) {
+		try (PreparedStatement ps = laConnexion.prepareStatement("select * from MAGASIN order by idmag;")) {
 
 			ResultSet rs = ps.executeQuery();
 			List<Magasin> entreprise = new ArrayList<>();
 
 			while (rs.next()) {
 
-				Magasin magasin = new Magasin(rs.getString("nommag"), rs.getString("villemag"), rs.getInt("idmag"));
+				Magasin magasin = new Magasin(rs.getString("nommag"), rs.getString("adressemag"), rs.getInt("idmag"), rs.getDouble("note"), rs.getString("telmag"));
 				entreprise.add(magasin);
 			}
 			return entreprise;

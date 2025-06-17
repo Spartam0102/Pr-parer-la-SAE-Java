@@ -1,12 +1,13 @@
 -- les magasins
-insert into MAGASIN(idmag, nommag, villemag) values
-       (1,'La librairie parisienne','Paris'),
-       (2,'Cap au Sud','Marseilles'),
-       (3,'Ty Li-Breizh-rie','Rennes'),
-       (4,'L''européenne','Strasbourg'),
-       (5,'Le Ch''ti livre','Lille'),
-       (6,'Rhône à lire','Lyon'),
-       (7,'Loire et livres','Orléans');
+INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
+  ('1', 'La librairie parisienne', '24 Rue de la Tombe-Issoire, 75014 Paris', '06 48 72 35 19', 4.5),
+  ('2', 'Cap au Sud', '12 Rue des Écrivains, 34300 Agde, France', '04 67 89 23 15', 4.2),
+  ('3', 'Ty Li-Breizh-rie', '14 Rue des Bons-Enfants, 13006 Marseille, France', '04 91 53 28 47', 4.8),
+  ('4', 'L''européenne', '5 Rue des Francs-Bourgeois, 67000 Strasbourg', '03 88 25 64 31', 4.1),
+  ('5', 'Le Ch''ti livre', '7 Rue de Paris, 59000 Lille', '03 20 54 78 12', 4.6),
+  ('6', 'Rhône à lire', '9 Quai Saint-Antoine, 69002 Lyon', '04 78 42 15 37', 4.3),
+  ('7', 'Loire et livres', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
+
 
 -- La classification
 insert into CLASSIFICATION(iddewey, nomclass) values
