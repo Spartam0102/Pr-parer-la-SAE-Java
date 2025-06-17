@@ -1,106 +1,203 @@
 package IHM;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
 
 public class FenetrePanier extends Application {
 
+    private BorderPane racine;
+    private VBox panelCentral;
+
+    private Button boutonHome;
+    private Button boutonSettings;
+    private Button boutonRetour;
+    private Button boutonPanier;
+
     @Override
-    public void start(Stage primaryStage) {
+    public void init() {
+        // Initialisation si nécessaire
+    }
 
-        BorderPane root = new BorderPane();
+    private Scene laScene() {
+        this.racine = new BorderPane();
+        racine.setTop(this.titre()); // Bannière en haut
+        this.panelCentral = fenetrePanier(); // Contenu principal au centre
+        racine.setCenter(this.panelCentral);
+        Scene scene = new Scene(racine, 800, 800);
+        return scene;
+    }
 
-        ImageView logo = new ImageView(new Image("file:/home/iut45/Etudiants/o22401144/Documents/SAE JAVA/Pr-parer-la-SAE-Java/img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
-        logo.setFitHeight(200); 
-        logo.setPreserveRatio(true);
-        Pane conteneurLogo = new Pane(logo);
-        BorderPane.setMargin(conteneurLogo, new Insets(10, 0, 0, 15));
-        root.setTop(conteneurLogo);
-        BorderPane.setAlignment(conteneurLogo, Pos.CENTER_LEFT);
+    private Pane titre() {
+    ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
+    logo.setFitHeight(110);
+    logo.setPreserveRatio(true);
 
-        VBox cadre = new VBox();
-        BorderPane.setMargin(cadre, new Insets(50, 200, 150, 200));
-        cadre.setStyle("-fx-background-color: #206db8; -fx-background-radius: 50;");
-        cadre.setPadding(new Insets(20));
-        cadre.setAlignment(Pos.TOP_CENTER);
+    ImageView homeView = new ImageView(new Image("file:img/house.png"));
+    ImageView settingsView = new ImageView(new Image("file:img/settings.png"));
+    ImageView panierView = new ImageView(new Image("file:img/panier.png"));
+    ImageView retourView = new ImageView(new Image("file:img/retour.png"));
 
-        Text titre = new Text("Connexion");
-        titre.setStyle("-fx-font-size: 45px; -fx-font-weight: bold; -fx-fill: white;");
-        cadre.getChildren().add(titre);
+    for (ImageView iv : new ImageView[]{homeView, settingsView, panierView, retourView}) {
+        iv.setFitHeight(30);
+        iv.setFitWidth(30);
+    }
 
-        GridPane grid = new GridPane();
-        grid.setVgap(15);
-        grid.setHgap(10);
-        grid.setAlignment(Pos.CENTER);
+    this.boutonHome = new Button("", homeView);
+    this.boutonSettings = new Button("", settingsView);
+    this.boutonPanier = new Button("", panierView);
+    this.boutonRetour = new Button("", retourView);
 
-        ImageView userIcon = new ImageView(new Image("file:./img/user_icon.png"));
-        userIcon.setFitHeight(45);
-        userIcon.setFitWidth(45);
-        TextField userfield = new TextField();
-        userfield.setPromptText("Nom d’utilisateur");
-        userfield.setPrefWidth(450);
-        userfield.setPrefHeight(50);
-        userfield.setStyle("-fx-background-radius: 18; -fx-border-radius: 18;" + 
-                                "-fx-border-color: black; -fx-border-width: 2;");
+    String styleBouton = "-fx-background-color: #206db8;" +
+            "-fx-border-radius: 18; -fx-background-radius: 18;";
+    boutonHome.setStyle(styleBouton);
+    boutonSettings.setStyle(styleBouton);
+    boutonPanier.setStyle(styleBouton);
+    boutonRetour.setStyle(styleBouton);
 
-        ImageView mdpIcon = new ImageView(new Image("file:./img/mdp_icon.png")); 
-        mdpIcon.setFitHeight(45);
-        mdpIcon.setFitWidth(45);
-        PasswordField mdpfield = new PasswordField();
-        mdpfield.setPromptText("Mot de passe");
-        mdpfield.setPrefWidth(450);
-        mdpfield.setPrefHeight(50);
-        mdpfield.setStyle("-fx-background-radius: 18; -fx-border-radius: 18;" + 
-                                "-fx-border-color: black; -fx-border-width: 2;");
+    HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
+    boutons.setPadding(new Insets(10));
+    boutons.setAlignment(Pos.CENTER); // centre les boutons dans la HBox horizontalement
 
-        grid.add(userIcon, 0, 3);
-        grid.add(userfield, 1, 3);
-        grid.add(mdpIcon, 0, 6);
-        grid.add(mdpfield, 1, 6);
+    // Conteneur pour centrer la HBox verticalement dans la partie droite
+    VBox conteneurDroit = new VBox(boutons);
+    conteneurDroit.setAlignment(Pos.CENTER); // centre verticalement
+    conteneurDroit.setPadding(new Insets(10));
 
-        cadre.getChildren().add(grid);
+    BorderPane banniere = new BorderPane();
+    banniere.setLeft(logo);
+    banniere.setRight(conteneurDroit); // la VBox est placée à droite
+    banniere.setStyle("-fx-background-color: white;");
 
-        HBox bottomBox = new HBox();
-        bottomBox.setAlignment(Pos.CENTER);
+    return banniere;
+}
 
-        VBox checkbox = new VBox();
-        checkbox.setAlignment(Pos.CENTER_LEFT);
-        HBox.setMargin(checkbox, new Insets(10, 0, 0, 0));
-        CheckBox voirMdp = new CheckBox("Afficher mot de passe");
-        voirMdp.setStyle("-fx-text-fill: white;");
-        Text texteInscritpion = new Text("Vous n’avez pas encore de compte ? Inscription");
-        texteInscritpion.setStyle("-fx-fill: white;");
-        VBox.setMargin(voirMdp, new Insets(10, 0, 10, 0));
-        VBox.setMargin(texteInscritpion, new Insets(10, 0, 0, 0));
-        checkbox.getChildren().addAll(voirMdp, texteInscritpion);
 
-        VBox boxConnection = new VBox();
-        boxConnection.setAlignment(Pos.CENTER_RIGHT);
-        Button boutonConnexion = new Button("Se connecter");
-        boutonConnexion.setStyle("-fx-background-color: #ff7d0f; -fx-text-fill: white; -fx-font-size: 18px;" + 
-                    "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
-        boutonConnexion.setPrefHeight(45);
-        
-        boutonConnexion.setPrefWidth(180);
-        boxConnection.getChildren().add(boutonConnexion);
+    private VBox fenetrePanier() {
+        VBox containerVertical = new VBox();
+        containerVertical.setPadding(new Insets(20));
+        containerVertical.setSpacing(10);
 
-        bottomBox.getChildren().addAll(checkbox, boutonConnexion);
-        cadre.getChildren().add(bottomBox);
+        HBox conteneur = new HBox(20);
+        conteneur.setPadding(new Insets(20));
+        conteneur.setStyle("-fx-background-color: #2073c4;");
+        HBox.setHgrow(conteneur, Priority.ALWAYS);
 
-        root.setCenter(cadre);
+        // Liste des livres
+        VBox listeLivres = new VBox(10);
+        listeLivres.setPadding(new Insets(10));
+        listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        listeLivres.setPrefWidth(400);
 
-        Scene scene = new Scene(root, 1200, 750);
-        primaryStage.setTitle("Fenêtre connexion");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        for (int i = 0; i < 20; i++) {
+            VBox livre = new VBox(5);
+            Label titre = new Label("L'Égypte des pharaons au Musée du Caire");
+            titre.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            Label auteur = new Label("Clatire Dubois");
+            Label prix = new Label("8.63 €");
+            prix.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+            livre.getChildren().addAll(titre, auteur, prix);
+            livre.setPadding(new Insets(10));
+            livre.setStyle("-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;");
+            listeLivres.getChildren().add(livre);
+        }
+
+        ScrollPane scrollPane = new ScrollPane(listeLivres);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent;");
+
+        // Liaison dynamique de la hauteur du ScrollPane à 70% de la hauteur de la
+        // fenêtre (racine)
+        scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
+        scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
+
+        HBox.setHgrow(scrollPane, Priority.ALWAYS);
+
+        // Partie récapitulatif
+        VBox recap = new VBox(20);
+        recap.setPrefWidth(300);
+        recap.setMaxHeight(Double.MAX_VALUE);
+        recap.setPadding(new Insets(15));
+        recap.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        Label nbProduits = new Label("Nombre de produit : 4");
+        Label livraison = new Label("Livraison : Domicile");
+        Label total = new Label("Total : 25,90 €");
+        total.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        Button commander = new Button("Commander");
+        commander.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white; -fx-font-weight: bold;");
+        recap.getChildren().addAll(nbProduits, livraison, total, commander);
+
+        // Mode de livraison
+        VBox modeLivraison = new VBox(10);
+        modeLivraison.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        modeLivraison.setPadding(new Insets(15));
+        Label modeLabel = new Label("Mode de livraison");
+        Button domicile = new Button("Domicile");
+        Button magasin = new Button("Magasin");
+
+        // Style initial : domicile sélectionné, magasin non sélectionné
+        domicile.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
+        magasin.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
+
+        // Gestion des clics pour basculer la sélection
+        domicile.setOnAction(e -> {
+            domicile.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
+            magasin.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
+        });
+
+        magasin.setOnAction(e -> {
+            magasin.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
+            domicile.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
+        });
+
+        HBox boutonsLivraison = new HBox(10, domicile, magasin);
+        modeLivraison.getChildren().addAll(modeLabel, boutonsLivraison);
+
+        // Regroupement total
+        VBox recapWrapper = new VBox(20, recap, modeLivraison);
+        recapWrapper.setPrefWidth(300);
+        HBox.setHgrow(recapWrapper, Priority.ALWAYS);
+
+        // Synchronisation de la hauteur (optionnel, si besoin)
+        recapWrapper.heightProperty().addListener((obs, oldVal, newVal) -> {
+            scrollPane.setPrefHeight(newVal.doubleValue());
+        });
+
+        // Ajout au conteneur horizontal
+        conteneur.getChildren().addAll(scrollPane, recapWrapper);
+
+        // Ajout au conteneur vertical principal
+        containerVertical.getChildren().add(conteneur);
+
+        VBox.setVgrow(conteneur, Priority.ALWAYS);
+
+        return containerVertical;
+    }
+
+    @Override
+    public void start(Stage stage) {
+        Scene scene = laScene();
+        stage.setScene(scene);
+        stage.setTitle("Livre Express - Panier");
+
+        // Adapte la taille de la fenêtre : par ex. largeur 800, hauteur 700
+        stage.setWidth(800);
+        stage.setHeight(700);
+
+        stage.show();
     }
 
     public static void main(String[] args) {
