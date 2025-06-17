@@ -1,5 +1,8 @@
 package IHM;
 
+
+import IHM.Controleur.ControleurHome;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 
 public class FenetreMagasins extends Application {
 
@@ -59,6 +63,11 @@ public class FenetreMagasins extends Application {
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
+
+        boutonHome.setOnAction(e -> {
+            Stage stage = (Stage) boutonHome.getScene().getWindow();
+            ControleurHome.allerAccueil(stage);
+        });
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
