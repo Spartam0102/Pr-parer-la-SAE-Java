@@ -18,7 +18,7 @@ public class FenetreConnexion extends Application {
 
         BorderPane root = new BorderPane();
 
-        ImageView logo = new ImageView(new Image("file:/home/iut45/Etudiants/o22401144/Documents/SAE JAVA/Pr-parer-la-SAE-Java/img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
+        ImageView logo = new ImageView(new Image("file:./img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
         logo.setFitHeight(200); 
         logo.setPreserveRatio(true);
         Pane conteneurLogo = new Pane(logo);
