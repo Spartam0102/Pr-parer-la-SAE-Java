@@ -12,7 +12,7 @@ public class VendeurBD {
 
 	public void creerVendeur(Vendeur vendeur) throws SQLException {
 		int nextId = getNextIdVendeur();
-		String sql = "INSERT INTO VENDEUR (idVen, nomVen, prenomVen, idmag) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO VENDEUR (idVen, nomVen, prenomVen, idmag, mdpV) VALUES (?, ?, ?, ?, ?)";
 
 		try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
 
@@ -25,6 +25,7 @@ public class VendeurBD {
 			} else {
 				ps.setNull(4, Types.INTEGER);
 			}
+			ps.setString(5, vendeur.getMotDePasseVendeur());
 			ps.executeUpdate();
 		}
 	}
@@ -63,7 +64,8 @@ public class VendeurBD {
 						rs.getString("prenomVen"),
 						null,
 						id,
-						magasin);
+						magasin,
+						rs.getString("mdpV"));
 			}
 		}
 		return null;

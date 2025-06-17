@@ -21,6 +21,9 @@ public class Client extends Personne {
     /** Panier du client, associant un livre à sa quantité. */
     private Map<Livre, Integer> panier;
 
+    /**Le mot de passe du client*/
+    private String motDePasseCli;
+
     /**
      * Constructeur de la classe {@code Client}.
      *
@@ -30,11 +33,12 @@ public class Client extends Personne {
      * @param id               l'identifiant unique du client
      * @param adresse          l'adresse du client
      */
-    public Client(String nom, String prenom, String dateDeNaissance, int id, String adresse) {
+    public Client(String nom, String prenom, String dateDeNaissance, int id, String adresse, String motDePAsse) {
         super(nom, prenom, dateDeNaissance);
         this.ideCli = id;
         this.adresse = adresse;
         this.panier = new HashMap<>();
+        this.motDePasseCli = motDePAsse;
     }
 
     /**
@@ -62,6 +66,10 @@ public class Client extends Personne {
      */
     public Map<Livre, Integer> getPanier() {
         return this.panier;
+    }
+
+    public String getMotDePasseCli() {
+        return this.motDePasseCli;
     }
 
     /**
@@ -117,7 +125,8 @@ public class Client extends Personne {
         Client tmp = (Client) obj;
         return super.getNom().equals(tmp.getNom()) && super.getPrenom().equals(tmp.getPrenom())
                 && super.getDateDeNaissance().equals(tmp.getDateDeNaissance())
-                && this.ideCli == tmp.getIdCli() && this.adresse.equals(tmp.getAdresse());
+                && this.ideCli == tmp.getIdCli() && this.adresse.equals(tmp.getAdresse())
+                && this.motDePasseCli.equals(tmp.getMotDePasseCli());
     }
 
     /**
@@ -127,7 +136,7 @@ public class Client extends Personne {
      */
     @Override
     public String toString() {
-        return super.toString() + ", fait partie des clients, et possède l'id " + this.ideCli
+        return super.toString() + ", fait partie des clients, et possède l'id " + this.ideCli + " avec comme mot de passe " + this.motDePasseCli
                 + ". Elle vit à l'adresse " + this.adresse;
     }
 }

@@ -26,7 +26,8 @@ public class ClientBD {
 					rs.getString("prenomCli"),
 					null,
 					id,
-					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
+					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"),
+					rs.getString("mdpC"));
 			return client;
 		}
 		return null;
@@ -44,7 +45,8 @@ public class ClientBD {
 					rs.getString("prenomCli"),
 					null,
 					rs.getInt("idcli"),
-					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"));
+					rs.getString("adressecli") + " " + rs.getString("codepostal") + " " + rs.getString("villecli"),
+					rs.getString("mdpC"));
 			res.add(client);
 		}
 		return res;
