@@ -133,18 +133,10 @@ public class FenetreConnexion extends Application {
         Map<String, String> infos = clientBD.recupererIdEtMotDePasse(idCli);
 
         if (!infos.isEmpty() && infos.get("mdpC").equals(mdpEntre)) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Connexion réussie");
-            alert.setHeaderText(null);
-            alert.setContentText("Bienvenue client n°" + infos.get("idcli"));
-            alert.showAndWait();
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de connexion");
-            alert.setHeaderText("Identifiant ou mot de passe incorrect");
-            alert.setContentText("Veuillez réessayer.");
-            alert.showAndWait();
-        }
+    Stage stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+    FenetreMagasins.afficher(stage, connexionMySQL); // tu dois avoir un objet ConnexionMySQL accessible
+}
+
     } catch (NumberFormatException ex) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Format incorrect");
@@ -155,6 +147,7 @@ public class FenetreConnexion extends Application {
         ex.printStackTrace();
     }
 });
+
 
 
         
