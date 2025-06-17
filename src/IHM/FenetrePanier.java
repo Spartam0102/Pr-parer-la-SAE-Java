@@ -37,7 +37,7 @@ public class FenetrePanier extends Application {
         racine.setTop(this.titre()); // Bannière en haut
         this.panelCentral = fenetrePanier(); // Contenu principal au centre
         racine.setCenter(this.panelCentral);
-        Scene scene = new Scene(racine, 800, 800);
+        Scene scene = new Scene(racine, 1200, 750);
         return scene;
     }
 
@@ -164,7 +164,9 @@ public class FenetrePanier extends Application {
         });
 
         HBox boutonsLivraison = new HBox(10, domicile, magasin);
+        boutonsLivraison.setAlignment(Pos.CENTER);
         modeLivraison.getChildren().addAll(modeLabel, boutonsLivraison);
+        modeLivraison.setAlignment(Pos.CENTER);
 
         // Regroupement total
         VBox recapWrapper = new VBox(20, recap, modeLivraison);
@@ -192,11 +194,6 @@ public class FenetrePanier extends Application {
         Scene scene = laScene();
         stage.setScene(scene);
         stage.setTitle("Livre Express - Panier");
-
-        // Adapte la taille de la fenêtre : par ex. largeur 800, hauteur 700
-        stage.setWidth(800);
-        stage.setHeight(700);
-
         stage.show();
     }
 
