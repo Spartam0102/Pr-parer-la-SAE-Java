@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "FenetrePanier",
+            "request": "launch",
+            "mainClass": "IHM.FenetrePanier",
+            "projectName": "Pr-parer-la-SAE-Java_60793550"
+        },
+        {
+            "type": "java",
             "name": "FenetreConnexion",
             "request": "launch",
             "mainClass": "IHM.FenetreConnexion",

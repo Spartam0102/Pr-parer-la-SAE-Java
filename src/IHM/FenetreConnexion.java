@@ -1,5 +1,14 @@
 package IHM;
 
+import java.sql.SQLException;
+import java.util.Map;
+
+import BD.ClientBD;
+import BD.ConnexionMySQL;
+import BD.LivreBD;
+import BD.MagasinBD;
+import BD.StatistiqueBD;
+import Java.Client;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,9 +21,36 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class FenetreConnexion extends Application {
+    private ConnexionMySQL connexionMySQL;
+    private MagasinBD magasinBD;
+    private LivreBD livreBD;
+    private boolean connexionEtablie;
+    private StatistiqueBD statistiqueBD;
+    private ClientBD clientBD;
+
+  
+    private void initialiserConnexion() {
+        try {
+            this.connexionMySQL = new ConnexionMySQL();
+            this.connexionMySQL.connecter();
+            this.magasinBD = new MagasinBD(this.connexionMySQL);
+            this.clientBD = new ClientBD(connexionMySQL); 
+            this.livreBD = new LivreBD(this.connexionMySQL);
+            this.statistiqueBD = new StatistiqueBD(this.connexionMySQL);
+            this.connexionEtablie = true;
+            System.out.println("Connexion à la base de données établie avec succès !");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Driver MySQL non trouvé !");
+            this.connexionEtablie = false;
+        } catch (SQLException e) {
+            System.out.println("Erreur de connexion à la base de données : " + e.getMessage());
+            this.connexionEtablie = false;
+        }
+    }
 
     @Override
     public void start(Stage primaryStage) {
+        initialiserConnexion();
 
         BorderPane root = new BorderPane();
 
@@ -88,6 +124,39 @@ public class FenetreConnexion extends Application {
         boutonConnexion.setStyle("-fx-background-color: #ff7d0f; -fx-text-fill: white; -fx-font-size: 18px;" + 
                     "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
         boutonConnexion.setPrefHeight(45);
+
+        boutonConnexion.setOnAction(e -> {
+    try {
+        int idCli = Integer.parseInt(userfield.getText());
+        String mdpEntre = mdpfield.getText();
+
+        Map<String, String> infos = clientBD.recupererIdEtMotDePasse(idCli);
+
+        if (!infos.isEmpty() && infos.get("mdpC").equals(mdpEntre)) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Connexion réussie");
+            alert.setHeaderText(null);
+            alert.setContentText("Bienvenue client n°" + infos.get("idcli"));
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de connexion");
+            alert.setHeaderText("Identifiant ou mot de passe incorrect");
+            alert.setContentText("Veuillez réessayer.");
+            alert.showAndWait();
+        }
+    } catch (NumberFormatException ex) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Format incorrect");
+        alert.setHeaderText("Identifiant invalide");
+        alert.setContentText("L'identifiant doit être un nombre.");
+        alert.showAndWait();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+});
+
+
         
         boutonConnexion.setPrefWidth(180);
         boxConnection.getChildren().add(boutonConnexion);
@@ -104,6 +173,7 @@ public class FenetreConnexion extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
-    }
+    launch(args);
+}
+
 }

@@ -108,6 +108,27 @@ public class ClientBD {
 		ps2.close();
 	}
 
+	public Map<String, String> recupererIdEtMotDePasse(int idCli) throws SQLException {
+    Map<String, String> result = new HashMap<>();
+
+    String sql = "SELECT idcli, mdpC FROM CLIENT WHERE idcli = ?";
+    PreparedStatement ps = laConnexion.prepareStatement(sql);
+    ps.setInt(1, idCli);
+    ResultSet rs = ps.executeQuery();
+
+    if (rs.next()) {
+        result.put("idcli", String.valueOf(rs.getInt("idcli")));
+        result.put("mdpC", rs.getString("mdpC"));
+    }
+
+    rs.close();
+    ps.close();
+
+    return result;
+}
+
+
+
 	public List<Livre> recupererToutLivreClient(int id) throws SQLException {
 		List<Livre> res = new ArrayList<>();
 

@@ -23,4 +23,4 @@ echo "🚀 Lancement de l'application..."
 # Exécution de la classe principale
 java --module-path "/usr/share/openjfx/lib/" \
      --add-modules javafx.controls,javafx.fxml \
-     -cp bin IHM.FenetreMagasins
+     -cp bin IHM.FenetreConnexion
