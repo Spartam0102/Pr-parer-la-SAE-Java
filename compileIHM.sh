@@ -3,9 +3,10 @@ echo "📦 Compilation en cours..."
 # Trouver tous les .java sauf ceux dans src/App/
 find src -name "*.java" ! -path "src/App/*" > sources.txt
 
-# Compilation avec JavaFX
+# Compilation avec JavaFX et MariaDB JDBC
 javac --module-path "/usr/share/openjfx/lib/" \
       --add-modules javafx.controls,javafx.fxml \
+      -cp lib/mariadb-java-client-3.3.2.jar \
       -d bin @sources.txt
 
 # Vérification du succès de la compilation
@@ -23,4 +24,5 @@ echo "🚀 Lancement de l'application..."
 # Exécution de la classe principale
 java --module-path "/usr/share/openjfx/lib/" \
      --add-modules javafx.controls,javafx.fxml \
-     -cp bin IHM.FenetreConnexion
+     -cp "bin:lib/mariadb-java-client-2.5.3.jar" \
+     IHM.FenetreConnexion
