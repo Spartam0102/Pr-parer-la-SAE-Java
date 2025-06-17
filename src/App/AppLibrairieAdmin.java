@@ -211,7 +211,7 @@ public class AppLibrairieAdmin {
                 return;
             }
 
-            Vendeur vendeur = new Vendeur(nom, prenom, null, 0, magasinAssocie);
+            Vendeur vendeur = new Vendeur(nom, prenom, null, 0, magasinAssocie, idMagStr);
             VendeurBD vendeurBD = new VendeurBD(connexionMySQL);
             vendeurBD.creerVendeur(vendeur);
 
