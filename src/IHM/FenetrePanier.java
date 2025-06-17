@@ -11,7 +11,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FenetreConnexion extends Application {
+public class FenetrePanier extends Application {
 
     @Override
     public void start(Stage primaryStage) {

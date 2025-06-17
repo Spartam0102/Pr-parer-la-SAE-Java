@@ -210,7 +210,7 @@ public class AppLibrairieClient {
                     if (nom.length() > 50) {
                         nom = nom.substring(0, 47) + "...";
                     }
-                    String ligne = "║    📚  " + nom;
+                    String ligne = "║      " + nom;
                     int esp = largeurConsole - ligne.length() - 3;
                     ligne += " ".repeat(Math.max(0, esp)) + "║";
                     System.out.println(centrerTexte(ligne, largeurConsole));
