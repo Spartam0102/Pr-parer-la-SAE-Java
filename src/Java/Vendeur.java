@@ -12,6 +12,7 @@ public class Vendeur extends Personne {
 
     private int idVendeur;
     private Magasin magasin;
+    private String motDePasseVendeur;
 
     /**
      * Constructeur de la classe Vendeur.
@@ -21,11 +22,13 @@ public class Vendeur extends Personne {
      * @param dateDeNaissance La date de naissance du vendeur
      * @param id             L'identifiant unique du vendeur
      * @param magasin        Le magasin dans lequel travaille le vendeur
+     * @param motDePasse    Le mot de passe du vendeur
      */
-    public Vendeur(String nom, String prenom, String dateDeNaissance, int id, Magasin magasin) {
+    public Vendeur(String nom, String prenom, String dateDeNaissance, int id, Magasin magasin, String motDePasse) {
         super(nom, prenom, dateDeNaissance);
         this.idVendeur = id;
         this.magasin = magasin;
+        this.motDePasseVendeur = motDePasse;
     }
 
     /**
@@ -44,6 +47,10 @@ public class Vendeur extends Personne {
      */
     public int getIdVendeur() {
         return this.idVendeur;
+    }
+
+    public String getMotDePasseVendeur() {
+        return this.motDePasseVendeur;
     }
 
     /**
@@ -82,7 +89,8 @@ public class Vendeur extends Personne {
         return super.getNom().equals(tmp.getNom()) && super.getPrenom().equals(tmp.getPrenom())
                 && super.getDateDeNaissance().equals(tmp.getDateDeNaissance())
                 && this.idVendeur == tmp.getIdVendeur()
-                && this.magasin.equals(tmp.getMagasin());
+                && this.magasin.equals(tmp.getMagasin())
+                && this.motDePasseVendeur.equals(tmp.getMotDePasseVendeur());
     }
 
     /**
@@ -92,7 +100,7 @@ public class Vendeur extends Personne {
      */
     @Override
     public String toString() {
-        return super.toString() + ", fait partie des vendeurs, il possède l'id " + this.idVendeur
+        return super.toString() + ", fait partie des vendeurs, il possède l'id " + this.idVendeur  + " avec comme mot de passe " + this.motDePasseVendeur
                 + ", et travaille dans " + this.magasin;
     }
 }

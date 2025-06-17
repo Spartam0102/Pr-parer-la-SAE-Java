@@ -11,6 +11,7 @@ public class Administrateur extends Personne {
 
     /** Identifiant unique de l'administrateur. */
     private int idAdmin;
+    private String motDePasseAdmin;
 
     /**
      * Constructeur de la classe {@code Administrateur}.
@@ -20,10 +21,12 @@ public class Administrateur extends Personne {
      * @param dateDeNaissance la date de naissance de l'administrateur au format
      *                        chaîne
      * @param idAdmin         l'identifiant unique de l'administrateur
+     * @param motDePasseAdmin le mot de passe de l'administrateur
      */
-    public Administrateur(String nom, String prenom, String dateDeNaissance, int idAdmin) {
+    public Administrateur(String nom, String prenom, String dateDeNaissance, int idAdmin, String motDePasse) {
         super(nom, prenom, dateDeNaissance);
         this.idAdmin = idAdmin;
+        this.motDePasseAdmin = motDePasse;
     }
 
     /**
@@ -33,6 +36,10 @@ public class Administrateur extends Personne {
      */
     public int getIdAdmin() {
         return this.idAdmin;
+    }
+
+    public String getMotDePasseAdmin() {
+        return this.motDePasseAdmin;
     }
 
     /**
@@ -57,7 +64,8 @@ public class Administrateur extends Personne {
         Administrateur tmp = (Administrateur) obj;
         return super.getNom().equals(tmp.getNom()) && super.getPrenom().equals(tmp.getPrenom())
                 && super.getDateDeNaissance().equals(tmp.getDateDeNaissance())
-                && this.idAdmin == tmp.getIdAdmin();
+                && this.idAdmin == tmp.getIdAdmin()
+                && this.motDePasseAdmin.equals(tmp.getMotDePasseAdmin());
     }
 
     /**
@@ -67,6 +75,6 @@ public class Administrateur extends Personne {
      */
     @Override
     public String toString() {
-        return super.toString() + ", fait partie des administrateurs, et possède l'id " + this.idAdmin;
+        return super.toString() + ", fait partie des administrateurs, et possède l'id " + this.idAdmin + " avec comme mot de passe " + this.motDePasseAdmin;
     }
 }

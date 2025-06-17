@@ -1,7 +1,9 @@
 #!/bin/bash
 
 echo "Compilation en cours..."
+
 javac --module-path "/usr/share/openjfx/lib/" --add-modules javafx.controls,javafx.fxml -d bin $(find src -name "*.java")
+
 if [ $? -ne 0 ]; then
     echo "❌ Erreur de compilation"
     exit 1

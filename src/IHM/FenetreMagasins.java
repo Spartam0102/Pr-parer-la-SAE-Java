@@ -1,6 +1,14 @@
 package IHM;
 
+
 import IHM.Controleur.ControleurHome;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import BD.*;
+import Java.*;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,6 +27,11 @@ public class FenetreMagasins extends Application {
     private Button boutonSettings;
     private Button boutonPanier;
     private Button boutonRetour;
+    private MagasinBD magasinBD;
+
+    public FenetreMagasins(ConnexionMySQL connexionMySQL){
+        this.magasinBD = new MagasinBD(connexionMySQL);
+    }
 
     private Pane titre() {
         ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
@@ -69,7 +82,7 @@ public class FenetreMagasins extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws SQLException{
 
         BorderPane root = new BorderPane();
 
@@ -92,10 +105,11 @@ public class FenetreMagasins extends Application {
             cadre.getColumnConstraints().add(colConst);
         }
 
-        for (int i = 0; i < 9; i++) {
+        List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
+        for (int i = 0; i < listeMagasins.size() ; i++) {
             BorderPane PaneMagasin = new BorderPane();
 
-            ImageView image = new ImageView(new Image("file:./img/mag1.jpeg"));
+            ImageView image = new ImageView(new Image("file:./img/mag" + (i+1) + ".jpeg"));
             image.setFitHeight(130);
             image.setPreserveRatio(true);
             Pane conteneurImage = new Pane(image);
@@ -105,12 +119,12 @@ public class FenetreMagasins extends Application {
             VBox DescriptionMagasin = new VBox();
             DescriptionMagasin.setAlignment(Pos.CENTER_LEFT);
 
-            Text nomMagasin = new Text("Magasin 1");
+            Text nomMagasin = new Text(listeMagasins.get(i).getNom());
             nomMagasin.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
             VBox.setMargin(nomMagasin, new Insets(5, 0, 0, 0));
 
             HBox boxNote = new HBox();
-            Text note = new Text("4.4");
+            Text note = new Text(Double.toString(listeMagasins.get(i).getNote()));
             note.setStyle("-fx-font-size: 15px;");
             ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
             etoile.setFitHeight(16);
@@ -118,7 +132,7 @@ public class FenetreMagasins extends Application {
             boxNote.getChildren().addAll(note, etoile);
 
             HBox boxTel = new HBox();
-            Text tel = new Text("06 64 65 48 05");
+            Text tel = new Text(listeMagasins.get(i).getTel());
             tel.setStyle("-fx-font-size: 15px;");
             ImageView telephone = new ImageView(new Image("file:./img/phone_icon.jpg"));
             telephone.setFitHeight(20);
@@ -131,7 +145,7 @@ public class FenetreMagasins extends Application {
             PaneMagasin.setCenter(DescriptionMagasin);
 
             HBox boxMap = new HBox();
-            Text adresse = new Text("12 rue de bernard, 27321 Agde, France");
+            Text adresse = new Text(listeMagasins.get(i).getAdresse());
             adresse.setStyle("-fx-font-size: 15px;");
             ImageView map = new ImageView(new Image("file:./img/map_icon.jpg"));
             map.setFitHeight(20);
