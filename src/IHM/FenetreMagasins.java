@@ -175,7 +175,13 @@ public class FenetreMagasins extends Application {
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL) {
+    try {
+        FenetreMagasins fm = new FenetreMagasins(connexionMySQL);
+        fm.start(stage);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
 }
