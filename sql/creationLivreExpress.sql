@@ -10,6 +10,9 @@ DROP TABLE IF EXISTS LIVRE;
 DROP TABLE IF EXISTS EDITEUR;
 DROP TABLE IF EXISTS AUTEUR;
 DROP TABLE IF EXISTS CLIENT;
+DROP TABLE IF EXISTS VENDEUR;
+DROP TABLE IF EXISTS GERER;
+DROP TABLE IF EXISTS ADMINISTRATEUR;
 DROP TABLE IF EXISTS MAGASIN;
 DROP TABLE IF EXISTS CLASSIFICATION;
 
@@ -27,15 +30,6 @@ CREATE TABLE CLASSIFICATION (
   nomclass varchar(50)
 );
 
-CREATE TABLE CLIENT (
-  PRIMARY KEY (idcli),
-  idcli      int NOT NULL,
-  nomcli     varchar(50),
-  prenomcli  varchar(30),
-  adressecli varchar(100),
-  codepostal varchar(5),
-  villecli   varchar(100)
-);
 
 CREATE TABLE COMMANDE (
   PRIMARY KEY (numcom),
@@ -104,6 +98,17 @@ CREATE TABLE THEMES (
   isbn    varchar(13) NOT NULL,
   iddewey varchar(3) NOT NULL
 );
+/*modification de tables*/
+CREATE TABLE CLIENT (
+  PRIMARY KEY (idcli),
+  idcli      int NOT NULL,
+  nomcli     varchar(50),
+  prenomcli  varchar(30),
+  adressecli varchar(100),
+  codepostal varchar(5),
+  villecli   varchar(100),
+  mdpC varchar(50)
+);
 
 /*Ajout de tables*/
 
@@ -111,7 +116,8 @@ CREATE TABLE VENDEUR (
     idVen INT PRIMARY KEY,
     nomVen VARCHAR(50),
     prenomVen VARCHAR(50),
-    idmag VARCHAR(42)
+    idmag VARCHAR(42),
+    mdpV varchar(50)
 );
 
 CREATE TABLE PANIER (
@@ -121,9 +127,29 @@ CREATE TABLE PANIER (
     PRIMARY KEY (idCli, isbn)
 );
 
-ALTer TABLE PANIER ADD FOREIGN KEY (idCli) REFERENCES CLIENT(idCli);
+CREATE TABLE ADMINISTRATEUR (          
+    idAdmin INT PRIMARY KEY,
+    nomAdmin VARCHAR(50),
+    prenomAdmin VARCHAR(50),
+    mdpA varchar(50)
+);
+
+
+CREATE TABLE GERER (          
+  PRIMARY KEY (idmag,idAdmin),
+  idmag    VARCHAR(42) NOT NULL,
+  idAdmin INT NOT NULL
+
+
+);
+
+
+ALTER TABLE PANIER ADD FOREIGN KEY (idCli) REFERENCES CLIENT(idCli);
 ALTER TABLE PANIER ADD FOREIGN KEY (isbn) REFERENCES LIVRE(isbn);
 ALTER TABLE VENDEUR ADD FOREIGN KEY (idmag) REFERENCES MAGASIN(idmag);
+ALTER TABLE GERER ADD FOREIGN KEY (idAdmin) REFERENCES ADMINISTRATEUR(idAdmin);
+ALTER TABLE GERER ADD FOREIGN KEY (idmag) REFERENCES MAGASIN(idmag);
+
 
 ALTER TABLE COMMANDE ADD FOREIGN KEY (idmag) REFERENCES MAGASIN (idmag);
 ALTER TABLE COMMANDE ADD FOREIGN KEY (idcli) REFERENCES CLIENT (idcli);
