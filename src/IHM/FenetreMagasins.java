@@ -30,9 +30,13 @@ public class FenetreMagasins extends Application {
     private Button boutonPanier;
     private Button boutonRetour;
     private MagasinBD magasinBD;
+    private boolean estVendeur;
+    private Client client;
 
-    public FenetreMagasins(ConnexionMySQL connexionMySQL) {
+    public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur, Client client) {
         this.magasinBD = new MagasinBD(connexionMySQL);
+        this.estVendeur = estVendeur;
+        this.client = client;
     }
 
     private Pane titre() {
@@ -80,8 +84,12 @@ public class FenetreMagasins extends Application {
         conteneurDroit.setAlignment(Pos.CENTER);
         conteneurDroit.setPadding(new Insets(10));
 
+        Text nomClient = new Text("Bienvenue " + this.client.getPrenom());
+        nomClient.setStyle("-fx-font-size: 40px; -fx-font-weight: bold;");
+
         BorderPane banniere = new BorderPane();
         banniere.setLeft(logo);
+        banniere.setCenter(nomClient);
         banniere.setRight(conteneurDroit);
         banniere.setStyle("-fx-background-color: white;");
 
@@ -108,7 +116,7 @@ public class FenetreMagasins extends Application {
         scrollPane.setStyle("-fx-background: transparent;");
         scrollPane.prefHeightProperty().bind(root.heightProperty().multiply(1));
         scrollPane.maxHeightProperty().bind(root.heightProperty().multiply(1));
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         root.setCenter(scrollPane);
 
@@ -198,9 +206,15 @@ public class FenetreMagasins extends Application {
                     magasinSelectionne);
 
             carteMagasin.setOnMouseClicked(event -> {
+
                 System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
                 Stage stage = (Stage) carteMagasin.getScene().getWindow();
-                controleur.allerStockMagasin(stage);
+
+                if (estVendeur) {
+                    FenetreMagasinVendeur.afficher(stage, magasinBD.getConnexion());
+                } else {
+                    FenetreStock.afficher(stage, magasinBD.getConnexion(), magasinSelectionne);
+                }
             });
 
         }
@@ -211,9 +225,9 @@ public class FenetreMagasins extends Application {
         primaryStage.show();
     }
 
-    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL) {
+    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, boolean estVendeur, Client client) {
         try {
-            FenetreMagasins fm = new FenetreMagasins(connexionMySQL);
+            FenetreMagasins fm = new FenetreMagasins(connexionMySQL, estVendeur, client);
             fm.start(stage);
         } catch (Exception e) {
             e.printStackTrace();

@@ -24,20 +24,14 @@ import java.sql.SQLException;
 
 public class FenetreConnexion extends Application {
     private ConnexionMySQL connexionMySQL;
-    private MagasinBD magasinBD;
-    private LivreBD livreBD;
     private boolean connexionEtablie;
-    private StatistiqueBD statistiqueBD;
     private ClientBD clientBD;
 
     private void initialiserConnexion() {
         try {
             this.connexionMySQL = new ConnexionMySQL();
             this.connexionMySQL.connecter();
-            this.magasinBD = new MagasinBD(this.connexionMySQL);
             this.clientBD = new ClientBD(this.connexionMySQL);
-            this.livreBD = new LivreBD(this.connexionMySQL);
-            this.statistiqueBD = new StatistiqueBD(this.connexionMySQL);
             this.connexionEtablie = true;
             System.out.println("Connexion à la base de données établie avec succès !");
         } catch (ClassNotFoundException ex) {
@@ -260,7 +254,7 @@ public class FenetreConnexion extends Application {
         }
     }
 
-    private void afficherPopupInscription() {
+    private void afficherPopupInscription(){
         Stage popup = new Stage();
         popup.setTitle("Inscription nouveau client");
 
@@ -272,19 +266,24 @@ public class FenetreConnexion extends Application {
 
         TextField nomField = new TextField();
         nomField.setPromptText("Nom");
+        nomField.setPrefWidth(300);
 
         TextField prenomField = new TextField();
         prenomField.setPromptText("Prénom");
+        nomField.setPrefWidth(300);;
 
         TextField adresseField = new TextField();
         adresseField.setPromptText("Adresse complète (ex: 12 rue X 75000 Paris)");
+        nomField.setPrefWidth(300);
 
         PasswordField mdpField = new PasswordField();
         mdpField.setPromptText("Mot de passe");
+        nomField.setPrefWidth(300);
 
         Button btnValider = new Button("Créer le compte");
         Label message = new Label();
         message.setStyle("-fx-text-fill: red;");
+        nomField.setPrefWidth(300);
 
         grid.add(new Label("Nom:"), 0, 0);
         grid.add(nomField, 1, 0);
@@ -298,31 +297,38 @@ public class FenetreConnexion extends Application {
         grid.add(message, 1, 5);
 
         btnValider.setOnAction(ev -> {
-            String nom = nomField.getText().trim();
-            String prenom = prenomField.getText().trim();
-            String adresse = adresseField.getText().trim();
-            String mdp = mdpField.getText();
+            try{
+                String nom = nomField.getText().trim();
+                String prenom = prenomField.getText().trim();
+                String adresse = adresseField.getText().trim();
+                String mdp = mdpField.getText();
+                int id = clientBD.maxIdClient() + 1;
 
-            if (nom.isEmpty() || prenom.isEmpty() || adresse.isEmpty() || mdp.isEmpty()) {
-                message.setText("Tous les champs doivent être remplis !");
-                return;
+                if (nom.isEmpty() || prenom.isEmpty() || adresse.isEmpty() || mdp.isEmpty()) {
+                    message.setText("Tous les champs doivent être remplis !");
+                    return;
+                }
+
+                try {
+                    Client nouveauClient = new Client(nom, prenom, null, id, adresse, mdp);
+                    clientBD.creerClient(nouveauClient);
+                    message.setStyle("-fx-text-fill: green;");
+                    message.setText("Compte créé avec succès !");
+                    message.setText("Compte créé avec succès ! Votre identifiant est : " + nouveauClient.getIdCli());
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        popup.close();
+                    }).start();
+
+                } catch (SQLException e) {
+                    message.setText(e.getMessage());
+                }
             }
-
-            try {
-                Client nouveauClient = new Client(nom, prenom, null, 0, adresse, mdp);
-                clientBD.creerClient(nouveauClient);
-                message.setStyle("-fx-text-fill: green;");
-                message.setText("Compte créé avec succès !");
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    popup.close();
-                }).start();
-
-            } catch (SQLException e) {
+            catch(SQLException e){
                 message.setText("Erreur lors de la création du compte : " + e.getMessage());
             }
         });
