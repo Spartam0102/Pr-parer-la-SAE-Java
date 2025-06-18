@@ -94,77 +94,86 @@ public class FenetrePanier extends Application {
         return banniere;
     }
 
-    private VBox fenetrePanier() {
-        VBox containerVertical = new VBox();
-        containerVertical.setPadding(new Insets(20));
-        containerVertical.setSpacing(10);
+   private VBox fenetrePanier() {
+    VBox containerVertical = new VBox();
+    containerVertical.setPadding(new Insets(20));
+    containerVertical.setSpacing(10);
 
-        HBox conteneur = new HBox(20);
-        conteneur.setPadding(new Insets(20));
-        conteneur.setStyle("-fx-background-color: #2073c4;");
-        HBox.setHgrow(conteneur, Priority.ALWAYS);
+    HBox conteneur = new HBox(20);
+    conteneur.setPadding(new Insets(20));
+    conteneur.setStyle("-fx-background-color: #2073c4;");
+    HBox.setHgrow(conteneur, Priority.ALWAYS);
 
-        VBox listeLivres = new VBox(10);
-        listeLivres.setPadding(new Insets(10));
-        listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-        listeLivres.setPrefWidth(400);
+    VBox listeLivres = new VBox(10);
+    listeLivres.setPadding(new Insets(10));
+    listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+    listeLivres.setPrefWidth(400);
 
-        ScrollPane scrollPane = new ScrollPane(listeLivres);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background: transparent;");
-        scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
-        scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
-        HBox.setHgrow(scrollPane, Priority.ALWAYS);
+    ScrollPane scrollPane = new ScrollPane(listeLivres);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setStyle("-fx-background: transparent;");
+    scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
+    scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
+    HBox.setHgrow(scrollPane, Priority.ALWAYS);
 
-        VBox ensembleLivresCommand = new VBox();
-        ensembleLivresCommand.setStyle("-fx-background-color: white;");
-        for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
-    VBox unLivreCommand = new VBox();
-    unLivreCommand.setPadding(new Insets(20));
+    VBox ensembleLivresCommand = new VBox();
+    ensembleLivresCommand.setStyle("-fx-background-color: white;");
+    
+    // Image placeholder locale
+    Image placeholder = new Image("file:img/placeholder.png", 100, 140, true, true);
 
-    // Chargement de l’image à partir de l’ISBN
-    long isbn = couple.getKey().getIdLivre();
-    Image imageLivre;
-    try {
-        String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
-        imageLivre = new Image(url, 100, 140, true, true); // largeur 100px, hauteur 140px, préserve ratio
-    } catch (Exception e) {
-        imageLivre = new Image("file:img/placeholder.png", 100, 140, true, true);
+    for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
+        VBox unLivreCommand = new VBox();
+        unLivreCommand.setPadding(new Insets(20));
+
+        long isbn = couple.getKey().getIdLivre();
+        ImageView imageView = new ImageView(placeholder); // placeholder immédiat
+
+        try {
+            String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+            Image imageLivre = new Image(url, 100, 140, true, true, true); // chargement en arrière-plan
+
+            // Quand l'image est chargée, on remplace le placeholder
+            imageLivre.progressProperty().addListener((obs, oldProgress, newProgress) -> {
+                if (newProgress.doubleValue() >= 1.0) {
+                    imageView.setImage(imageLivre);
+                }
+            });
+
+        } catch (Exception e) {
+            // Si erreur, garder le placeholder
+        }
+
+        // Texte titre + quantité dans un VBox
+        Text nomLivre = new Text(couple.getKey().getNomLivre());
+        nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
+        Text quantite = new Text("     x" + couple.getValue());
+        quantite.setStyle("-fx-font-size: 15px");
+
+        VBox texteVBox = new VBox(nomLivre, quantite);
+        texteVBox.setAlignment(Pos.CENTER_LEFT);
+        texteVBox.setSpacing(5);
+
+        HBox ligneLivre = new HBox(10, imageView, texteVBox);
+        ligneLivre.setAlignment(Pos.CENTER_LEFT);
+
+        Text nomAuteur = new Text("Claude Dubois");
+        Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
+        HBox prixBox = new HBox(prixText);
+        prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        prixBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Separator barre = new Separator();
+        barre.setPrefHeight(1);
+        barre.setOpacity(0.5);
+
+        ensembleLivresCommand.getChildren().add(barre);
+
+        unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
+        ensembleLivresCommand.getChildren().add(unLivreCommand);
     }
-    ImageView imageView = new ImageView(imageLivre);
 
-    // Texte titre + quantité dans un VBox
-    Text nomLivre = new Text(couple.getKey().getNomLivre());
-    nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
-    Text quantite = new Text("     x" + couple.getValue());
-    quantite.setStyle("-fx-font-size: 15px");
-
-    VBox texteVBox = new VBox(nomLivre, quantite);
-    texteVBox.setAlignment(Pos.CENTER_LEFT);
-    texteVBox.setSpacing(5);
-
-    // Mettre image et texte côte à côte
-    HBox ligneLivre = new HBox(10, imageView, texteVBox);
-    ligneLivre.setAlignment(Pos.CENTER_LEFT);
-
-    Text nomAuteur = new Text("Claude Dubois");
-    Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
-    HBox prixBox = new HBox(prixText);
-    prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-    prixBox.setAlignment(Pos.CENTER_RIGHT);
-
-    Separator barre = new Separator();
-    barre.setPrefHeight(1);
-    barre.setOpacity(0.5);
-
-    ensembleLivresCommand.getChildren().add(barre);
-
-    unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
-    ensembleLivresCommand.getChildren().add(unLivreCommand);
-}
-
-
-        scrollPane.setContent(ensembleLivresCommand);
+    scrollPane.setContent(ensembleLivresCommand);
 
         VBox recap = new VBox(20);
         recap.setPrefWidth(300);
