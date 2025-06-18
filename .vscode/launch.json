@@ -9,6 +9,20 @@
             "name": "FenetrePanier",
             "request": "launch",
             "mainClass": "IHM.FenetrePanier",
+            "projectName": "Pr-parer-la-SAE-Java_1d8bc866"
+        },
+        {
+            "type": "java",
+            "name": "FenetreLivres",
+            "request": "launch",
+            "mainClass": "IHM.FenetreLivres",
+            "projectName": "Pr-parer-la-SAE-Java_1d8bc866"
+        },
+        {
+            "type": "java",
+            "name": "FenetrePanier",
+            "request": "launch",
+            "mainClass": "IHM.FenetrePanier",
             "projectName": "Pr-parer-la-SAE-Java_60793550"
         },
         {
