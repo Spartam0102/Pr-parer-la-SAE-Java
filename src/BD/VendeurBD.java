@@ -2,6 +2,8 @@ package BD;
 
 import Java.*;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VendeurBD {
 	private ConnexionMySQL laConnexion;
@@ -70,4 +72,42 @@ public class VendeurBD {
 		}
 		return null;
 	}
+
+	public boolean verifierConnexion(int idVen, String mdp) throws SQLException {
+    String sql = "SELECT mdpV FROM VENDEUR WHERE idven = ?";
+    PreparedStatement ps = laConnexion.prepareStatement(sql);
+    ps.setInt(1, idVen);
+    ResultSet rs = ps.executeQuery();
+
+    boolean isValid = false;
+    if (rs.next()) {
+        String mdpBD = rs.getString("mdpV");
+        isValid = mdpBD != null && mdpBD.equals(mdp);
+    }
+
+    rs.close();
+    ps.close();
+
+    return isValid;
+}
+
+
+	public Map<String, String> recupererIdEtMotDePasse(int idVen) throws SQLException {
+    Map<String, String> result = new HashMap<>();
+
+    String sql = "SELECT idVen, mdpV FROM VENDEUR WHERE idVen = ?";
+    PreparedStatement ps = laConnexion.prepareStatement(sql);
+    ps.setInt(1, idVen);
+    ResultSet rs = ps.executeQuery();
+
+    if (rs.next()) {
+        result.put("idVen", String.valueOf(rs.getInt("idVen")));
+        result.put("mdpV", rs.getString("mdpV"));
+    }
+
+    rs.close();
+    ps.close();
+
+    return result;
+}
 }

@@ -1,5 +1,8 @@
 package IHM;
 
+
+import IHM.Controleur.ControleurCarteMagasin;
+
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 
@@ -180,9 +183,20 @@ public class FenetreMagasins extends Application {
 
             carteMagasin.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
+            Magasin magasinSelectionne = listeMagasins.get(i);
+
+            ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
+                    magasinSelectionne);
+
+            carteMagasin.setOnMouseClicked(event -> {
+                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
+                Stage stage = (Stage) carteMagasin.getScene().getWindow();
+                controleur.allerStockMagasin(stage);
+            });
+
         }
 
-        Scene scene = new Scene(root, 1200, 750);
+        Scene scene = new Scene(root, 1500, 750);
         primaryStage.setTitle("Fenêtre des magasins");
         primaryStage.setScene(scene);
         primaryStage.show();

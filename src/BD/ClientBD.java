@@ -108,6 +108,25 @@ public class ClientBD {
 		ps2.close();
 	}
 
+	public boolean verifierConnexion(int idCli, String mdp) throws SQLException {
+    String sql = "SELECT mdpC FROM CLIENT WHERE idcli = ?";
+    PreparedStatement ps = laConnexion.prepareStatement(sql);
+    ps.setInt(1, idCli);
+    ResultSet rs = ps.executeQuery();
+
+    boolean isValid = false;
+    if (rs.next()) {
+        String mdpBD = rs.getString("mdpC");
+        isValid = mdpBD != null && mdpBD.equals(mdp);
+    }
+
+    rs.close();
+    ps.close();
+
+    return isValid;
+}
+
+
 	public Map<String, String> recupererIdEtMotDePasse(int idCli) throws SQLException {
     Map<String, String> result = new HashMap<>();
 
@@ -126,6 +145,36 @@ public class ClientBD {
 
     return result;
 }
+
+	
+	public void creerClient(Client client) throws SQLException {
+    String sql = "INSERT INTO CLIENT (nomcli, prenomCli, adressecli, codepostal, villecli, mdpC) " +
+                 "VALUES (?, ?, ?, ?, ?, ?)";
+    PreparedStatement ps = laConnexion.prepareStatement(sql);
+
+    
+    String adresseComplete = client.getAdresse(); 
+    String[] adresseSplit = adresseComplete.split(" ");
+
+    
+    String codePostal = adresseSplit[adresseSplit.length - 2];
+    String ville = adresseSplit[adresseSplit.length - 1];
+    StringBuilder adresse = new StringBuilder();
+    for (int i = 0; i < adresseSplit.length - 2; i++) {
+        adresse.append(adresseSplit[i]).append(" ");
+    }
+
+    ps.setString(1, client.getNom());
+    ps.setString(2, client.getPrenom());
+    ps.setString(3, adresse.toString().trim());
+    ps.setString(4, codePostal);
+    ps.setString(5, ville);
+    ps.setString(6, client.getMotDePasseCli());
+
+    ps.executeUpdate();
+    ps.close();
+}
+
 
 
 
