@@ -33,6 +33,16 @@ public class Auteur extends Personne {
         return this.idedit;
     }
 
+    @Override
+    public String getPrenom() {
+        return super.getPrenom();
+    }
+
+    @Override
+    public String getNom() {
+        return super.getNom();
+    }
+
     /**
      * Vérifie si cet objet est égal à un autre objet.
      * Deux auteurs sont considérés comme égaux s'ils ont le même nom,

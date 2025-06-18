@@ -1,6 +1,7 @@
 package IHM;
 
-import Java.Livre;
+import Java.*;
+import BD.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,9 +12,12 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import IHM.Controleur.ControleurHome;
+import javafx.scene.control.Separator;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 public class FenetrePanier extends Application {
@@ -21,13 +25,17 @@ public class FenetrePanier extends Application {
     private BorderPane racine;
     private VBox panelCentral;
     private Map<Livre, Integer> panierClient;
+    private ClientBD clientBD;
 
-    public FenetrePanier() {
-        this.panierClient = Map.of();
-    }
-
-    public FenetrePanier(Map<Livre, Integer> panierClient) {
-        this.panierClient = panierClient;
+    public FenetrePanier(ConnexionMySQL connexionMySQL, Client client) {
+        this.clientBD = new ClientBD(connexionMySQL);
+        try{
+            client.setPanier(clientBD.recupererPanier(client.getIdCli()));
+        }
+        catch(SQLException e){
+            System.out.println("Erreur sql : " + e.getMessage());
+        }
+        this.panierClient = client.getPanier();
     }
 
     private Scene laScene() {
@@ -101,35 +109,46 @@ public class FenetrePanier extends Application {
         listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
         listeLivres.setPrefWidth(400);
 
-        if (panierClient != null && !panierClient.isEmpty()) {
-            for (Map.Entry<Livre, Integer> entree : panierClient.entrySet()) {
-                Livre livre = entree.getKey();
-                int quantite = entree.getValue();
-
-                VBox livreBox = new VBox(5);
-                Label titre = new Label(livre.getNomLivre());
-                titre.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-                Label auteur = new Label("Auteur : " + (livre.getAuteur() != null ? livre.getAuteur() : "Inconnu"));
-                Label prix = new Label(String.format("%.2f €", livre.getPrix()));
-                prix.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
-                Label quantiteLabel = new Label("Quantité : " + quantite);
-
-                livreBox.getChildren().addAll(titre, auteur, prix, quantiteLabel);
-                livreBox.setPadding(new Insets(10));
-                livreBox.setStyle("-fx-border-color: lightgray; -fx-border-width: 0 0 1 0;");
-                listeLivres.getChildren().add(livreBox);
-            }
-        } else {
-            Label vide = new Label("Votre panier est vide.");
-            listeLivres.getChildren().add(vide);
-        }
-
         ScrollPane scrollPane = new ScrollPane(listeLivres);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: transparent;");
         scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
         scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
         HBox.setHgrow(scrollPane, Priority.ALWAYS);
+
+        VBox ensembleLivresCommand = new VBox();
+        ensembleLivresCommand.setStyle("-fx-background-color: white;");
+        for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
+            VBox unLivreCommand = new VBox();
+            unLivreCommand.setPadding(new Insets(20));
+
+            Text nomLivre = new Text(couple.getKey().getNomLivre());
+            nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
+            Text quantite = new Text("     x" + couple.getValue());
+            quantite.setStyle("-fx-font-size: 15px");
+            HBox ligneLivre = new HBox();
+            ligneLivre.setAlignment(Pos.BOTTOM_LEFT);
+            ligneLivre.getChildren().addAll(nomLivre, quantite);
+
+            Text nomAuteur = new Text(
+                    // couple.getKey().getAuteur().getPrenom() + " " + couple.getKey().getAuteur().getNom());
+                    "claude Dubois");
+            
+            Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));            HBox prixBox = new HBox(prixText);
+            prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+            prixBox.setAlignment(Pos.CENTER_RIGHT);
+
+            Separator barre = new Separator();
+            barre.setPrefHeight(1);
+            barre.setOpacity(0.5);
+
+            ensembleLivresCommand.getChildren().add(barre);
+
+            unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
+            ensembleLivresCommand.getChildren().add(unLivreCommand);
+        }
+
+        scrollPane.setContent(ensembleLivresCommand);
 
         VBox recap = new VBox(20);
         recap.setPrefWidth(300);

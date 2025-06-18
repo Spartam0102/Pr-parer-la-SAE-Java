@@ -79,7 +79,7 @@ public class LivreBD {
 							rs.getInt("nbpages"),
 							new ArrayList<>(),
 							new ArrayList<>(),
-							new ArrayList<>());
+							null);
 					livres.add(l);
 				}
 			}
@@ -105,7 +105,7 @@ public class LivreBD {
 							rs.getInt("nbpages"),
 							new ArrayList<>(),
 							new ArrayList<>(),
-							new ArrayList<>());
+							null);
 				} else {
 					return null;
 				}

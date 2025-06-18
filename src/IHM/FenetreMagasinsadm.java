@@ -70,11 +70,6 @@ public class FenetreMagasinsadm extends Application {
             ControleurHome.allerAccueil(stage);
         });
 
-        boutonPanier.setOnAction(e -> {
-            Stage stage = (Stage) boutonPanier.getScene().getWindow();
-            ControleurPanier.allerStock(stage);
-        });
-
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
         conteneurDroit.setPadding(new Insets(10));
