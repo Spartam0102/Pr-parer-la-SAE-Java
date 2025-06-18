@@ -1,22 +1,9 @@
 package IHM;
 
-
-import IHM.Controleur.ControleurCarteMagasin;
-
-import IHM.Controleur.ControleurHome;
-import IHM.Controleur.ControleurPanier;
-
-import java.sql.SQLException;
-import java.util.List;
-
-import BD.*;
-import Java.*;
-
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,17 +11,12 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FenetreMagasins extends Application {
+public class FenetreLivres extends Application {
 
     private Button boutonHome;
     private Button boutonSettings;
     private Button boutonPanier;
     private Button boutonRetour;
-    private MagasinBD magasinBD;
-
-    public FenetreMagasins(ConnexionMySQL connexionMySQL) {
-        this.magasinBD = new MagasinBD(connexionMySQL);
-    }
 
     private Pane titre() {
         ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
@@ -67,16 +49,6 @@ public class FenetreMagasins extends Application {
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
 
-        boutonHome.setOnAction(e -> {
-            Stage stage = (Stage) boutonHome.getScene().getWindow();
-            ControleurHome.allerAccueil(stage);
-        });
-
-        boutonPanier.setOnAction(e -> {
-            Stage stage = (Stage) boutonPanier.getScene().getWindow();
-            ControleurPanier.allerStock(stage);
-        });
-
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
         conteneurDroit.setPadding(new Insets(10));
@@ -90,7 +62,7 @@ public class FenetreMagasins extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws SQLException {
+    public void start(Stage primaryStage) {
 
         BorderPane root = new BorderPane();
 
@@ -103,15 +75,7 @@ public class FenetreMagasins extends Application {
         cadre.setHgap(20);
         cadre.setVgap(20);
         cadre.setPadding(new Insets(30));
-        ScrollPane scrollPane = new ScrollPane(cadre);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-        scrollPane.setStyle("-fx-background: transparent;");
-        scrollPane.prefHeightProperty().bind(root.heightProperty().multiply(1));
-        scrollPane.maxHeightProperty().bind(root.heightProperty().multiply(1));
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Optionnel : empêche le scroll horizontal
-
-        root.setCenter(scrollPane);
+        root.setCenter(cadre);
 
         for (int i = 0; i < 3; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
@@ -121,11 +85,10 @@ public class FenetreMagasins extends Application {
             cadre.getColumnConstraints().add(colConst);
         }
 
-        List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
-        for (int i = 0; i < listeMagasins.size(); i++) {
+        for (int i = 0; i < 9; i++) {
             BorderPane PaneMagasin = new BorderPane();
 
-            ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
+            ImageView image = new ImageView(new Image("file:./img/mag1.jpeg"));
             image.setFitHeight(130);
             image.setPreserveRatio(true);
             Pane conteneurImage = new Pane(image);
@@ -135,12 +98,12 @@ public class FenetreMagasins extends Application {
             VBox DescriptionMagasin = new VBox();
             DescriptionMagasin.setAlignment(Pos.CENTER_LEFT);
 
-            Text nomMagasin = new Text(listeMagasins.get(i).getNom());
+            Text nomMagasin = new Text("Magasin 1");
             nomMagasin.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
             VBox.setMargin(nomMagasin, new Insets(5, 0, 0, 0));
 
             HBox boxNote = new HBox();
-            Text note = new Text(Double.toString(listeMagasins.get(i).getNote()));
+            Text note = new Text("4.4");
             note.setStyle("-fx-font-size: 15px;");
             ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
             etoile.setFitHeight(16);
@@ -148,7 +111,7 @@ public class FenetreMagasins extends Application {
             boxNote.getChildren().addAll(note, etoile);
 
             HBox boxTel = new HBox();
-            Text tel = new Text(listeMagasins.get(i).getTel());
+            Text tel = new Text("06 64 65 48 05");
             tel.setStyle("-fx-font-size: 15px;");
             ImageView telephone = new ImageView(new Image("file:./img/phone_icon.jpg"));
             telephone.setFitHeight(20);
@@ -161,7 +124,7 @@ public class FenetreMagasins extends Application {
             PaneMagasin.setCenter(DescriptionMagasin);
 
             HBox boxMap = new HBox();
-            Text adresse = new Text(listeMagasins.get(i).getAdresse());
+            Text adresse = new Text("12 rue de bernard, 27321 Agde, France");
             adresse.setStyle("-fx-font-size: 15px;");
             ImageView map = new ImageView(new Image("file:./img/map_icon.jpg"));
             map.setFitHeight(20);
@@ -183,32 +146,15 @@ public class FenetreMagasins extends Application {
 
             carteMagasin.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
-            Magasin magasinSelectionne = listeMagasins.get(i);
-
-            ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
-                    magasinSelectionne);
-
-            carteMagasin.setOnMouseClicked(event -> {
-                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
-                Stage stage = (Stage) carteMagasin.getScene().getWindow();
-                controleur.allerStockMagasin(stage);
-            });
-
         }
 
-        Scene scene = new Scene(root, 1500, 750);
-        primaryStage.setTitle("Fenêtre des magasins");
+        Scene scene = new Scene(root, 1200, 750);
+        primaryStage.setTitle("Fenêtre un magasin");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL) {
-        try {
-            FenetreMagasins fm = new FenetreMagasins(connexionMySQL);
-            fm.start(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
+        launch(args);
     }
-
 }

@@ -4,7 +4,9 @@ import BD.ConnexionMySQL;
 import BD.VendeurBD;
 import BD.AdministrateurBD;
 import BD.ClientBD;
-import IHM.FenetreMagasins;
+
+//caca
+import IHM.FenetreMagasinsadm;
 
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -44,7 +46,24 @@ public class ControleurSeConnecter {
 
             int id;
             try {
-                id = Integer.parseInt(idTexte);
+
+                int idCli = Integer.parseInt(userfield.getText());
+                String mdpEntre = mdpfield.getText();
+
+                Map<String, String> infos = clientBD.recupererIdEtMotDePasse(idCli);
+
+                if (!infos.isEmpty() && infos.get("mdpC").equals(mdpEntre)) {
+                    Stage stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+
+                    FenetreMagasinsadm.afficher(stage, connexionMySQL);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur de connexion");
+                    alert.setHeaderText("Identifiants incorrects");
+                    alert.setContentText("Le mot de passe ou l'identifiant est incorrect.");
+                    alert.showAndWait();
+                }
+
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setContentText("L'identifiant doit être un nombre.");

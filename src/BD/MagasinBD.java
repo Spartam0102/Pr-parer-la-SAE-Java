@@ -134,17 +134,19 @@ public class MagasinBD {
 		return isbnGenere;
 	}
 
-	// public int insererMagasin(Magasin m) throws SQLException {
-	// 	PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?)");
+	public int insererMagasin(Magasin m) throws SQLException {
+	PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?,?,?)");
 
-	// 	int numJoueur = this.maxNumMagasin() + 1;
-	// 	ps.setInt(1, numJoueur);
-	// 	ps.setString(2, m.getNom());
-	// 	ps.setString(3, m.getVille());
-	// 	ps.executeUpdate();
+	int numMagasin = this.maxNumMagasin() + 1;
+	ps.setString(1, m.getNom());
+	ps.setString(2, m.getAdresse());
+	ps.setInt(3, numMagasin);
+	ps.setDouble(4, m.getNote());
+	ps.setString(5, m.getTel());
+	ps.executeUpdate();
 
-	// 	return numJoueur;
-	// }
+	return numMagasin;
+	}
 
 	public void effacerMagasin(int num) throws SQLException {
 		PreparedStatement ps = this.laConnexion.prepareStatement("DELETE FROM MAGASIN WHERE idmag = ?");

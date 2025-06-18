@@ -1,8 +1,5 @@
 package IHM;
 
-
-import IHM.Controleur.ControleurCarteMagasin;
-
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 
@@ -24,7 +21,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FenetreMagasins extends Application {
+public class FenetreMagasinsadm extends Application {
 
     private Button boutonHome;
     private Button boutonSettings;
@@ -32,7 +29,7 @@ public class FenetreMagasins extends Application {
     private Button boutonRetour;
     private MagasinBD magasinBD;
 
-    public FenetreMagasins(ConnexionMySQL connexionMySQL) {
+    public FenetreMagasinsadm(ConnexionMySQL connexionMySQL) {
         this.magasinBD = new MagasinBD(connexionMySQL);
     }
 
@@ -119,6 +116,7 @@ public class FenetreMagasins extends Application {
             colConst.setFillWidth(true);
             colConst.setPercentWidth(33.33);
             cadre.getColumnConstraints().add(colConst);
+
         }
 
         List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
@@ -183,20 +181,34 @@ public class FenetreMagasins extends Application {
 
             carteMagasin.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
-            Magasin magasinSelectionne = listeMagasins.get(i);
-
-            ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
-                    magasinSelectionne);
-
-            carteMagasin.setOnMouseClicked(event -> {
-                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
-                Stage stage = (Stage) carteMagasin.getScene().getWindow();
-                controleur.allerStockMagasin(stage);
-            });
 
         }
 
-        Scene scene = new Scene(root, 1500, 750);
+        VBox magasinPlus = new VBox();
+        magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
+        magasinPlus.setPadding(new Insets(10));
+        magasinPlus.setSpacing(10);
+        magasinPlus.setPrefHeight(180); 
+        magasinPlus.setAlignment(Pos.CENTER);
+
+        ImageView map = new ImageView(new Image("file:./img/plus.png"));
+        map.setPreserveRatio(true);
+        map.setFitWidth(150);
+
+        Text textemagasinPlus = new Text("Ajouter un magasin");
+        textemagasinPlus.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        magasinPlus.getChildren().add(map);
+
+        int i = listeMagasins.size();
+        int col = i % 3;
+        int row = i / 3;
+
+        cadre.add(magasinPlus, col, row);
+        GridPane.setHgrow(magasinPlus, Priority.ALWAYS);
+
+
+
+        Scene scene = new Scene(root, 1200, 750);
         primaryStage.setTitle("Fenêtre des magasins");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -204,7 +216,7 @@ public class FenetreMagasins extends Application {
 
     public static void afficher(Stage stage, ConnexionMySQL connexionMySQL) {
         try {
-            FenetreMagasins fm = new FenetreMagasins(connexionMySQL);
+            FenetreMagasinsadm fm = new FenetreMagasinsadm(connexionMySQL);
             fm.start(stage);
         } catch (Exception e) {
             e.printStackTrace();
