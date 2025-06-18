@@ -9,10 +9,13 @@ import java.util.Map;
 
 public class ClientBD {
 	private ConnexionMySQL laConnexion;
+	private ClientBD clientBD;
 
 	public ClientBD(ConnexionMySQL laConnexion) {
-		this.laConnexion = laConnexion;
-	}
+    this.laConnexion = laConnexion;
+    this.clientBD = this; 
+}
+
 
 	public Client recupererClient(int id) throws SQLException {
 		PreparedStatement ps = laConnexion.prepareStatement("select * from CLIENT where idcli = ?;");
@@ -219,4 +222,53 @@ public class ClientBD {
 		}
 		return maxId;
 	}
+
+	public List<Livre> livreRecommander(int id) throws SQLException {
+    List<Livre> livresDuClient = this.recupererToutLivreClient(id);
+    List<Client> tousLesClients = this.recuperToutClient();
+    List<Livre> meilleureListe = maxLivreEnCommun(livresDuClient, tousLesClients, id);
+    return differenceDeLivre(livresDuClient, meilleureListe);
+}
+
+
+    public List<Livre> differenceDeLivre(List<Livre> liste1, List<Livre> liste2) {
+        List<Livre> res = new ArrayList<>();
+        for (Livre livre : liste2) {
+            if (!liste1.contains(livre)) {
+                res.add(livre);
+            }
+        }
+        return res;
+    }
+
+    public List<Livre> maxLivreEnCommun(List<Livre> livresDuClient, List<Client> listeClients, int idClientCourant)
+            throws SQLException {
+        List<Livre> res = new ArrayList<>();
+        int max = 0;
+
+        for (Client client : listeClients) {
+            if (client.getIdCli() == idClientCourant)
+                continue;
+
+            List<Livre> livresAutreClient = this.recupererToutLivreClient(client.getIdCli());
+
+            int commun = livreEnCommun(livresDuClient, livresAutreClient);
+
+            if (commun > max) {
+                max = commun;
+                res = livresAutreClient;
+            }
+        }
+        return res;
+    }
+
+    public int livreEnCommun(List<Livre> liste1, List<Livre> liste2) {
+        int res = 0;
+        for (Livre livre : liste2) {
+            if (liste1.contains(livre)) {
+                res++;
+            }
+        }
+        return res;
+    }
 }
