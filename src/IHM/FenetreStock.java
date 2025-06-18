@@ -96,11 +96,19 @@ public class FenetreStock extends Application {
         cadreGrand.setSpacing(20);
         cadreGrand.setAlignment(Pos.CENTER);
 
+        VBox ensemble = new VBox();
+        VBox test = new VBox();
+        test.setStyle("-fx-background-color:rgb(236, 18, 225);");
+        Text vfffff = new Text("dfghdhxgdsghbxtng");
+        test.getChildren().add(vfffff);
+
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(cadreGrand);
+        scrollPane.setContent(ensemble);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         root.setCenter(scrollPane);
+
+        ensemble.getChildren().addAll(test, cadreGrand);
 
         GridPane grilleLivres = new GridPane();
         grilleLivres.setStyle("-fx-background-color: white; -fx-background-radius: 20px 20px 0 0; -fx-border-radius: 20px 20px 0 0;");
@@ -108,7 +116,7 @@ public class FenetreStock extends Application {
         grilleLivres.setHgap(30);
         grilleLivres.setVgap(30);
         grilleLivres.setAlignment(Pos.CENTER);
-        cadreGrand.getChildren().add(grilleLivres);
+        cadreGrand.getChildren().addAll(grilleLivres);
         grilleLivres.setPadding(new Insets(20));
 
         Text titreMag = new Text(magasin.getNom());
