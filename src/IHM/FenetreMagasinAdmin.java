@@ -1,8 +1,12 @@
 package IHM;
 
 
+import BD.ConnexionMySQL;
+import BD.MagasinBD;
+import IHM.Controleur.ControleurCarteMagasin;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
+import Java.Magasin;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,6 +29,13 @@ public class FenetreMagasinAdmin extends Application{
     private Button boutonSettings;
     private Button boutonPanier;
     private Button boutonRetour;
+    private MagasinBD magasinBD;
+    private Magasin magasin;
+
+    public FenetreMagasinAdmin(ConnexionMySQL connexionMySQL, Magasin magasin) {
+        this.magasinBD = new MagasinBD(connexionMySQL);
+        this.magasin = magasin;
+    }
  
     private Pane titre() {
         ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
@@ -78,59 +89,61 @@ public class FenetreMagasinAdmin extends Application{
         BorderPane entier = new BorderPane();
         entier.setStyle("-fx-background-color:rgb(255, 255, 255); -fx-background-radius: 10px;");
 
-        Text titre = new Text("La Librairie Parisienne");
+        Text titre = new Text(magasin.getNom());
         titre.setStyle("-fx-font-size: 40px; -fx-font-weight: bold;");
-        BorderPane.setMargin(titre, new Insets(20));
+        BorderPane.setMargin(titre, new Insets(0, 20, 20, 20));
         entier.setTop(titre);
 
         BorderPane centre = new BorderPane();
-        ImageView image = new ImageView(new Image("file:./img/mag1.jpeg"));
-        image.setFitHeight(400);
+        ImageView image = new ImageView(new Image("file:./img/mag"+ magasin.getIdMagasin() + ".jpeg"));
+        image.setFitHeight(300);
+        image.setStyle("-fx-background-radius: 10px;");
         image.setPreserveRatio(true);
-        Pane conteneurImage = new Pane(image);
-        centre.setLeft(conteneurImage);
-        BorderPane.setMargin(conteneurImage, new Insets(7, 16, 7, 7));
-        centre.setLeft(conteneurImage);
-
-        VBox DescriptionMagasin = new VBox();
-        DescriptionMagasin.setAlignment(Pos.CENTER_LEFT);
+        centre.setLeft(image);
 
         HBox num = new HBox();
-        Text numMagasin = new Text("n°1");
-        numMagasin.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        ImageView maison = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        Text numMagasin = new Text("n°"+ magasin.getIdMagasin());
+        numMagasin.setStyle("-fx-font-size: 20px;");
+        ImageView maison = new ImageView(new Image("file:./img/image.png"));
         maison.setFitHeight(20);
         maison.setPreserveRatio(true);
-        HBox.setMargin(maison, new Insets(5, 0, 0, 0));
+        HBox.setMargin(maison, new Insets(0, 5, 0, 0));
         num.getChildren().addAll(maison, numMagasin);
 
         HBox boxNote = new HBox();
-        Text note = new Text("4.6");
+        Text note = new Text("" + magasin.getNote());
         note.setStyle("-fx-font-size: 15px;");
         ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
         etoile.setFitHeight(16);
         etoile.setPreserveRatio(true);
+        HBox.setMargin(etoile, new Insets(0, 0, 0, 5));
         boxNote.getChildren().addAll(note, etoile);
 
         HBox boxTel = new HBox();
-        Text tel = new Text("06 73 69 21 41");
+        Text tel = new Text(magasin.getTel());
         tel.setStyle("-fx-font-size: 15px;");
-        ImageView telephone = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        ImageView telephone = new ImageView(new Image("file:./img/phone.png"));
         telephone.setFitHeight(20);
         telephone.setPreserveRatio(true);
+        HBox.setMargin(telephone, new Insets(0, 5, 0, 0));
         boxTel.getChildren().addAll(telephone, tel);
 
-        DescriptionMagasin.setAlignment(Pos.TOP_LEFT);
-        DescriptionMagasin.setSpacing(17);
-        DescriptionMagasin.getChildren().addAll(num, boxNote, boxTel);
-        centre.setRight(DescriptionMagasin);
+        VBox descriptionMagasin = new VBox();
+        descriptionMagasin.setAlignment(Pos.CENTER_RIGHT);
+        descriptionMagasin.setSpacing(17);
+        VBox.setMargin(num, new Insets(0, 0 , 20, 0));
+        VBox.setMargin(boxNote, new Insets(0, 0 , 20, 0));
+        VBox.setMargin(boxTel, new Insets(0, 0 , 20, 0));
+        descriptionMagasin.getChildren().addAll(num, boxNote, boxTel);
+        centre.setRight(descriptionMagasin);
 
         HBox boxadresse = new HBox();
-        Text adresse = new Text("12 rue Dolou, 75014 Paris");
+        Text adresse = new Text(magasin.getAdresse());
         tel.setStyle("-fx-font-size: 15px;");
-        ImageView pointeur = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        ImageView pointeur = new ImageView(new Image("file:./img/map.png"));
         pointeur.setFitHeight(20);
         pointeur.setPreserveRatio(true);
+        boxadresse.setAlignment(Pos.CENTER);
         boxadresse.getChildren().addAll(pointeur, adresse);
         centre.setBottom(boxadresse);
 
@@ -138,13 +151,30 @@ public class FenetreMagasinAdmin extends Application{
 
         HBox lesBoutons = new HBox();
         Button modifierStock = new Button("Modifier les stocks");
-        modifierStock.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px;");
+        modifierStock.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
+        HBox.setMargin(modifierStock, new Insets(0, 50, 0, 0));
+        modifierStock.setPrefHeight(40);
+        modifierStock.setPrefWidth(200);
         Button supprimerMagasin = new Button("Supprimer Magasin");
-        supprimerMagasin.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 10px;");
-        lesBoutons.setAlignment(Pos.CENTER_LEFT);
+        supprimerMagasin.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
+        HBox.setMargin(supprimerMagasin, new Insets(0, 0, 0, 50));
+        supprimerMagasin.setPrefHeight(40);
+        supprimerMagasin.setPrefWidth(200);
+        lesBoutons.setAlignment(Pos.CENTER);
+        BorderPane.setMargin(lesBoutons, new Insets(20));
         lesBoutons.getChildren().addAll(modifierStock, supprimerMagasin);
 
         entier.setBottom(lesBoutons);
+
+        ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
+                    this.magasin);
+
+            modifierStock.setOnMouseClicked(event -> {
+
+                System.out.println("Modifier Stock sélectioner");
+                Stage stage = (Stage) modifierStock.getScene().getWindow();
+                FenetreMagasinVendeur.afficher(stage, magasinBD.getConnexion());
+            });
 
         return entier;
     }
@@ -174,7 +204,7 @@ public class FenetreMagasinAdmin extends Application{
         image.setFitHeight(100);
         image.setPreserveRatio(true);
         Button button = new Button("Créer");
-        button.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px;");
+        button.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
         button.setPrefWidth(100);
 
         droit.setAlignment(Pos.CENTER);
@@ -244,16 +274,20 @@ public class FenetreMagasinAdmin extends Application{
         root.setCenter(cadre);
 
         Pane mag = infoMag();
+        mag.setPadding(new Insets(30));
         HBox.setMargin(mag, new Insets(20));
         Pane compte = compteVendeur();
+        compte.setMinWidth(400);
+        compte.setMinHeight(200);
         Pane stat = statistique();
+        stat.setMinWidth(400);
+        stat.setMinWidth(200);
         VBox compteStat = new VBox();
         compteStat.getChildren().addAll(compte, stat);
         VBox.setMargin(compte, new Insets(20));
         VBox.setMargin(stat, new Insets(20));
         cadre.getChildren().addAll(mag, compteStat);
         HBox.setHgrow(mag, Priority.ALWAYS);
-         
 
 
         Scene scene = new Scene(root, 1200, 750);
@@ -262,6 +296,15 @@ public class FenetreMagasinAdmin extends Application{
         primaryStage.show();
     }
 
+
+     public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Magasin magasin) {
+        try {
+            FenetreStock fs = new FenetreStock(connexionMySQL, magasin);
+            fs.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
         launch(args);
     }

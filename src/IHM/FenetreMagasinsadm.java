@@ -1,8 +1,10 @@
 package IHM;
 
+import IHM.Controleur.ControleurCarteMagasin;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 import IHM.Controleur.ControleurPlusMagasin;
+import IHM.Controleur.ControleurCarteMagasinAdmin;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -184,6 +186,17 @@ public class FenetreMagasinsadm extends Application {
             cadre.add(conteneurCarte, col, row);
             conteneurCarte.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(conteneurCarte, Priority.ALWAYS);
+
+             Magasin magasinSelectionne = listeMagasins.get(i);
+
+            ControleurCarteMagasinAdmin controleur = new ControleurCarteMagasinAdmin(magasinBD.getConnexion(),
+                    magasinSelectionne);
+
+            conteneurCarte.setOnMouseClicked(event -> {
+
+                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
+                controleur.allerDansFenetreMAgasin(primaryStage);
+            });
         }
 
         // Création du bouton "Ajouter un magasin" avec l'icône plus
