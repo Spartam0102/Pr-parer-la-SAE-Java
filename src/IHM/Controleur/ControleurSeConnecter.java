@@ -4,8 +4,7 @@ import BD.ConnexionMySQL;
 import BD.VendeurBD;
 import BD.AdministrateurBD;
 import BD.ClientBD;
-
-//caca
+import IHM.FenetreMagasins;
 import IHM.FenetreMagasinsadm;
 
 import javafx.scene.control.*;
@@ -13,6 +12,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ControleurSeConnecter {
 
@@ -29,7 +29,8 @@ public class ControleurSeConnecter {
     }
 
     public void gererConnexion(Button boutonConnexion, TextField userfield, PasswordField mdpfield,
-            ToggleGroup groupeRoles) {
+                               ToggleGroup groupeRoles) {
+
         boutonConnexion.setOnAction(e -> {
             String idTexte = userfield.getText().trim();
             String mdp = mdpfield.getText();
@@ -46,24 +47,7 @@ public class ControleurSeConnecter {
 
             int id;
             try {
-
-                int idCli = Integer.parseInt(userfield.getText());
-                String mdpEntre = mdpfield.getText();
-
-                Map<String, String> infos = clientBD.recupererIdEtMotDePasse(idCli);
-
-                if (!infos.isEmpty() && infos.get("mdpC").equals(mdpEntre)) {
-                    Stage stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
-
-                    FenetreMagasinsadm.afficher(stage, connexionMySQL);
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Erreur de connexion");
-                    alert.setHeaderText("Identifiants incorrects");
-                    alert.setContentText("Le mot de passe ou l'identifiant est incorrect.");
-                    alert.showAndWait();
-                }
-
+                id = Integer.parseInt(idTexte);
             } catch (NumberFormatException ex) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setContentText("L'identifiant doit être un nombre.");
@@ -72,6 +56,7 @@ public class ControleurSeConnecter {
             }
 
             boolean authOk = false;
+
             try {
                 switch (role) {
                     case "Client":
@@ -98,26 +83,33 @@ public class ControleurSeConnecter {
             }
 
             if (authOk) {
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setContentText("Connexion réussie !");
-                alert.show();
-
-                // Récupérer la fenêtre actuelle
                 Stage currentStage = (Stage) boutonConnexion.getScene().getWindow();
 
-                // Ouvrir la nouvelle fenêtre FenetreMagasins
-                FenetreMagasins fenetreMagasins = new FenetreMagasins(connexionMySQL);
-                Stage newStage = new Stage();
                 try {
-                    fenetreMagasins.start(newStage);
+                    switch (role) {
+                        case "Client":
+                        case "Vendeur":
+                            // Ouvre FenetreMagasins
+                            FenetreMagasins.afficher(currentStage, connexionMySQL);
+                            break;
+                        case "Administrateur":
+                            // Ouvre FenetreMagasinsadm
+                            FenetreMagasinsadm.afficher(currentStage, connexionMySQL);
+                            break;
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setContentText("Erreur lors de l'ouverture de la fenêtre.");
+                    alert.show();
                 }
-
-                // Fermer la fenêtre actuelle
-                currentStage.close();
+            } else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur de connexion");
+                alert.setHeaderText("Identifiants incorrects");
+                alert.setContentText("Le mot de passe ou l'identifiant est incorrect.");
+                alert.showAndWait();
             }
-
         });
     }
 }
