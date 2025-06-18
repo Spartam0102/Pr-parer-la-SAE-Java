@@ -169,13 +169,22 @@ public class FenetreMagasins extends Application {
             int col = i % 3;
             int row = i / 3;
 
+
             cadre.add(carteMagasin, col, row);
 
             carteMagasin.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
+            Magasin magasinSelectionne = listeMagasins.get(i); 
+carteMagasin.setOnMouseClicked(event -> {
+    System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
+    // Tu peux remplacer cette ligne par une action réelle
+    // Exemple :
+    // ControleurMagasin.allerDetailsMagasin((Stage) carteMagasin.getScene().getWindow(), magasinSelectionne);
+});
+
         }
 
-        Scene scene = new Scene(root, 1200, 750);
+        Scene scene = new Scene(root, 1500, 750);
         primaryStage.setTitle("Fenêtre des magasins");
         primaryStage.setScene(scene);
         primaryStage.show();
