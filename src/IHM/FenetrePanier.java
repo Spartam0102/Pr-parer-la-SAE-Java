@@ -119,7 +119,7 @@ public class FenetrePanier extends Application {
         VBox ensembleLivresCommand = new VBox();
         ensembleLivresCommand.setStyle("-fx-background-color: white;");
         for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
-            VBox unLivreCommand = new VBox();
+            VBox unLivreCommand = new VBox(); 
             unLivreCommand.setPadding(new Insets(20));
 
             Text nomLivre = new Text(couple.getKey().getNomLivre());
