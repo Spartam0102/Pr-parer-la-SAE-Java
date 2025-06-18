@@ -1,5 +1,6 @@
 package IHM.Controleur;
 
+import Java.Client;
 import BD.ConnexionMySQL;
 import BD.VendeurBD;
 import BD.AdministrateurBD;
@@ -20,6 +21,7 @@ public class ControleurSeConnecter {
     private ClientBD clientBD;
     private VendeurBD vendeurBD;
     private AdministrateurBD adminBD;
+    private Client client;
 
     public ControleurSeConnecter(ConnexionMySQL connexionMySQL) {
         this.connexionMySQL = connexionMySQL;
@@ -88,10 +90,11 @@ public class ControleurSeConnecter {
             try {
                 switch (role) {
                     case "Client":
-                        FenetreMagasins.afficher(currentStage, connexionMySQL, false);
+                        this.client = clientBD.recupererClient(id);
+                        FenetreMagasins.afficher(currentStage, connexionMySQL, false, this.client);
                         break;
                     case "Vendeur":
-                        FenetreMagasins.afficher(currentStage, connexionMySQL, true);
+                        FenetreMagasins.afficher(currentStage, connexionMySQL, true, null);
                         break;
                     case "Administrateur":
                         FenetreMagasinsadm.afficher(currentStage, connexionMySQL);

@@ -128,28 +128,27 @@ public class ClientBD {
 
 
 	public Map<String, String> recupererIdEtMotDePasse(int idCli) throws SQLException {
-    Map<String, String> result = new HashMap<>();
+		Map<String, String> result = new HashMap<>();
 
-    String sql = "SELECT idcli, mdpC FROM CLIENT WHERE idcli = ?";
-    PreparedStatement ps = laConnexion.prepareStatement(sql);
-    ps.setInt(1, idCli);
-    ResultSet rs = ps.executeQuery();
+		String sql = "SELECT idcli, mdpC FROM CLIENT WHERE idcli = ?";
+		PreparedStatement ps = laConnexion.prepareStatement(sql);
+		ps.setInt(1, idCli);
+		ResultSet rs = ps.executeQuery();
 
-    if (rs.next()) {
-        result.put("idcli", String.valueOf(rs.getInt("idcli")));
-        result.put("mdpC", rs.getString("mdpC"));
-    }
+		if (rs.next()) {
+			result.put("idcli", String.valueOf(rs.getInt("idcli")));
+			result.put("mdpC", rs.getString("mdpC"));
+		}
 
-    rs.close();
-    ps.close();
+		rs.close();
+		ps.close();
 
-    return result;
-}
+		return result;
+	}
 
-	
 	public void creerClient(Client client) throws SQLException {
-    String sql = "INSERT INTO CLIENT (nomcli, prenomCli, adressecli, codepostal, villecli, mdpC) " +
-                 "VALUES (?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO CLIENT (idcli, nomcli, prenomCli, adressecli, codepostal, villecli, mdpC) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
     PreparedStatement ps = laConnexion.prepareStatement(sql);
 
     
@@ -164,12 +163,13 @@ public class ClientBD {
         adresse.append(adresseSplit[i]).append(" ");
     }
 
-    ps.setString(1, client.getNom());
-    ps.setString(2, client.getPrenom());
-    ps.setString(3, adresse.toString().trim());
-    ps.setString(4, codePostal);
-    ps.setString(5, ville);
-    ps.setString(6, client.getMotDePasseCli());
+	ps.setInt(1, client.getIdCli());
+    ps.setString(2, client.getNom());
+    ps.setString(3, client.getPrenom());
+    ps.setString(4, adresse.toString().trim());
+    ps.setString(5, codePostal);
+    ps.setString(6, ville);
+    ps.setString(7, client.getMotDePasseCli());
 
     ps.executeUpdate();
     ps.close();
@@ -206,5 +206,17 @@ public class ClientBD {
 			}
 		}
 		return res;
+	}
+
+	public int maxIdClient() throws SQLException {
+	Integer maxId = null;
+		PreparedStatement ps = laConnexion
+				.prepareStatement("SELECT MAX(idcli) maxid FROM CLIENT;");
+		ResultSet rs = ps.executeQuery();
+
+		if (rs.next()) {
+			maxId =  rs.getInt("maxid");
+		}
+		return maxId;
 	}
 }
