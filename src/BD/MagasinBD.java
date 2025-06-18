@@ -105,6 +105,11 @@ public class MagasinBD {
 		}
 	}
 
+	public ConnexionMySQL getConnexion() {
+    return this.laConnexion; 
+}
+
+
 	public long insererLivre(Livre livre) throws SQLException {
 		long isbnGenere = System.currentTimeMillis();
 		int anneePublication;

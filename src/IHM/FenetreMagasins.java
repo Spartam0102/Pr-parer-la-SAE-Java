@@ -1,6 +1,6 @@
 package IHM;
 
-
+import IHM.Controleur.ControleurCarteMagasin;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 
@@ -21,7 +21,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 public class FenetreMagasins extends Application {
 
     private Button boutonHome;
@@ -30,7 +29,7 @@ public class FenetreMagasins extends Application {
     private Button boutonRetour;
     private MagasinBD magasinBD;
 
-    public FenetreMagasins(ConnexionMySQL connexionMySQL){
+    public FenetreMagasins(ConnexionMySQL connexionMySQL) {
         this.magasinBD = new MagasinBD(connexionMySQL);
     }
 
@@ -88,7 +87,7 @@ public class FenetreMagasins extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws SQLException{
+    public void start(Stage primaryStage) throws SQLException {
 
         BorderPane root = new BorderPane();
 
@@ -112,10 +111,10 @@ public class FenetreMagasins extends Application {
         }
 
         List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
-        for (int i = 0; i < listeMagasins.size() ; i++) {
+        for (int i = 0; i < listeMagasins.size(); i++) {
             BorderPane PaneMagasin = new BorderPane();
 
-            ImageView image = new ImageView(new Image("file:./img/mag" + (i+1) + ".jpeg"));
+            ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
             image.setFitHeight(130);
             image.setPreserveRatio(true);
             Pane conteneurImage = new Pane(image);
@@ -169,18 +168,20 @@ public class FenetreMagasins extends Application {
             int col = i % 3;
             int row = i / 3;
 
-
             cadre.add(carteMagasin, col, row);
 
             carteMagasin.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
-            Magasin magasinSelectionne = listeMagasins.get(i); 
-carteMagasin.setOnMouseClicked(event -> {
-    System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
-    // Tu peux remplacer cette ligne par une action réelle
-    // Exemple :
-    // ControleurMagasin.allerDetailsMagasin((Stage) carteMagasin.getScene().getWindow(), magasinSelectionne);
-});
+            Magasin magasinSelectionne = listeMagasins.get(i);
+
+            ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
+                    magasinSelectionne);
+
+            carteMagasin.setOnMouseClicked(event -> {
+                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
+                Stage stage = (Stage) carteMagasin.getScene().getWindow();
+                controleur.allerStockMagasin(stage);
+            });
 
         }
 
@@ -191,12 +192,12 @@ carteMagasin.setOnMouseClicked(event -> {
     }
 
     public static void afficher(Stage stage, ConnexionMySQL connexionMySQL) {
-    try {
-        FenetreMagasins fm = new FenetreMagasins(connexionMySQL);
-        fm.start(stage);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            FenetreMagasins fm = new FenetreMagasins(connexionMySQL);
+            fm.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 
 }
