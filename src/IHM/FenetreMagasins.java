@@ -178,7 +178,6 @@ public class FenetreMagasins extends Application {
                     magasinSelectionne);
 
             carteMagasin.setOnMouseClicked(event -> {
-                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
                 Stage stage = (Stage) carteMagasin.getScene().getWindow();
                 controleur.allerStockMagasin(stage);
             });

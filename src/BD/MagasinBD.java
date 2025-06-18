@@ -167,7 +167,7 @@ public class MagasinBD {
 		}
 	}
 
-	public Map<Livre, Integer> listeLivreUnMagasin(long id) throws SQLException {
+	public Map<Livre, Integer> listeLivreUnMagasin(int id) throws SQLException {
 		String requete = "SELECT DISTINCT isbn, titre, datepubli, prix, nbpages, qte, idmag FROM LIVRE NATURAL JOIN POSSEDER WHERE idmag = ?";
 
 		try (PreparedStatement ps = laConnexion.prepareStatement(requete)) {
