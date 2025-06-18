@@ -2,7 +2,9 @@ package IHM.Controleur;
 
 import BD.ConnexionMySQL;
 import BD.ClientBD;
-import IHM.FenetreMagasins;
+
+//caca
+import IHM.FenetreMagasinsadm;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -31,7 +33,8 @@ public class ControleurSeConnecter {
 
                 if (!infos.isEmpty() && infos.get("mdpC").equals(mdpEntre)) {
                     Stage stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
-                    FenetreMagasins.afficher(stage, connexionMySQL);
+
+                    FenetreMagasinsadm.afficher(stage, connexionMySQL);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Erreur de connexion");
