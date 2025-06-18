@@ -138,11 +138,11 @@ public class MagasinBD {
 	PreparedStatement ps = this.laConnexion.prepareStatement("insert into MAGASIN values (?,?,?,?,?)");
 
 	int numMagasin = this.maxNumMagasin() + 1;
-	ps.setString(1, m.getNom());
-	ps.setString(2, m.getAdresse());
-	ps.setInt(3, numMagasin);
-	ps.setDouble(4, m.getNote());
-	ps.setString(5, m.getTel());
+	ps.setInt(1, numMagasin);
+	ps.setString(2, m.getNom());
+	ps.setString(3, m.getAdresse());
+	ps.setString(4, m.getTel());
+	ps.setDouble(5, m.getNote());
 	ps.executeUpdate();
 
 	return numMagasin;
