@@ -33,7 +33,7 @@ public class Livre {
     private List<Integer> editeur;
 
     /** Liste des auteurs du livre. */
-    private List<String> auteur;
+    private Auteur auteur;
 
     /** Liste des magasins où le livre est disponible. */
     private List<Magasin> magasins;
@@ -51,7 +51,7 @@ public class Livre {
      * @param auteur              liste des auteurs
      */
     public Livre(long id, String nomLivre, String dateDePublication, double prix, int nbPage,
-            List<String> classifications, List<Integer> editeur, List<String> auteur) {
+            List<String> classifications, List<Integer> editeur, Auteur auteur) {
         this.idLivre = id;
         this.nomLivre = nomLivre;
         this.dateDePublication = dateDePublication;
@@ -68,7 +68,7 @@ public class Livre {
      *
      * @return liste des auteurs
      */
-    public List<String> getAuteur() {
+    public Auteur getAuteur() {
         return this.auteur;
     }
 

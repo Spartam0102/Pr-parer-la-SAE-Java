@@ -77,7 +77,7 @@ public class FenetreMagasins extends Application {
 
         boutonPanier.setOnAction(e -> {
             Stage stage = (Stage) boutonPanier.getScene().getWindow();
-            ControleurPanier.allerStock(stage);
+            ControleurPanier.allerStock(stage, client, magasinBD.getConnexion());
         });
 
         VBox conteneurDroit = new VBox(boutons);
