@@ -3,22 +3,24 @@ package IHM;
 import IHM.Controleur.ControleurHome;
 
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import BD.*;
 import Java.*;
 
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 
 public class FenetreStock extends Application {
 
@@ -26,17 +28,12 @@ public class FenetreStock extends Application {
     private Button boutonSettings;
     private Button boutonPanier;
     private Button boutonRetour;
-
     private MagasinBD magasinBD;
+    private Magasin magasin;
 
-    // Champs statiques pour transmettre connexion et magasin
-    private static ConnexionMySQL connexionStatic;
-    private static Magasin magasinStatic;
-
-    // Constructeur sans argument requis par JavaFX
-    public FenetreStock(ConnexionMySQL connexion, Magasin magasin) {
-        connexionStatic = connexion;
-        magasinStatic = magasin;
+    public FenetreStock(ConnexionMySQL connexionMySQL, Magasin magasin){
+        this.magasinBD = new MagasinBD(connexionMySQL);
+        this.magasin = magasin;
     }
 
     private Pane titre() {
@@ -54,10 +51,10 @@ public class FenetreStock extends Application {
             iv.setFitWidth(30);
         }
 
-        boutonHome = new Button("", homeView);
-        boutonSettings = new Button("", settingsView);
-        boutonPanier = new Button("", panierView);
-        boutonRetour = new Button("", retourView);
+        this.boutonHome = new Button("", homeView);
+        this.boutonSettings = new Button("", settingsView);
+        this.boutonPanier = new Button("", panierView);
+        this.boutonRetour = new Button("", retourView);
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
@@ -75,8 +72,6 @@ public class FenetreStock extends Application {
             ControleurHome.allerAccueil(stage);
         });
 
-        // TODO : ajouter action boutonSettings, boutonPanier, boutonRetour
-
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
         conteneurDroit.setPadding(new Insets(10));
@@ -89,106 +84,95 @@ public class FenetreStock extends Application {
         return banniere;
     }
 
-    @Override
+   @Override
     public void start(Stage primaryStage) throws SQLException {
-        magasinBD = new MagasinBD(connexionStatic);
-
         BorderPane root = new BorderPane();
 
         Pane banniere = titre();
         root.setTop(banniere);
 
-        GridPane cadre = new GridPane();
-        cadre.setStyle("-fx-background-color: #206db8;");
-        cadre.setPadding(new Insets(30));
-        cadre.setHgap(20);
-        cadre.setVgap(20);
-        root.setCenter(cadre);
+        VBox cadreGrand = new VBox();
+        cadreGrand.setStyle(" -fx-background-color: #206db8;");
+        cadreGrand.setSpacing(20);
+        cadreGrand.setAlignment(Pos.CENTER);
 
-        // Colonnes de largeur égale (3 colonnes)
-        for (int i = 0; i < 3; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setHgrow(Priority.ALWAYS);
-            colConst.setFillWidth(true);
-            colConst.setPercentWidth(33.33);
-            cadre.getColumnConstraints().add(colConst);
-        }
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(cadreGrand);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+        root.setCenter(scrollPane);
 
-        Map<Livre, Integer> listeLivres = magasinStatic.getStockLivre();
-        int i = -1;
+        GridPane grilleLivres = new GridPane();
+        grilleLivres.setStyle("-fx-background-color: white; -fx-background-radius: 20px 20px 0 0; -fx-border-radius: 20px 20px 0 0;");
+        cadreGrand.setPadding(new Insets(70, 70, 0, 70));
+        grilleLivres.setHgap(30);
+        grilleLivres.setVgap(30);
+        grilleLivres.setAlignment(Pos.CENTER);
+        cadreGrand.getChildren().add(grilleLivres);
+        grilleLivres.setPadding(new Insets(20));
+
+        Text titreMag = new Text(magasin.getNom());
+        titreMag.setStyle("-fx-font-size: 45px; -fx-font-weight: bold;");
+        grilleLivres.add(titreMag, 1, 0);
+        GridPane.setHalignment(titreMag, HPos.CENTER);
+
+        Map<Livre, Integer> listeLivres = magasinBD.listeLivreUnMagasin(this.magasin.getIdMagasin());
+
+        int i = 3;
         for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
-            i++;
             Livre livre = entry.getKey();
             Integer quantite = entry.getValue();
 
-            VBox caseInfo = new VBox(5);
-            caseInfo.setPadding(new Insets(10));
-            caseInfo.setStyle(
-                    "-fx-background-color: white; -fx-border-color: black; -fx-border-radius: 5; -fx-background-radius: 5;");
+            VBox carte = new VBox(10);
+            carte.setPrefWidth(280);
+            carte.setPadding(new Insets(10));
+            carte.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+            carte.setAlignment(Pos.TOP_LEFT);
+            GridPane.setMargin(carte, new Insets(5, 0, 5, 0));
 
-            Text nomLivre = new Text(livre.getNomLivre());
-            HBox detail = new HBox(20);
-            detail.setAlignment(Pos.CENTER_LEFT);
+            Text titre = new Text(livre.getNomLivre());
+            titre.setWrappingWidth(400);
+            titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            VBox gauche = new VBox(5);
-            Text texteAuteur = new Text(); 
-
-            List<String> auteurs = livre.getAuteur();
-            String auteursString = String.join(", ", auteurs);
-            texteAuteur.setText(auteursString);
-
+            Text auteur = new Text("Claire Dubois");
             HBox stock = new HBox(5);
-            if (quantite <= 0) {
-                ImageView croix = new ImageView(new Image("file:./img/croix.jpeg"));
-                croix.setFitHeight(20);
-                croix.setPreserveRatio(true);
-                Text indisponible = new Text("Livre non disponible");
-                stock.getChildren().addAll(croix, indisponible);
-            } else {
-                ImageView boite = new ImageView(new Image("file:./img/stock_icon.jpeg"));
-                boite.setFitHeight(20);
-                boite.setPreserveRatio(true);
-                Text nbStock = new Text(quantite + " en stock");
-                stock.getChildren().addAll(boite, nbStock);
-            }
-            gauche.getChildren().addAll(texteAuteur, stock);
+            ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
+            iconeStock.setFitHeight(22);
+            iconeStock.setFitWidth(22);
 
-            VBox droite = new VBox(5);
-            Text prix = new Text(livre.getPrix() + " €");
+            Text stockText = new Text(quantite + (quantite <= 1 ? " en stock" : " en stock"));
+            stock.getChildren().addAll(iconeStock, stockText);
+
+            VBox infos = new VBox(5, auteur, stock);
+
+            VBox droite = new VBox(8);
+            droite.setAlignment(Pos.CENTER_RIGHT);
+            Text prix = new Text(String.format("%.2f €", livre.getPrix()));
+            prix.setStyle("-fx-font-weight: bold;");
+
             Button bouton = new Button("Ajouter au panier");
+            bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
+                " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
+
             droite.getChildren().addAll(prix, bouton);
 
-            bouton.setOnAction(e -> {
-                System.out.println("Ajout au panier : " + livre.getNomLivre());
-                // TODO : ajouter la logique pour ajouter au panier
-            });
+            BorderPane ligne = new BorderPane();
+            ligne.setLeft(infos);
+            ligne.setRight(droite);
 
-            detail.getChildren().addAll(gauche, droite);
-            caseInfo.getChildren().addAll(nomLivre, detail);
+            carte.getChildren().addAll(titre, ligne);
 
             int col = i % 3;
             int row = i / 3;
-            cadre.add(caseInfo, col, row);
+            grilleLivres.add(carte, col, row);
+            i++;
         }
-
-        Scene scene = new Scene(root, 1200, 750);
-        primaryStage.setTitle("Fenêtre Magasin client");
+        Scene scene = new Scene(root, 1500, 750);
+        primaryStage.setTitle("Fenêtre Magasin Client");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    /**
-     * Méthode statique pour afficher la fenêtre, en initialisant les variables
-     * nécessaires.
-     * 
-     * @throws SQLException
-     */
-    public static void afficher(Stage stage, Magasin magasinSelectionne, ConnexionMySQL connexion) throws SQLException {
-        connexionStatic = connexion;
-        magasinStatic = magasinSelectionne;
-        FenetreStock fenetre = new FenetreStock(connexion, magasinSelectionne);
-        fenetre.start(stage);
-    }
 
     public static void main(String[] args) {
         launch(args);

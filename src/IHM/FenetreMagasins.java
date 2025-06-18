@@ -202,6 +202,7 @@ public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur) {
                     magasinSelectionne);
 
             carteMagasin.setOnMouseClicked(event -> {
+
     System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
     Stage stage = (Stage) carteMagasin.getScene().getWindow();
 
