@@ -33,11 +33,10 @@ public class FenetreMagasins extends Application {
 
     private boolean estVendeur;
 
-public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur) {
-    this.magasinBD = new MagasinBD(connexionMySQL);
-    this.estVendeur = estVendeur;
-}
-
+    public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur) {
+        this.magasinBD = new MagasinBD(connexionMySQL);
+        this.estVendeur = estVendeur;
+    }
 
     private Pane titre() {
         ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
@@ -203,21 +202,15 @@ public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur) {
 
             carteMagasin.setOnMouseClicked(event -> {
 
-    System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
-    Stage stage = (Stage) carteMagasin.getScene().getWindow();
+                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
+                Stage stage = (Stage) carteMagasin.getScene().getWindow();
 
-    if (estVendeur) {
-        FenetreMagasinVendeur.afficher(stage, magasinBD.getConnexion());
-    } else {
-        try {
-            FenetreStock.afficher(stage, magasinSelectionne, magasinBD.getConnexion());
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-});
-
+                if (estVendeur) {
+                    FenetreMagasinVendeur.afficher(stage, magasinBD.getConnexion());
+                } else {
+                    FenetreStock.afficher(stage, magasinBD.getConnexion(), magasinSelectionne);
+                }
+            });
 
         }
 
@@ -228,13 +221,12 @@ public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur) {
     }
 
     public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, boolean estVendeur) {
-    try {
-        FenetreMagasins fm = new FenetreMagasins(connexionMySQL, estVendeur);
-        fm.start(stage);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            FenetreMagasins fm = new FenetreMagasins(connexionMySQL, estVendeur);
+            fm.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
-
 
 }

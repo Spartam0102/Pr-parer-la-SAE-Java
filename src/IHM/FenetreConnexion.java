@@ -303,6 +303,9 @@ public class FenetreConnexion extends Application {
             String adresse = adresseField.getText().trim();
             String mdp = mdpField.getText();
 
+            
+
+
             if (nom.isEmpty() || prenom.isEmpty() || adresse.isEmpty() || mdp.isEmpty()) {
                 message.setText("Tous les champs doivent être remplis !");
                 return;

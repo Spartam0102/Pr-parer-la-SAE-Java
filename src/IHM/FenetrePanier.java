@@ -35,7 +35,7 @@ public class FenetrePanier extends Application {
         racine.setTop(this.titre());
         this.panelCentral = fenetrePanier();
         racine.setCenter(this.panelCentral);
-        Scene scene = new Scene(racine, 1200, 750);
+        Scene scene = new Scene(racine, 1500, 750);
         return scene;
     }
 
@@ -186,6 +186,7 @@ public class FenetrePanier extends Application {
         HBox.setHgrow(recapWrapper, Priority.ALWAYS);
 
         recapWrapper.heightProperty().addListener((obs, oldVal, newVal) -> {
+            scrollPane.prefHeightProperty().unbind(); //
             scrollPane.setPrefHeight(newVal.doubleValue());
         });
 
