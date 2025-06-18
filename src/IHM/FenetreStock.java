@@ -112,7 +112,8 @@ public class FenetreStock extends Application {
         grilleLivres.setPadding(new Insets(20));
 
         Text titreMag = new Text(magasin.getNom());
-        titreMag.setStyle("-fx-font-size: 45px; -fx-font-weight: bold;");
+        titreMag.setStyle("-fx-font-size: 35px; -fx-font-weight: bold;");
+        titreMag.setWrappingWidth(400);
         grilleLivres.add(titreMag, 1, 0);
         GridPane.setHalignment(titreMag, HPos.CENTER);
 
@@ -171,6 +172,15 @@ public class FenetreStock extends Application {
         primaryStage.setTitle("Fenêtre Magasin Client");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Magasin magasin) {
+        try {
+            FenetreStock fs = new FenetreStock(connexionMySQL, magasin);
+            fs.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
