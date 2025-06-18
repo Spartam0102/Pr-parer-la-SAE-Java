@@ -119,34 +119,50 @@ public class FenetrePanier extends Application {
         VBox ensembleLivresCommand = new VBox();
         ensembleLivresCommand.setStyle("-fx-background-color: white;");
         for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
-            VBox unLivreCommand = new VBox();
-            unLivreCommand.setPadding(new Insets(20));
+    VBox unLivreCommand = new VBox();
+    unLivreCommand.setPadding(new Insets(20));
 
-            Text nomLivre = new Text(couple.getKey().getNomLivre());
-            nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
-            Text quantite = new Text("     x" + couple.getValue());
-            quantite.setStyle("-fx-font-size: 15px");
-            HBox ligneLivre = new HBox();
-            ligneLivre.setAlignment(Pos.BOTTOM_LEFT);
-            ligneLivre.getChildren().addAll(nomLivre, quantite);
+    // Chargement de l’image à partir de l’ISBN
+    long isbn = couple.getKey().getIdLivre();
+    Image imageLivre;
+    try {
+        String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+        imageLivre = new Image(url, 100, 140, true, true); // largeur 100px, hauteur 140px, préserve ratio
+    } catch (Exception e) {
+        imageLivre = new Image("file:img/placeholder.png", 100, 140, true, true);
+    }
+    ImageView imageView = new ImageView(imageLivre);
 
-            Text nomAuteur = new Text(
-                    // couple.getKey().getAuteur().getPrenom() + " " + couple.getKey().getAuteur().getNom());
-                    "claude Dubois");
-            
-            Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));            HBox prixBox = new HBox(prixText);
-            prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-            prixBox.setAlignment(Pos.CENTER_RIGHT);
+    // Texte titre + quantité dans un VBox
+    Text nomLivre = new Text(couple.getKey().getNomLivre());
+    nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
+    Text quantite = new Text("     x" + couple.getValue());
+    quantite.setStyle("-fx-font-size: 15px");
 
-            Separator barre = new Separator();
-            barre.setPrefHeight(1);
-            barre.setOpacity(0.5);
+    VBox texteVBox = new VBox(nomLivre, quantite);
+    texteVBox.setAlignment(Pos.CENTER_LEFT);
+    texteVBox.setSpacing(5);
 
-            ensembleLivresCommand.getChildren().add(barre);
+    // Mettre image et texte côte à côte
+    HBox ligneLivre = new HBox(10, imageView, texteVBox);
+    ligneLivre.setAlignment(Pos.CENTER_LEFT);
 
-            unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
-            ensembleLivresCommand.getChildren().add(unLivreCommand);
-        }
+    Text nomAuteur = new Text("Claude Dubois");
+    Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
+    HBox prixBox = new HBox(prixText);
+    prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+    prixBox.setAlignment(Pos.CENTER_RIGHT);
+
+    Separator barre = new Separator();
+    barre.setPrefHeight(1);
+    barre.setOpacity(0.5);
+
+    ensembleLivresCommand.getChildren().add(barre);
+
+    unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
+    ensembleLivresCommand.getChildren().add(unLivreCommand);
+}
+
 
         scrollPane.setContent(ensembleLivresCommand);
 
