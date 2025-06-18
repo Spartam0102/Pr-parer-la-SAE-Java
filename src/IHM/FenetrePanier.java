@@ -94,61 +94,88 @@ public class FenetrePanier extends Application {
         return banniere;
     }
 
-    private VBox fenetrePanier() {
-        VBox containerVertical = new VBox();
-        containerVertical.setPadding(new Insets(20));
-        containerVertical.setSpacing(10);
 
-        HBox conteneur = new HBox(20);
-        conteneur.setPadding(new Insets(20));
-        conteneur.setStyle("-fx-background-color: #2073c4;");
-        HBox.setHgrow(conteneur, Priority.ALWAYS);
+   private VBox fenetrePanier() {
+    VBox containerVertical = new VBox();
+    containerVertical.setPadding(new Insets(20));
+    containerVertical.setSpacing(10);
 
-        VBox listeLivres = new VBox(10);
-        listeLivres.setPadding(new Insets(10));
-        listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-        listeLivres.setPrefWidth(400);
+    HBox conteneur = new HBox(20);
+    conteneur.setPadding(new Insets(20));
+    conteneur.setStyle("-fx-background-color: #2073c4;");
+    HBox.setHgrow(conteneur, Priority.ALWAYS);
 
-        ScrollPane scrollPane = new ScrollPane(listeLivres);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background: transparent;");
-        scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
-        scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
-        HBox.setHgrow(scrollPane, Priority.ALWAYS);
+    VBox listeLivres = new VBox(10);
+    listeLivres.setPadding(new Insets(10));
+    listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+    listeLivres.setPrefWidth(400);
 
-        VBox ensembleLivresCommand = new VBox();
-        ensembleLivresCommand.setStyle("-fx-background-color: white;");
-        for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
-            VBox unLivreCommand = new VBox(); 
-            unLivreCommand.setPadding(new Insets(20));
+    ScrollPane scrollPane = new ScrollPane(listeLivres);
+    scrollPane.setFitToWidth(true);
+    scrollPane.setStyle("-fx-background: transparent;");
+    scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
+    scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
+    HBox.setHgrow(scrollPane, Priority.ALWAYS);
 
-            Text nomLivre = new Text(couple.getKey().getNomLivre());
-            nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
-            Text quantite = new Text("     x" + couple.getValue());
-            quantite.setStyle("-fx-font-size: 15px");
-            HBox ligneLivre = new HBox();
-            ligneLivre.setAlignment(Pos.BOTTOM_LEFT);
-            ligneLivre.getChildren().addAll(nomLivre, quantite);
+    VBox ensembleLivresCommand = new VBox();
+    ensembleLivresCommand.setStyle("-fx-background-color: white;");
+    
+    // Image placeholder locale
+    Image placeholder = new Image("file:img/placeholder.png", 100, 140, true, true);
 
-            Text nomAuteur = new Text(
-                    // couple.getKey().getAuteur().getPrenom() + " " + couple.getKey().getAuteur().getNom());
-                    "claude Dubois");
-            
-            Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));            HBox prixBox = new HBox(prixText);
-            prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-            prixBox.setAlignment(Pos.CENTER_RIGHT);
+    for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
+        VBox unLivreCommand = new VBox();
+        unLivreCommand.setPadding(new Insets(20));
 
-            Separator barre = new Separator();
-            barre.setPrefHeight(1);
-            barre.setOpacity(0.5);
+        long isbn = couple.getKey().getIdLivre();
+        ImageView imageView = new ImageView(placeholder); // placeholder immédiat
 
-            ensembleLivresCommand.getChildren().add(barre);
+        try {
+            String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+            Image imageLivre = new Image(url, 100, 140, true, true, true); // chargement en arrière-plan
 
-            unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
-            ensembleLivresCommand.getChildren().add(unLivreCommand);
+            // Quand l'image est chargée, on remplace le placeholder
+            imageLivre.progressProperty().addListener((obs, oldProgress, newProgress) -> {
+                if (newProgress.doubleValue() >= 1.0) {
+                    imageView.setImage(imageLivre);
+                }
+            });
+
+        } catch (Exception e) {
+            // Si erreur, garder le placeholder
+
         }
 
-        scrollPane.setContent(ensembleLivresCommand);
+        // Texte titre + quantité dans un VBox
+        Text nomLivre = new Text(couple.getKey().getNomLivre());
+        nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
+        Text quantite = new Text("     x" + couple.getValue());
+        quantite.setStyle("-fx-font-size: 15px");
+
+        VBox texteVBox = new VBox(nomLivre, quantite);
+        texteVBox.setAlignment(Pos.CENTER_LEFT);
+        texteVBox.setSpacing(5);
+
+        HBox ligneLivre = new HBox(10, imageView, texteVBox);
+        ligneLivre.setAlignment(Pos.CENTER_LEFT);
+
+        Text nomAuteur = new Text("Claude Dubois");
+        Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
+        HBox prixBox = new HBox(prixText);
+        prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        prixBox.setAlignment(Pos.CENTER_RIGHT);
+
+        Separator barre = new Separator();
+        barre.setPrefHeight(1);
+        barre.setOpacity(0.5);
+
+        ensembleLivresCommand.getChildren().add(barre);
+
+        unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
+        ensembleLivresCommand.getChildren().add(unLivreCommand);
+    }
+
+    scrollPane.setContent(ensembleLivresCommand);
 
         VBox recap = new VBox(20);
         recap.setPrefWidth(300);

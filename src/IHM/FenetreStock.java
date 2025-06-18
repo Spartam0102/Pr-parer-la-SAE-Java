@@ -41,7 +41,12 @@ public class FenetreStock extends Application {
     private MagasinBD magasinBD;
     private Magasin magasin;
     private Timeline timelineDefilante;
+
     private int indexLigne = 0; 
+
+    private Scene scene;
+    private String isbn;
+
 
     public FenetreStock(ConnexionMySQL connexionMySQL, Magasin magasin) {
         this.magasinBD = new MagasinBD(connexionMySQL);
@@ -138,8 +143,44 @@ public class FenetreStock extends Application {
         timelineDefilante.stop();
     }
 
+    setupBanniereDefilante(test, recommandations, largeurScene);
+
+    final int nbColonnes = 3;
+    double largeurCarte = (largeurScene - (nbColonnes - 1) * grilleLivres.getHgap() - cadreGrand.getPadding().getLeft() - cadreGrand.getPadding().getRight()) / nbColonnes;
+    largeurCarte = Math.min(Math.max(largeurCarte, 200), 350);
+
+    for (javafx.scene.Node node : grilleLivres.getChildren()) {
+        if (node instanceof VBox) {
+            ((VBox) node).setPrefWidth(largeurCarte);
+        }
+    }
+}
+
+
+@Override
+public void start(Stage primaryStage) throws SQLException {
+    BorderPane root = new BorderPane();
+
+    Pane banniere = titre();
+    root.setTop(banniere);
+
+    VBox cadreGrand = new VBox();
+    cadreGrand.setStyle(" -fx-background-color: #206db8;");
+    cadreGrand.setSpacing(20);
+    cadreGrand.setAlignment(Pos.CENTER);
+
+    VBox ensemble = new VBox();
+
+    VBox test = new VBox();
+    test.setStyle("-fx-background-color: rgb(236,18,225);");
+    test.setPrefHeight(40);
+
+    ensemble.getChildren().addAll(test, cadreGrand);
+
+
     // Timeline d’attente que la largeur soit calculée
     Timeline[] attenteLayout = new Timeline[1];
+
 
     attenteLayout[0] = new Timeline(new KeyFrame(Duration.millis(50), e -> {
         double width = hbox.getWidth();
@@ -154,6 +195,23 @@ public class FenetreStock extends Application {
                 double x = hbox.getTranslateX();
                 x -= 2; // vitesse de défilement
 
+    Scene scene = new Scene(root, 1200, 750);
+    primaryStage.setTitle("Fenêtre Magasin Client");
+    primaryStage.setScene(scene);
+
+    List<String> recommandations = getRecommandations();
+    setupBanniereDefilante(test, recommandations, scene.getWidth());
+
+    GridPane grilleLivres = new GridPane();
+    grilleLivres.setStyle("-fx-background-color: white; -fx-background-radius: 20px 20px 0 0; -fx-border-radius: 20px 20px 0 0;");
+    cadreGrand.setPadding(new Insets(20, 50, 0, 50));
+    grilleLivres.setHgap(30);
+    grilleLivres.setVgap(30);
+    grilleLivres.setAlignment(Pos.CENTER);
+    cadreGrand.getChildren().addAll(grilleLivres);
+    grilleLivres.setPadding(new Insets(20));
+
+
                 if (x <= -totalWidth) {
                     x = 0;
                 }
@@ -163,6 +221,7 @@ public class FenetreStock extends Application {
             timelineDefilante.setCycleCount(Timeline.INDEFINITE);
             timelineDefilante.play();
 
+
             // Stopper la timeline d’attente
             attenteLayout[0].stop();
         } else {
@@ -171,9 +230,62 @@ public class FenetreStock extends Application {
         }
     }));
 
+    final int nbColonnes = 3;
+    int i = 0;
+    for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
+        Livre livre = entry.getKey();
+        Integer quantite = entry.getValue();
+
+        long isbn = livre.getIdLivre();  // Assure-toi qu’il n’est pas null ou vide
+
+        Image imageLivre;
+        try {
+            String imageUrl = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+            imageLivre = new Image(imageUrl, true);
+        } catch (Exception e) {
+            imageLivre = new Image("file:img/placeholder.png");
+        }
+
+        ImageView imageView = new ImageView(imageLivre);
+        imageView.setFitHeight(140);
+        imageView.setPreserveRatio(true);
+
+        VBox carte = new VBox(10);
+        carte.setPadding(new Insets(10));
+        carte.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+        carte.setAlignment(Pos.TOP_LEFT);
+        carte.setPrefWidth(300);  // Valeur par défaut, ajustée plus bas
+        GridPane.setMargin(carte, new Insets(5, 0, 5, 0));
+
+        Text titre = new Text(livre.getNomLivre());
+        titre.setWrappingWidth(400);
+        titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        Text auteur = new Text("Claire Dubois");
+
+        HBox stock = new HBox(5);
+        ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
+        iconeStock.setFitHeight(22);
+        iconeStock.setFitWidth(22);
+        Text stockText = new Text(quantite + (quantite <= 1 ? " en stock" : " en stock"));
+        stock.getChildren().addAll(iconeStock, stockText);
+
+        VBox infos = new VBox(5, auteur, stock);
+
+        VBox droite = new VBox(8);
+        droite.setAlignment(Pos.CENTER_RIGHT);
+        Text prix = new Text(String.format("%.2f €", livre.getPrix()));
+        prix.setStyle("-fx-font-weight: bold;");
+        Button bouton = new Button("Ajouter au panier");
+        bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
+                " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
+        droite.getChildren().addAll(prix, bouton);
+
+
     attenteLayout[0].setCycleCount(1);
     attenteLayout[0].play();
 }
+
 
 
     private void ajusterLargeur(Scene scene, VBox test, List<String> recommandations, GridPane grilleLivres,
@@ -318,6 +430,22 @@ public class FenetreStock extends Application {
             double largeurCarte = (largeurScene - (nbColonnes - 1) * grilleLivres.getHgap()
                     - cadreGrand.getPadding().getLeft() - cadreGrand.getPadding().getRight()) / nbColonnes;
             largeurCarte = Math.min(Math.max(largeurCarte, 200), 350);
+
+        carte.getChildren().addAll(imageView, titre, ligne);
+
+        int col = i % nbColonnes;
+        int row = i / nbColonnes + 1;
+        grilleLivres.add(carte, col, row);
+        i++;
+    }
+
+    scene.widthProperty().addListener((obs, oldVal, newVal) -> {
+        ajusterLargeur(scene, test, recommandations, grilleLivres, cadreGrand);
+    });
+
+    // Forcer l’ajustement une première fois
+    ajusterLargeur(scene, test, recommandations, grilleLivres, cadreGrand);
+
 
             for (javafx.scene.Node node : grilleLivres.getChildren()) {
                 if (node instanceof VBox) {
