@@ -1,6 +1,5 @@
 package IHM;
 
-
 import IHM.Controleur.ControleurCarteMagasin;
 
 import IHM.Controleur.ControleurHome;
@@ -109,7 +108,7 @@ public class FenetreMagasins extends Application {
         scrollPane.setStyle("-fx-background: transparent;");
         scrollPane.prefHeightProperty().bind(root.heightProperty().multiply(1));
         scrollPane.maxHeightProperty().bind(root.heightProperty().multiply(1));
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Optionnel : empêche le scroll horizontal
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
 
         root.setCenter(scrollPane);
 
@@ -128,12 +127,22 @@ public class FenetreMagasins extends Application {
             ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
             image.setFitHeight(130);
             image.setPreserveRatio(true);
-            Pane conteneurImage = new Pane(image);
+
+            VBox conteneurImage = new VBox(image);
+            conteneurImage.setAlignment(Pos.CENTER_LEFT);
+            conteneurImage.setMinWidth(150);
+            conteneurImage.setMaxWidth(150);
             PaneMagasin.setLeft(conteneurImage);
             BorderPane.setMargin(conteneurImage, new Insets(7, 16, 7, 7));
 
             VBox DescriptionMagasin = new VBox();
             DescriptionMagasin.setAlignment(Pos.CENTER_LEFT);
+            DescriptionMagasin.setPadding(new Insets(0, 10, 0, 10));
+            DescriptionMagasin.setMaxWidth(Double.MAX_VALUE);
+
+            image.setFitHeight(130);
+            image.setPreserveRatio(true);
+            image.setSmooth(true);
 
             Text nomMagasin = new Text(listeMagasins.get(i).getNom());
             nomMagasin.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
@@ -150,7 +159,7 @@ public class FenetreMagasins extends Application {
             HBox boxTel = new HBox();
             Text tel = new Text(listeMagasins.get(i).getTel());
             tel.setStyle("-fx-font-size: 15px;");
-            ImageView telephone = new ImageView(new Image("file:./img/phone_icon.jpg"));
+            ImageView telephone = new ImageView(new Image("file:./img/phone.png"));
             telephone.setFitHeight(20);
             telephone.setPreserveRatio(true);
             boxTel.getChildren().addAll(telephone, tel);
@@ -163,7 +172,7 @@ public class FenetreMagasins extends Application {
             HBox boxMap = new HBox();
             Text adresse = new Text(listeMagasins.get(i).getAdresse());
             adresse.setStyle("-fx-font-size: 15px;");
-            ImageView map = new ImageView(new Image("file:./img/map_icon.jpg"));
+            ImageView map = new ImageView(new Image("file:./img/map.png"));
             map.setFitHeight(20);
             map.setPreserveRatio(true);
             boxMap.getChildren().addAll(map, adresse);

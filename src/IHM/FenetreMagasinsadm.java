@@ -106,7 +106,7 @@ public class FenetreMagasinsadm extends Application {
         scrollPane.setStyle("-fx-background: transparent;");
         scrollPane.prefHeightProperty().bind(root.heightProperty().multiply(1));
         scrollPane.maxHeightProperty().bind(root.heightProperty().multiply(1));
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Optionnel : empêche le scroll horizontal
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
 
         root.setCenter(scrollPane);
 
@@ -119,85 +119,88 @@ public class FenetreMagasinsadm extends Application {
 
         }
 
-        List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
-        for (int i = 0; i < listeMagasins.size(); i++) {
-            BorderPane PaneMagasin = new BorderPane();
+       List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
+for (int i = 0; i < listeMagasins.size(); i++) {
+    BorderPane carte = new BorderPane();
 
-            ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
-            image.setFitHeight(130);
-            image.setPreserveRatio(true);
-            Pane conteneurImage = new Pane(image);
-            PaneMagasin.setLeft(conteneurImage);
-            BorderPane.setMargin(conteneurImage, new Insets(7, 16, 7, 7));
+   
+    ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
+    image.setFitHeight(130);
+    image.setPreserveRatio(true);
+    VBox boxImage = new VBox(image);
+    boxImage.setAlignment(Pos.CENTER_LEFT);
+    boxImage.setMinWidth(150);
+    carte.setLeft(boxImage);
+    BorderPane.setMargin(boxImage, new Insets(7, 16, 7, 7));
 
-            VBox DescriptionMagasin = new VBox();
-            DescriptionMagasin.setAlignment(Pos.CENTER_LEFT);
+    
+    VBox description = new VBox();
+    description.setAlignment(Pos.CENTER_LEFT);
+    description.setSpacing(17);
 
-            Text nomMagasin = new Text(listeMagasins.get(i).getNom());
-            nomMagasin.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-            VBox.setMargin(nomMagasin, new Insets(5, 0, 0, 0));
+    Text nom = new Text(listeMagasins.get(i).getNom());
+    nom.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+    VBox.setMargin(nom, new Insets(5, 0, 0, 0));
 
-            HBox boxNote = new HBox();
-            Text note = new Text(Double.toString(listeMagasins.get(i).getNote()));
-            note.setStyle("-fx-font-size: 15px;");
-            ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
-            etoile.setFitHeight(16);
-            etoile.setPreserveRatio(true);
-            boxNote.getChildren().addAll(note, etoile);
+    HBox noteBox = new HBox();
+    noteBox.setSpacing(5);
+    Text note = new Text(String.valueOf(listeMagasins.get(i).getNote()));
+    note.setStyle("-fx-font-size: 15px;");
+    ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
+    etoile.setFitHeight(16);
+    etoile.setPreserveRatio(true);
+    noteBox.getChildren().addAll(note, etoile);
 
-            HBox boxTel = new HBox();
-            Text tel = new Text(listeMagasins.get(i).getTel());
-            tel.setStyle("-fx-font-size: 15px;");
-            ImageView telephone = new ImageView(new Image("file:./img/phone_icon.jpg"));
-            telephone.setFitHeight(20);
-            telephone.setPreserveRatio(true);
-            boxTel.getChildren().addAll(telephone, tel);
+    HBox telBox = new HBox();
+    telBox.setSpacing(5);
+    Text tel = new Text(listeMagasins.get(i).getTel());
+    tel.setStyle("-fx-font-size: 15px;");
+    ImageView phone = new ImageView(new Image("file:./img/phone.png"));
+    phone.setFitHeight(20);
+    phone.setPreserveRatio(true);
+    telBox.getChildren().addAll(phone, tel);
 
-            DescriptionMagasin.setAlignment(Pos.TOP_LEFT);
-            DescriptionMagasin.setSpacing(17);
-            DescriptionMagasin.getChildren().addAll(nomMagasin, boxNote, boxTel);
-            PaneMagasin.setCenter(DescriptionMagasin);
+    description.getChildren().addAll(nom, noteBox, telBox);
+    carte.setCenter(description);
 
-            HBox boxMap = new HBox();
-            Text adresse = new Text(listeMagasins.get(i).getAdresse());
-            adresse.setStyle("-fx-font-size: 15px;");
-            ImageView map = new ImageView(new Image("file:./img/map_icon.jpg"));
-            map.setFitHeight(20);
-            map.setPreserveRatio(true);
-            boxMap.getChildren().addAll(map, adresse);
+  
+    HBox adresseBox = new HBox();
+    adresseBox.setSpacing(5);
+    Text adresse = new Text(listeMagasins.get(i).getAdresse());
+    adresse.setStyle("-fx-font-size: 15px;");
+    ImageView map = new ImageView(new Image("file:./img/map.png"));
+    map.setFitHeight(20);
+    map.setPreserveRatio(true);
+    adresseBox.getChildren().addAll(map, adresse);
+    carte.setBottom(adresseBox);
 
-            PaneMagasin.setBottom(boxMap);
+    
+    VBox conteneurCarte = new VBox();
+    conteneurCarte.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
+    conteneurCarte.setPadding(new Insets(10));
+    conteneurCarte.setSpacing(10);
+    conteneurCarte.getChildren().add(carte);
 
-            VBox carteMagasin = new VBox();
-            carteMagasin.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
-            carteMagasin.setPadding(new Insets(10));
-            carteMagasin.setSpacing(10);
+    int col = i % 3;
+    int row = i / 3;
 
-            carteMagasin.getChildren().add(PaneMagasin);
-            int col = i % 3;
-            int row = i / 3;
+    cadre.add(conteneurCarte, col, row);
+    conteneurCarte.setMaxWidth(Double.MAX_VALUE);
+    GridPane.setHgrow(conteneurCarte, Priority.ALWAYS);
+}
 
-            cadre.add(carteMagasin, col, row);
-
-            carteMagasin.setMaxWidth(Double.MAX_VALUE);
-            GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
-
-        }
 
         VBox magasinPlus = new VBox();
         magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
         magasinPlus.setPadding(new Insets(10));
         magasinPlus.setSpacing(10);
-        magasinPlus.setPrefHeight(180); 
+        magasinPlus.setPrefHeight(180);
         magasinPlus.setAlignment(Pos.CENTER);
 
         ImageView map = new ImageView(new Image("file:./img/plus.png"));
         map.setPreserveRatio(true);
         map.setFitWidth(150);
 
-        Text textemagasinPlus = new Text("Ajouter un magasin");
-        textemagasinPlus.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        magasinPlus.getChildren().add(map);
 
         int i = listeMagasins.size();
         int col = i % 3;
@@ -205,8 +208,6 @@ public class FenetreMagasinsadm extends Application {
 
         cadre.add(magasinPlus, col, row);
         GridPane.setHgrow(magasinPlus, Priority.ALWAYS);
-
-
 
         Scene scene = new Scene(root, 1200, 750);
         primaryStage.setTitle("Fenêtre des magasins");
