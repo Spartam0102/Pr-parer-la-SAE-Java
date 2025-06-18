@@ -94,6 +94,7 @@ public class FenetrePanier extends Application {
         return banniere;
     }
 
+
    private VBox fenetrePanier() {
     VBox containerVertical = new VBox();
     containerVertical.setPadding(new Insets(20));
@@ -142,6 +143,7 @@ public class FenetrePanier extends Application {
 
         } catch (Exception e) {
             // Si erreur, garder le placeholder
+
         }
 
         // Texte titre + quantité dans un VBox
