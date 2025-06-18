@@ -73,7 +73,6 @@ public class FenetreMagasinAdmin extends Application{
             ControleurHome.allerAccueil(stage);
         });
 
-
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
         conteneurDroit.setPadding(new Insets(10));

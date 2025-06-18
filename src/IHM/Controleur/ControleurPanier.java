@@ -1,6 +1,6 @@
 package IHM.Controleur;
 
-import BD.*;
+
 import Java.*;
 import BD.ConnexionMySQL;
 import IHM.FenetrePanier;
