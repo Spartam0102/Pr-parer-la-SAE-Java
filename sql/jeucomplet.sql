@@ -1,3 +1,4 @@
+
 -- les magasins
 INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
   (1, 'La librairie parisienne', '24 Rue de la Tombe-Issoire, 75014 Paris', '06 48 72 35 19', 4.5),
@@ -13,6 +14,14 @@ INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
   (10, 'Le Ch''ti livre', '7 Rue de Paris, 59000 Lille', '03 20 54 78 12', 4.6),
   (11, 'Rhône à lire', '9 Quai Saint-Antoine, 69002 Lyon', '04 78 42 15 37', 4.3),
   (12, 'Loire et livres', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
+
+INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
+  (13, 'Loire et livres', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
+
+INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
+  (14, 'Loire et livres', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
+  INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
+  (15, 'cc', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
 
 
 -- La classification

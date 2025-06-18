@@ -2,6 +2,7 @@ package IHM;
 
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
+import IHM.Controleur.ControleurPlusMagasin;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -116,80 +117,81 @@ public class FenetreMagasinsadm extends Application {
             colConst.setFillWidth(true);
             colConst.setPercentWidth(33.33);
             cadre.getColumnConstraints().add(colConst);
-
         }
 
-       List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
-for (int i = 0; i < listeMagasins.size(); i++) {
-    BorderPane carte = new BorderPane();
+        List<Magasin> listeMagasins = magasinBD.listeDesMagasins();
+        for (int i = 0; i < listeMagasins.size(); i++) {
+            BorderPane carte = new BorderPane();
 
-   
-    ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
-    image.setFitHeight(130);
-    image.setPreserveRatio(true);
-    VBox boxImage = new VBox(image);
-    boxImage.setAlignment(Pos.CENTER_LEFT);
-    boxImage.setMinWidth(150);
-    carte.setLeft(boxImage);
-    BorderPane.setMargin(boxImage, new Insets(7, 16, 7, 7));
+            ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
+            image.setFitHeight(130);
+            image.setPreserveRatio(true);
+            if(i>6){
+            image = new ImageView(new Image("file:./img/image.png"));
+            image.setFitHeight(130);
+            image.setPreserveRatio(true);
 
-    
-    VBox description = new VBox();
-    description.setAlignment(Pos.CENTER_LEFT);
-    description.setSpacing(17);
+            }
+            VBox boxImage = new VBox(image);
+            boxImage.setAlignment(Pos.CENTER_LEFT);
+            boxImage.setMinWidth(150);
+            carte.setLeft(boxImage);
+            BorderPane.setMargin(boxImage, new Insets(7, 16, 7, 7));
 
-    Text nom = new Text(listeMagasins.get(i).getNom());
-    nom.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-    VBox.setMargin(nom, new Insets(5, 0, 0, 0));
+            VBox description = new VBox();
+            description.setAlignment(Pos.CENTER_LEFT);
+            description.setSpacing(17);
 
-    HBox noteBox = new HBox();
-    noteBox.setSpacing(5);
-    Text note = new Text(String.valueOf(listeMagasins.get(i).getNote()));
-    note.setStyle("-fx-font-size: 15px;");
-    ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
-    etoile.setFitHeight(16);
-    etoile.setPreserveRatio(true);
-    noteBox.getChildren().addAll(note, etoile);
+            Text nom = new Text(listeMagasins.get(i).getNom());
+            nom.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+            VBox.setMargin(nom, new Insets(5, 0, 0, 0));
 
-    HBox telBox = new HBox();
-    telBox.setSpacing(5);
-    Text tel = new Text(listeMagasins.get(i).getTel());
-    tel.setStyle("-fx-font-size: 15px;");
-    ImageView phone = new ImageView(new Image("file:./img/phone.png"));
-    phone.setFitHeight(20);
-    phone.setPreserveRatio(true);
-    telBox.getChildren().addAll(phone, tel);
+            HBox noteBox = new HBox();
+            noteBox.setSpacing(5);
+            Text note = new Text(String.valueOf(listeMagasins.get(i).getNote()));
+            note.setStyle("-fx-font-size: 15px;");
+            ImageView etoile = new ImageView(new Image("file:./img/star_icon.png"));
+            etoile.setFitHeight(16);
+            etoile.setPreserveRatio(true);
+            noteBox.getChildren().addAll(note, etoile);
 
-    description.getChildren().addAll(nom, noteBox, telBox);
-    carte.setCenter(description);
+            HBox telBox = new HBox();
+            telBox.setSpacing(5);
+            Text tel = new Text(listeMagasins.get(i).getTel());
+            tel.setStyle("-fx-font-size: 15px;");
+            ImageView phone = new ImageView(new Image("file:./img/phone.png"));
+            phone.setFitHeight(20);
+            phone.setPreserveRatio(true);
+            telBox.getChildren().addAll(phone, tel);
 
-  
-    HBox adresseBox = new HBox();
-    adresseBox.setSpacing(5);
-    Text adresse = new Text(listeMagasins.get(i).getAdresse());
-    adresse.setStyle("-fx-font-size: 15px;");
-    ImageView map = new ImageView(new Image("file:./img/map.png"));
-    map.setFitHeight(20);
-    map.setPreserveRatio(true);
-    adresseBox.getChildren().addAll(map, adresse);
-    carte.setBottom(adresseBox);
+            description.getChildren().addAll(nom, noteBox, telBox);
+            carte.setCenter(description);
 
-    
-    VBox conteneurCarte = new VBox();
-    conteneurCarte.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
-    conteneurCarte.setPadding(new Insets(10));
-    conteneurCarte.setSpacing(10);
-    conteneurCarte.getChildren().add(carte);
+            HBox adresseBox = new HBox();
+            adresseBox.setSpacing(5);
+            Text adresse = new Text(listeMagasins.get(i).getAdresse());
+            adresse.setStyle("-fx-font-size: 15px;");
+            ImageView map = new ImageView(new Image("file:./img/map.png"));
+            map.setFitHeight(20);
+            map.setPreserveRatio(true);
+            adresseBox.getChildren().addAll(map, adresse);
+            carte.setBottom(adresseBox);
 
-    int col = i % 3;
-    int row = i / 3;
+            VBox conteneurCarte = new VBox();
+            conteneurCarte.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
+            conteneurCarte.setPadding(new Insets(10));
+            conteneurCarte.setSpacing(10);
+            conteneurCarte.getChildren().add(carte);
 
-    cadre.add(conteneurCarte, col, row);
-    conteneurCarte.setMaxWidth(Double.MAX_VALUE);
-    GridPane.setHgrow(conteneurCarte, Priority.ALWAYS);
-}
+            int col = i % 3;
+            int row = i / 3;
 
+            cadre.add(conteneurCarte, col, row);
+            conteneurCarte.setMaxWidth(Double.MAX_VALUE);
+            GridPane.setHgrow(conteneurCarte, Priority.ALWAYS);
+        }
 
+        // Création du bouton "Ajouter un magasin" avec l'icône plus
         VBox magasinPlus = new VBox();
         magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
         magasinPlus.setPadding(new Insets(10));
@@ -197,10 +199,31 @@ for (int i = 0; i < listeMagasins.size(); i++) {
         magasinPlus.setPrefHeight(180);
         magasinPlus.setAlignment(Pos.CENTER);
 
-        ImageView map = new ImageView(new Image("file:./img/plus.png"));
-        map.setPreserveRatio(true);
-        map.setFitWidth(150);
+        ImageView plusIcon = new ImageView(new Image("file:./img/plus.png"));
+        plusIcon.setPreserveRatio(true);
+        plusIcon.setFitWidth(100);
 
+        Text texteAjouter = new Text("Ajouter un magasin");
+        texteAjouter.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-fill: #206db8;");
+
+        magasinPlus.getChildren().addAll(plusIcon, texteAjouter);
+
+/*         // Ajout de l'effet hover pour le bouton plus
+        magasinPlus.setOnMouseEntered(e -> {
+            magasinPlus.setStyle("-fx-background-color: #f0f8ff; -fx-background-radius: 15px; " +
+                               "-fx-border-color: #206db8; -fx-border-width: 2px; -fx-border-radius: 15px; " +
+                               "-fx-cursor: hand;");
+        });
+
+        magasinPlus.setOnMouseExited(e -> {
+            magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px; " +
+                               "-fx-border-color: #206db8; -fx-border-width: 2px; -fx-border-radius: 15px;");
+        });
+*/
+        // Action pour ouvrir la popup d'ajout de magasin
+        magasinPlus.setOnMouseClicked(e -> {
+            ControleurPlusMagasin.afficherPopupAjouterMagasin(primaryStage, magasinBD);
+        });
 
         int i = listeMagasins.size();
         int col = i % 3;
@@ -223,5 +246,4 @@ for (int i = 0; i < listeMagasins.size(); i++) {
             e.printStackTrace();
         }
     }
-
 }

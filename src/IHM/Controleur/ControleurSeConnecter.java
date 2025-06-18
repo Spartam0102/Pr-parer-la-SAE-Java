@@ -29,7 +29,7 @@ public class ControleurSeConnecter {
     }
 
     public void gererConnexion(Button boutonConnexion, TextField userfield, PasswordField mdpfield,
-                               ToggleGroup groupeRoles) {
+            ToggleGroup groupeRoles) {
 
         boutonConnexion.setOnAction(e -> {
             String idTexte = userfield.getText().trim();
