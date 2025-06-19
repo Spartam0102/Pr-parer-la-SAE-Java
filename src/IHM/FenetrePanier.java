@@ -2,6 +2,7 @@ package IHM;
 
 import Java.*;
 import BD.*;
+import IHM.Controleur.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import IHM.Controleur.ControleurHome;
 import javafx.scene.control.Separator;
 
 import java.sql.SQLException;
@@ -26,9 +26,15 @@ public class FenetrePanier extends Application {
     private VBox panelCentral;
     private Map<Livre, Integer> panierClient;
     private ClientBD clientBD;
+    private Client client;
+    private ConnexionMySQL connexionMySQL;
+    private Stage stage;
 
     public FenetrePanier(ConnexionMySQL connexionMySQL, Client client) {
+        this.client = client;
         this.clientBD = new ClientBD(connexionMySQL);
+        this.connexionMySQL = connexionMySQL;
+        
         try{
             client.setPanier(clientBD.recupererPanier(client.getIdCli()));
         }
@@ -73,10 +79,9 @@ public class FenetrePanier extends Application {
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
 
-        boutonHome.setOnAction(e -> {
-            Stage stage = (Stage) boutonHome.getScene().getWindow();
-            ControleurHome.allerAccueil(stage);
-        });
+        boutonPanier.setOnAction(new ControleurPanier(this.connexionMySQL, this.client, this.stage));
+
+        boutonHome.setOnAction(new ControleurHome(this.stage));
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -110,12 +115,30 @@ public class FenetrePanier extends Application {
     listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
     listeLivres.setPrefWidth(400);
 
+    VBox partieGauche = new VBox();
+
+    Button boutonConnexion = new Button("Réinitialiser le Panier");
+    boutonConnexion.setStyle("-fx-background-color:rgb(250, 0, 0); -fx-text-fill: white; -fx-font-size: 18px;" +
+            "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
+    boutonConnexion.setOnAction(new ControleurReinitialiserPanier(this.client, this.connexionMySQL, this.stage));
+    boutonConnexion.setPrefHeight(45);
+    boutonConnexion.setPrefWidth(260);
+
+    VBox boxConnection = new VBox();
+    boxConnection.setAlignment(Pos.CENTER_RIGHT);
+    boxConnection.getChildren().add(boutonConnexion);
+    boxConnection.setPadding(new Insets(10, 0, 10, 10));;
+
     ScrollPane scrollPane = new ScrollPane(listeLivres);
     scrollPane.setFitToWidth(true);
     scrollPane.setStyle("-fx-background: transparent;");
     scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
     scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
-    HBox.setHgrow(scrollPane, Priority.ALWAYS);
+    scrollPane.setPrefWidth(900);
+    scrollPane.setMinWidth(900);
+    scrollPane.setMaxWidth(900);
+
+    partieGauche.getChildren().addAll(scrollPane, boxConnection);
 
     VBox ensembleLivresCommand = new VBox();
     ensembleLivresCommand.setStyle("-fx-background-color: white;");
@@ -124,7 +147,7 @@ public class FenetrePanier extends Application {
     Image placeholder = new Image("file:img/placeholder.png", 100, 140, true, true);
 
     for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
-        VBox unLivreCommand = new VBox();
+        HBox unLivreCommand = new HBox();
         unLivreCommand.setPadding(new Insets(20));
 
         long isbn = couple.getKey().getIdLivre();
@@ -150,29 +173,46 @@ public class FenetrePanier extends Application {
         Text nomLivre = new Text(couple.getKey().getNomLivre());
         nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
         Text quantite = new Text("     x" + couple.getValue());
-        quantite.setStyle("-fx-font-size: 15px");
+        quantite.setStyle("-fx-font-size: 20px");
 
-        VBox texteVBox = new VBox(nomLivre, quantite);
+        Text nomAuteur = new Text("Claude Dubois");
+
+        VBox texteVBox = new VBox(nomLivre, nomAuteur, quantite);
         texteVBox.setAlignment(Pos.CENTER_LEFT);
-        texteVBox.setSpacing(5);
+        texteVBox.setSpacing(20);
 
         HBox ligneLivre = new HBox(10, imageView, texteVBox);
         ligneLivre.setAlignment(Pos.CENTER_LEFT);
 
-        Text nomAuteur = new Text("Claude Dubois");
         Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
-        HBox prixBox = new HBox(prixText);
+        VBox prixBox = new VBox(prixText);
+
+
+        HBox boxPoubelle = new HBox();
+        ImageView poubelle = new ImageView(new Image("file:./img/image.png"));
+        boxPoubelle.setAlignment(Pos.CENTER);
+        poubelle.setFitHeight(25);
+        poubelle.setPreserveRatio(true);
+        boxPoubelle.setOnMouseClicked(new ControleurSuppElemPanier(this.client, couple.getKey(), this.connexionMySQL, this.stage));
+        boxPoubelle.getChildren().add(poubelle);
+        VBox boxPrixButton = new VBox(prixText);
         prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        prixBox.setAlignment(Pos.CENTER_RIGHT);
+        boxPrixButton.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(boxPrixButton, Priority.NEVER);
+        boxPrixButton.setMaxWidth(Region.USE_PREF_SIZE);
+
+        boxPrixButton.getChildren().addAll(prixBox, boxPoubelle);
 
         Separator barre = new Separator();
         barre.setPrefHeight(1);
         barre.setOpacity(0.5);
 
-        ensembleLivresCommand.getChildren().add(barre);
 
-        unLivreCommand.getChildren().addAll(ligneLivre, nomAuteur, prixBox);
-        ensembleLivresCommand.getChildren().add(unLivreCommand);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        unLivreCommand.getChildren().addAll(ligneLivre, spacer, boxPrixButton);
+
+        ensembleLivresCommand.getChildren().addAll(unLivreCommand, barre);
     }
 
     scrollPane.setContent(ensembleLivresCommand);
@@ -236,7 +276,7 @@ public class FenetrePanier extends Application {
             scrollPane.setPrefHeight(newVal.doubleValue());
         });
 
-        conteneur.getChildren().addAll(scrollPane, recapWrapper);
+        conteneur.getChildren().addAll(partieGauche, recapWrapper);
         containerVertical.getChildren().add(conteneur);
         VBox.setVgrow(conteneur, Priority.ALWAYS);
 
@@ -245,6 +285,7 @@ public class FenetrePanier extends Application {
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         Scene scene = laScene();
         stage.setScene(scene);
         stage.setTitle("Livre Express - Panier");

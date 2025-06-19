@@ -1,12 +1,13 @@
 package IHM.Controleur;
 
-import Java.Client;
+import Java.*;
 import BD.ConnexionMySQL;
 import BD.VendeurBD;
 import BD.AdministrateurBD;
 import BD.ClientBD;
-import IHM.FenetreMagasins;
-import IHM.FenetreMagasinsadm;
+import IHM.FenetreUnMagasinVendeur;
+import IHM.FenetreMagasinsClient;
+import IHM.FenetreMagasinsAdmin;
 
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -22,6 +23,7 @@ public class ControleurSeConnecter {
     private VendeurBD vendeurBD;
     private AdministrateurBD adminBD;
     private Client client;
+    private Vendeur vendeur;
 
     public ControleurSeConnecter(ConnexionMySQL connexionMySQL) {
         this.connexionMySQL = connexionMySQL;
@@ -93,13 +95,14 @@ public class ControleurSeConnecter {
                 switch (role) {
                     case "Client":
                         this.client = clientBD.recupererClient(id);
-                        FenetreMagasins.afficher(currentStage, connexionMySQL, false, this.client);
+                        FenetreMagasinsClient.afficher(currentStage, connexionMySQL, this.client);
                         break;
                     case "Vendeur":
-                        FenetreMagasins.afficher(currentStage, connexionMySQL, true, null);
+                        this.vendeur = vendeurBD.recupererVendeur(id);
+                        FenetreUnMagasinVendeur.afficher(currentStage, connexionMySQL, this.vendeur);
                         break;
                     case "Administrateur":
-                        FenetreMagasinsadm.afficher(currentStage, connexionMySQL);
+                        FenetreMagasinsAdmin.afficher(currentStage, connexionMySQL);
                         break;
                 }
             } catch (Exception ex) {

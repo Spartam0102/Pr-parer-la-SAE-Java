@@ -1,11 +1,14 @@
 package IHM.Controleur;
 
 import BD.ConnexionMySQL;
-import IHM.FenetreMagasinAdmin;
+import IHM.FenetreUnMagasinAdmin;
 import Java.Magasin;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ControleurCarteMagasinAdmin {
+public class ControleurCarteMagasinAdmin implements EventHandler<MouseEvent> {
+
     private ConnexionMySQL connexionMySQL;
     private Magasin magasin;
 
@@ -14,9 +17,12 @@ public class ControleurCarteMagasinAdmin {
         this.magasin = magasin;
     }
 
-    public void allerDansFenetreMAgasin(Stage stage) {
+    @Override
+    public void handle(MouseEvent event) {
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
         try {
-            FenetreMagasinAdmin fenetreMagasinAdmin = new FenetreMagasinAdmin(connexionMySQL, magasin);
+            FenetreUnMagasinAdmin fenetreMagasinAdmin = new FenetreUnMagasinAdmin(connexionMySQL, magasin);
             fenetreMagasinAdmin.start(stage);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,9 @@
 package IHM;
 
+import IHM.Controleur.ControleurAjouterLivre;
 import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurPanier;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +38,13 @@ public class FenetreStock extends Application {
     private MagasinBD magasinBD;
     private Magasin magasin;
     private Timeline timelineDefilante;
+    private Client client;
+    private Stage stage;
 
-    public FenetreStock(ConnexionMySQL connexionMySQL, Magasin magasin) {
+    public FenetreStock(ConnexionMySQL connexionMySQL, Magasin magasin, Client client) {
         this.magasinBD = new MagasinBD(connexionMySQL);
         this.magasin = magasin;
+        this.client = client;
     }
 
     private Pane titre() {
@@ -72,10 +78,8 @@ public class FenetreStock extends Application {
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
 
-        boutonHome.setOnAction(e -> {
-            Stage stage = (Stage) boutonHome.getScene().getWindow();
-            ControleurHome.allerAccueil(stage);
-        });
+        boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonPanier.setOnAction(new ControleurPanier(this.magasinBD.getConnexion(), client, stage));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
@@ -181,6 +185,7 @@ public class FenetreStock extends Application {
 
     @Override
     public void start(Stage primaryStage) throws SQLException {
+        this.stage = primaryStage;
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 1500, 750);
 
@@ -295,10 +300,7 @@ for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
             " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
 
     // Ici tu peux ajouter un event handler pour le bouton si tu veux
-    bouton.setOnAction(e -> {
-        System.out.println("Ajouter au panier : " + livre.getNomLivre());
-        // TODO: Ajouter la gestion réelle du panier
-    });
+    bouton.setOnAction(new ControleurAjouterLivre(this.client, livre, magasinBD.getConnexion()));
 
     droite.getChildren().addAll(prix, bouton);
 
@@ -325,9 +327,9 @@ for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
         primaryStage.show();
     }
 
-    public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin) {
+    public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin, Client client) {
     try {
-        FenetreStock fenetre = new FenetreStock(connexion, magasin);
+        FenetreStock fenetre = new FenetreStock(connexion, magasin, client);
         fenetre.start(stage);
     } catch (Exception e) {
         e.printStackTrace();

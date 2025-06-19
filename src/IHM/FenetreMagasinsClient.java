@@ -1,8 +1,9 @@
 package IHM;
 
-import IHM.Controleur.ControleurCarteMagasin;
-
+import IHM.Controleur.ControleurStock;
+import IHM.Controleur.ControleurCarteMagasinAdmin;
 import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurMagasinVendeur;
 import IHM.Controleur.ControleurPanier;
 
 import java.sql.SQLException;
@@ -23,19 +24,18 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FenetreMagasins extends Application {
+public class FenetreMagasinsClient extends Application {
 
     private Button boutonHome;
     private Button boutonSettings;
     private Button boutonPanier;
     private Button boutonRetour;
     private MagasinBD magasinBD;
-    private boolean estVendeur;
     private Client client;
+    private Stage stage;
 
-    public FenetreMagasins(ConnexionMySQL connexionMySQL, boolean estVendeur, Client client) {
+    public FenetreMagasinsClient(ConnexionMySQL connexionMySQL, Client client) {
         this.magasinBD = new MagasinBD(connexionMySQL);
-        this.estVendeur = estVendeur;
         this.client = client;
     }
 
@@ -70,15 +70,8 @@ public class FenetreMagasins extends Application {
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
 
-        boutonHome.setOnAction(e -> {
-            Stage stage = (Stage) boutonHome.getScene().getWindow();
-            ControleurHome.allerAccueil(stage);
-        });
-
-        boutonPanier.setOnAction(e -> {
-            Stage stage = (Stage) boutonPanier.getScene().getWindow();
-            ControleurPanier.allerStock(stage, client, magasinBD.getConnexion());
-        });
+        boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonPanier.setOnAction(new ControleurPanier(magasinBD.getConnexion(), this.client, this.stage));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
@@ -98,6 +91,7 @@ public class FenetreMagasins extends Application {
 
     @Override
     public void start(Stage primaryStage) throws SQLException {
+         this.stage = primaryStage;
 
         BorderPane root = new BorderPane();
 
@@ -202,21 +196,7 @@ public class FenetreMagasins extends Application {
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
             Magasin magasinSelectionne = listeMagasins.get(i);
 
-            ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
-                    magasinSelectionne);
-
-            carteMagasin.setOnMouseClicked(event -> {
-
-                System.out.println("Magasin sélectionné : " + magasinSelectionne.getNom());
-                Stage stage = (Stage) carteMagasin.getScene().getWindow();
-
-                if (estVendeur) {
-                    FenetreMagasinVendeur.afficher(stage, magasinBD.getConnexion());
-                } else {
-                    FenetreStock.afficher(stage, magasinBD.getConnexion(), magasinSelectionne);
-                }
-            });
-
+            carteMagasin.setOnMouseClicked(new ControleurStock(this.magasinBD.getConnexion(), magasinSelectionne, client, primaryStage));
         }
 
         Scene scene = new Scene(root, 1500, 750);
@@ -225,13 +205,12 @@ public class FenetreMagasins extends Application {
         primaryStage.show();
     }
 
-    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, boolean estVendeur, Client client) {
+    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Client client) {
         try {
-            FenetreMagasins fm = new FenetreMagasins(connexionMySQL, estVendeur, client);
+            FenetreMagasinsClient fm = new FenetreMagasinsClient(connexionMySQL, client);
             fm.start(stage);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -82,7 +82,7 @@ CREATE TABLE MAGASIN (
   idmag    int NOT NULL,
   nommag   VARCHAR(42),
   adressemag VARCHAR(200),
-  telmag VARCHAR(4),
+  telmag VARCHAR(20),
   note FLOAT
 );
 

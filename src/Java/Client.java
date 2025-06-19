@@ -103,6 +103,12 @@ public class Client extends Personne {
         }
     }
 
+    public void supprimerLivrePanier(Livre livre) {
+        if (this.panier.containsKey(livre)) {
+            this.panier.remove(livre);
+        }
+    }
+
     /**
      * Vérifie si cet objet est égal à un autre objet.
      * Deux clients sont égaux s'ils ont le même nom, prénom, date de naissance,

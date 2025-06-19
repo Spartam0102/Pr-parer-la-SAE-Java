@@ -3,9 +3,7 @@ package IHM;
 
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
-import IHM.Controleur.ControleurCarteMagasin;
 import IHM.Controleur.ControleurHome;
-import IHM.Controleur.ControleurPanier;
 import Java.Magasin;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -23,16 +21,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FenetreMagasinAdmin extends Application{
+public class FenetreUnMagasinAdmin extends Application{
     
     private Button boutonHome;
     private Button boutonSettings;
-    private Button boutonPanier;
     private Button boutonRetour;
     private MagasinBD magasinBD;
     private Magasin magasin;
+    private Stage stage;
 
-    public FenetreMagasinAdmin(ConnexionMySQL connexionMySQL, Magasin magasin) {
+    public FenetreUnMagasinAdmin(ConnexionMySQL connexionMySQL, Magasin magasin) {
         this.magasinBD = new MagasinBD(connexionMySQL);
         this.magasin = magasin;
     }
@@ -54,24 +52,19 @@ public class FenetreMagasinAdmin extends Application{
 
         this.boutonHome = new Button("", homeView);
         this.boutonSettings = new Button("", settingsView);
-        this.boutonPanier = new Button("", panierView);
         this.boutonRetour = new Button("", retourView);
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
         boutonHome.setStyle(styleBouton);
         boutonSettings.setStyle(styleBouton);
-        boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
 
-        HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
+        HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonRetour);
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
 
-        boutonHome.setOnAction(e -> {
-            Stage stage = (Stage) boutonHome.getScene().getWindow();
-            ControleurHome.allerAccueil(stage);
-        });
+        boutonHome.setOnAction(new ControleurHome(this.stage));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
@@ -166,16 +159,6 @@ public class FenetreMagasinAdmin extends Application{
 
         entier.setBottom(lesBoutons);
 
-        ControleurCarteMagasin controleur = new ControleurCarteMagasin(magasinBD.getConnexion(),
-                    this.magasin);
-
-            modifierStock.setOnMouseClicked(event -> {
-
-                System.out.println("Modifier Stock sélectioner");
-                Stage stage = (Stage) modifierStock.getScene().getWindow();
-                FenetreMagasinVendeur.afficher(stage, magasinBD.getConnexion());
-            });
-
         return entier;
     }
 
@@ -263,6 +246,7 @@ public class FenetreMagasinAdmin extends Application{
 
     @Override
     public void start(Stage primaryStage){
+        this.stage = primaryStage;
         BorderPane root = new BorderPane();
 
         Pane banniere = titre();
@@ -290,7 +274,7 @@ public class FenetreMagasinAdmin extends Application{
         HBox.setHgrow(mag, Priority.ALWAYS);
 
 
-        Scene scene = new Scene(root, 1200, 750);
+        Scene scene = new Scene(root, 1500, 750);
         primaryStage.setTitle("Fenêtre des magasins");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -299,7 +283,7 @@ public class FenetreMagasinAdmin extends Application{
 
      public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Magasin magasin) {
         try {
-            FenetreStock fs = new FenetreStock(connexionMySQL, magasin);
+            FenetreStock fs = new FenetreStock(connexionMySQL, magasin, null);
             fs.start(stage);
         } catch (Exception e) {
             e.printStackTrace();

@@ -122,7 +122,7 @@ public class ControleurPlusMagasin {
 
     private static void rafraichirFenetreMagasins(Stage stage, MagasinBD magasinBD) {
 
-            IHM.FenetreMagasinsadm.afficher(stage, magasinBD.getConnexion());
+            IHM.FenetreMagasinsAdmin.afficher(stage, magasinBD.getConnexion());
 
     }
 }

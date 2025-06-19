@@ -1,5 +1,6 @@
 package IHM;
 
+import IHM.Controleur.ControleurHome;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,6 +18,7 @@ public class FenetreLivres extends Application {
     private Button boutonSettings;
     private Button boutonPanier;
     private Button boutonRetour;
+    private Stage stage;
 
     private Pane titre() {
         ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
@@ -45,6 +47,8 @@ public class FenetreLivres extends Application {
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
 
+        boutonHome.setOnAction(new ControleurHome(this.stage));
+
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
@@ -63,6 +67,7 @@ public class FenetreLivres extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        this.stage = primaryStage;
 
         BorderPane root = new BorderPane();
 
