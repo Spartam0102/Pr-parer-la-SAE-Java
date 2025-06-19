@@ -8,7 +8,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +22,8 @@ import javafx.scene.control.Separator;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FenetrePanier extends Application {
 
@@ -29,11 +34,15 @@ public class FenetrePanier extends Application {
     private Client client;
     private ConnexionMySQL connexionMySQL;
     private Stage stage;
+    private MagasinBD magasinBD;
+    private String modeLivraisonChoisi;
 
     public FenetrePanier(ConnexionMySQL connexionMySQL, Client client) {
         this.client = client;
         this.clientBD = new ClientBD(connexionMySQL);
         this.connexionMySQL = connexionMySQL;
+        this.magasinBD = new MagasinBD(connexionMySQL);
+        this.modeLivraisonChoisi = "Domicile";
         
         try{
             client.setPanier(clientBD.recupererPanier(client.getIdCli()));
@@ -140,6 +149,7 @@ public class FenetrePanier extends Application {
     scrollPane.setMaxWidth(900);
 
     partieGauche.getChildren().addAll(scrollPane, boxConnection);
+    VBox.setMargin(scrollPane, new Insets(20, 20, 0, 20));
 
     VBox ensembleLivresCommand = new VBox();
     ensembleLivresCommand.setStyle("-fx-background-color: white;");
@@ -219,7 +229,7 @@ public class FenetrePanier extends Application {
     scrollPane.setContent(ensembleLivresCommand);
 
         VBox recap = new VBox(20);
-        recap.setPrefWidth(300);
+        recap.setPrefWidth(400);
         recap.setMaxHeight(Double.MAX_VALUE);
         recap.setPadding(new Insets(15));
         recap.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
@@ -233,20 +243,33 @@ public class FenetrePanier extends Application {
         }
 
         Label nbProduitsLabel = new Label("Nombre de produit(s) : " + nbProduits);
+        nbProduitsLabel.setStyle(" -fx-font-size: 16px;");
         Label livraisonLabel = new Label("Livraison : Domicile");
+        livraisonLabel.setStyle(" -fx-font-size: 16px;");
         Label totalLabel = new Label(String.format("Total : %.2f €", totalPrix));
-        totalLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
+        totalLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         Button commander = new Button("Commander");
-        commander.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white; -fx-font-weight: bold;");
-
-        recap.getChildren().addAll(nbProduitsLabel, livraisonLabel, totalLabel, commander);
+        commander.setPrefHeight(45);
+        commander.setPrefWidth(160);
+        HBox boutonCommander = new HBox();
+        commander.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white; -fx-font-weight: bold;" + 
+                            "-fx-border-radius : 18px");
+        commander.setOnAction(new ControleurCommander(connexionMySQL, null, client, this.modeLivraisonChoisi));
+        boutonCommander.setAlignment(Pos.CENTER);
+        boutonCommander.getChildren().add(commander);
+        recap.getChildren().addAll(nbProduitsLabel, livraisonLabel, totalLabel, boutonCommander);
 
         VBox modeLivraison = new VBox(10);
         modeLivraison.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
         modeLivraison.setPadding(new Insets(15));
         Label modeLabel = new Label("Mode de livraison");
+        modeLabel.setStyle(" -fx-font-size: 18px;");
         Button domicile = new Button("Domicile");
         Button magasin = new Button("Magasin");
+        domicile.setPrefHeight(45);
+        domicile.setPrefWidth(160);
+        magasin.setPrefHeight(45);
+        magasin.setPrefWidth(160);
 
         domicile.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
         magasin.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
@@ -255,21 +278,71 @@ public class FenetrePanier extends Application {
             domicile.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
             magasin.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
             livraisonLabel.setText("Livraison : Domicile");
+            this.modeLivraisonChoisi = "Domicile";
         });
 
         magasin.setOnAction(e -> {
             magasin.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
             domicile.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
             livraisonLabel.setText("Livraison : Magasin");
+            this.modeLivraisonChoisi = "Magasin";
         });
 
         HBox boutonsLivraison = new HBox(10, domicile, magasin);
         boutonsLivraison.setAlignment(Pos.CENTER);
+
+        ComboBox<Magasin> comboMagasins = new ComboBox<>();
+        List<Magasin> listeMagasins = new ArrayList<>(); 
+        try{
+            listeMagasins = this.magasinBD.listeDesMagasins();
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        comboMagasins.getItems().addAll(listeMagasins);
+        
+        comboMagasins.setCellFactory(lv -> new ListCell<Magasin>() {
+            @Override
+            protected void updateItem(Magasin magasin, boolean empty) {
+                super.updateItem(magasin, empty);
+                setText(empty || magasin == null ? "" : magasin.getNom()); 
+            }
+        });
+        comboMagasins.setButtonCell(new ListCell<Magasin>() {
+            @Override
+            protected void updateItem(Magasin magasin, boolean empty) {
+                super.updateItem(magasin, empty);
+                setText(empty || magasin == null ? "" : magasin.getNom());
+            }
+        });
+
+        comboMagasins.setOnAction(e -> {
+            Magasin selected = comboMagasins.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                System.out.println("Magasin sélectionné : " + selected.getNom());
+            }
+        });
+
+        Text choixMagRetrait = new Text("Choisissez votre magasin de retrait");
+        choixMagRetrait.setStyle(" -fx-font-size: 18px;");
+
+        VBox listeMagasinsBox = new VBox(choixMagRetrait, comboMagasins);
+        listeMagasinsBox.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        listeMagasinsBox.setAlignment(Pos.CENTER);
+        listeMagasinsBox.setPrefHeight(100);
+        listeMagasinsBox.setSpacing(15);
+
         modeLivraison.getChildren().addAll(modeLabel, boutonsLivraison);
         modeLivraison.setAlignment(Pos.CENTER);
 
-        VBox recapWrapper = new VBox(20, recap, modeLivraison);
-        recapWrapper.setPrefWidth(300);
+        VBox recapWrapper = new VBox(20, recap, modeLivraison, listeMagasinsBox);
+        VBox.setVgrow(recap, Priority.ALWAYS);
+        VBox.setVgrow(modeLivraison, Priority.ALWAYS);
+        VBox.setVgrow(listeMagasinsBox, Priority.ALWAYS);
+        VBox.setMargin(recap, new Insets(16));
+        VBox.setMargin(modeLivraison, new Insets(16));
+        VBox.setMargin(listeMagasinsBox, new Insets(16));
+        recapWrapper.setPrefWidth(400);
         HBox.setHgrow(recapWrapper, Priority.ALWAYS);
 
         recapWrapper.heightProperty().addListener((obs, oldVal, newVal) -> {

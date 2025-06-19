@@ -439,7 +439,7 @@ public class FenetreStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Ou livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois");
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -457,8 +457,10 @@ public class FenetreStock extends Application {
             Button bouton = new Button("Ajouter au panier");
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
+
             bouton.setOnAction(
                     new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier, magasin));
+
             droite.getChildren().addAll(prix, bouton);
 
             BorderPane ligne = new BorderPane();
