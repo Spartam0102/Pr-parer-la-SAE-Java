@@ -359,7 +359,7 @@ public class FenetreStock extends Application {
 
             nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
             nombre.setAlignment(Pos.CENTER_RIGHT);
-            System.out.println(lblCompteur);
+
 
             // Créer le contrôleur pour ajouter au panier avec référence au label
             ControleurAjouterLivrePanier controleurAjouterLivrePanier = new ControleurAjouterLivrePanier(this.client, livre, magasinBD.getConnexion(), lblCompteur,magasin);

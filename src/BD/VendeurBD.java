@@ -14,7 +14,7 @@ public class VendeurBD {
 		this.magasinBD = new MagasinBD(laConnexion);
 	}
 
-	public void creerVendeur(Vendeur vendeur) throws SQLException {
+	public int creerVendeur(Vendeur vendeur) throws SQLException {
 		int nextId = getNextIdVendeur();
 		String sql = "INSERT INTO VENDEUR (idVen, nomVen, prenomVen, idmag, mdpV) VALUES (?, ?, ?, ?, ?)";
 
@@ -31,6 +31,7 @@ public class VendeurBD {
 			}
 			ps.setString(5, vendeur.getMotDePasseVendeur());
 			ps.executeUpdate();
+			return nextId;
 		}
 	}
 

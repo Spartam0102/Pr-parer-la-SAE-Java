@@ -3,7 +3,9 @@ package IHM;
 
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
+import IHM.Controleur.ControleurAjouterVendeur;
 import IHM.Controleur.ControleurAllerModifierStock;
+import IHM.Controleur.ControleurCompteur;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurRetour;
@@ -190,9 +192,17 @@ public class FenetreUnMagasinAdmin extends Application{
         TextField prenom = new TextField();
         prenom.setPromptText("Prénom");
         prenom.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
-        gauche.getChildren().addAll(titre, nom, prenom);
+        TextField mdp = new TextField();
+        mdp.setPromptText("mdp");
+        mdp.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        TextField date = new TextField();
+        date.setPromptText("date de naissance");
+        mdp.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        gauche.getChildren().addAll(titre, nom, prenom,mdp,date);
         VBox.setMargin(prenom, new Insets(5));
         VBox.setMargin(nom, new Insets(5));
+        VBox.setMargin(date, new Insets(5));
+        VBox.setMargin(mdp, new Insets(5));
         VBox.setMargin(titre, new Insets(5));
 
         VBox droit = new VBox();
@@ -202,6 +212,10 @@ public class FenetreUnMagasinAdmin extends Application{
         Button button = new Button("Créer");
         button.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
         button.setPrefWidth(100);
+
+
+    ControleurAjouterVendeur controleurAjouterVendeur = new ControleurAjouterVendeur(nom, prenom, date, mdp, magasin, magasinBD.getConnexion());
+    button.setOnAction(controleurAjouterVendeur);
 
         droit.setAlignment(Pos.CENTER);
         droit.getChildren().addAll(image, button);
