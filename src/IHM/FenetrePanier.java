@@ -80,8 +80,8 @@ public class FenetrePanier extends Application {
         boutonRetour.setStyle(styleBouton);
 
         boutonPanier.setOnAction(new ControleurPanier(this.connexionMySQL, this.client, this.stage));
-
         boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonRetour.setOnAction(new ControleurRetour(this.connexionMySQL, stage, client, "fenetreMagasinsClient"));
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -189,7 +189,7 @@ public class FenetrePanier extends Application {
 
 
         HBox boxPoubelle = new HBox();
-        ImageView poubelle = new ImageView(new Image("file:./img/image.png"));
+        ImageView poubelle = new ImageView(new Image("file:img/trash.png"));
         boxPoubelle.setAlignment(Pos.CENTER);
         poubelle.setFitHeight(25);
         poubelle.setPreserveRatio(true);
@@ -282,6 +282,16 @@ public class FenetrePanier extends Application {
 
         return containerVertical;
     }
+
+    public static void afficher(Stage stage, ConnexionMySQL connexion, Client client) {
+    try {
+        FenetrePanier fenetre = new FenetrePanier(connexion, client);
+        fenetre.start(stage);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
 
     @Override
     public void start(Stage stage) {
