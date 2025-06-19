@@ -87,6 +87,7 @@ public class FenetrePanier extends Application {
         boutonSettings.setStyle(styleBouton);
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
+        boutonSettings.setOnAction(new ControleurParametre(this.stage));
 
         boutonPanier.setOnAction(new ControleurPanier(this.connexionMySQL, this.client, this.stage));
         boutonHome.setOnAction(new ControleurHome(this.stage));

@@ -28,7 +28,8 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
         this.client = client;
         this.livre = livre;
         this.clientBD = new ClientBD(connexionMySQL);
-        this.labelCompteur = labelCompteur;}
+        this.labelCompteur = labelCompteur;
+    }
 
     private ConnexionMySQL connexion;
     private Vendeur vendeur;
