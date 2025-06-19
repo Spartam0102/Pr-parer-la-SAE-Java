@@ -31,4 +31,6 @@ public class ControleurStock  implements EventHandler<MouseEvent> {
             e.printStackTrace();
         }
     }
+
+
 }

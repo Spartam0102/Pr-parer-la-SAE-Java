@@ -3,14 +3,23 @@ package IHM;
 
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
+import IHM.Controleur.ControleurAjouterVendeur;
 import IHM.Controleur.ControleurAllerModifierStock;
+
 import IHM.Controleur.ControleurCAglobal;
 import IHM.Controleur.ControleurCA;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurNbCommande;
+
+import IHM.Controleur.ControleurCompteur;
+import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurParametre;
+import IHM.Controleur.ControleurRetour;
+
 import IHM.Controleur.ControleurStock;
 import IHM.Controleur.ControleurSuppElemPanier;
 import IHM.Controleur.ControleurSuppMagasin;
+
 import Java.Magasin;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -60,6 +69,7 @@ public class FenetreUnMagasinAdmin extends Application{
         this.boutonHome = new Button("", homeView);
         this.boutonSettings = new Button("", settingsView);
         this.boutonRetour = new Button("", retourView);
+        boutonSettings.setOnAction(new ControleurParametre(this.stage));
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
@@ -72,6 +82,7 @@ public class FenetreUnMagasinAdmin extends Application{
         boutons.setAlignment(Pos.CENTER);
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, null, "fenetreMagasinsAdmin"));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
@@ -187,9 +198,17 @@ public class FenetreUnMagasinAdmin extends Application{
         TextField prenom = new TextField();
         prenom.setPromptText("Prénom");
         prenom.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
-        gauche.getChildren().addAll(titre, nom, prenom);
+        TextField mdp = new TextField();
+        mdp.setPromptText("mdp");
+        mdp.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        TextField date = new TextField();
+        date.setPromptText("date de naissance");
+        mdp.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        gauche.getChildren().addAll(titre, nom, prenom,mdp,date);
         VBox.setMargin(prenom, new Insets(5));
         VBox.setMargin(nom, new Insets(5));
+        VBox.setMargin(date, new Insets(5));
+        VBox.setMargin(mdp, new Insets(5));
         VBox.setMargin(titre, new Insets(5));
 
         VBox droit = new VBox();
@@ -199,6 +218,10 @@ public class FenetreUnMagasinAdmin extends Application{
         Button button = new Button("Créer");
         button.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
         button.setPrefWidth(100);
+
+
+    ControleurAjouterVendeur controleurAjouterVendeur = new ControleurAjouterVendeur(nom, prenom, date, mdp, magasin, magasinBD.getConnexion());
+    button.setOnAction(controleurAjouterVendeur);
 
         droit.setAlignment(Pos.CENTER);
         droit.getChildren().addAll(image, button);
