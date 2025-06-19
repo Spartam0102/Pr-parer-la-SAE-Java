@@ -5,6 +5,12 @@ import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.Controleur.ControleurAjouterVendeur;
 import IHM.Controleur.ControleurAllerModifierStock;
+
+import IHM.Controleur.ControleurCAglobal;
+import IHM.Controleur.ControleurCA;
+import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurNbCommande;
+
 import IHM.Controleur.ControleurCompteur;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurParametre;
@@ -109,7 +115,7 @@ public class FenetreUnMagasinAdmin extends Application{
         HBox num = new HBox();
         Text numMagasin = new Text("n°"+ magasin.getIdMagasin());
         numMagasin.setStyle("-fx-font-size: 20px;");
-        ImageView maison = new ImageView(new Image("file:./img/image.png"));
+        ImageView maison = new ImageView(new Image("file:./img/magasin.png"));
         maison.setFitHeight(20);
         maison.setPreserveRatio(true);
         HBox.setMargin(maison, new Insets(0, 5, 0, 0));
@@ -234,22 +240,24 @@ public class FenetreUnMagasinAdmin extends Application{
 
         Text titreText = new Text("Statistiques");
         titreText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        ImageView titreImage = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        ImageView titreImage = new ImageView(new Image("file:./img/graph.png"));
         titreImage.setFitHeight(20);
         titreImage.setPreserveRatio(true);
         HBox titre = new HBox(titreText, titreImage);
         HBox.setMargin(titreImage, new Insets(0, 0, 0, 5));
         titre.setAlignment(Pos.CENTER);
 
-        ImageView livre = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        ImageView livre = new ImageView(new Image("file:./img/livre.png"));
         livre.setFitHeight(20);
         livre.setPreserveRatio(true);
-        HBox vente = new HBox(new Text("Nombre de livres venus pour un magasin"), livre);
+        HBox vente = new HBox(new Text("Nombre de commande effectuer dans ce magasin"), livre);
         HBox.setMargin(livre, new Insets(0, 0, 0, 5));
         vente.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px;");
         vente.setPadding(new Insets(10));
 
-        ImageView pinceau = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        vente.setOnMouseClicked(new ControleurNbCommande(this.magasinBD.getConnexion(), magasin, stage));
+
+        ImageView pinceau = new ImageView(new Image("file:./img/pinceau.png"));
         pinceau.setFitHeight(20);
         pinceau.setPreserveRatio(true);
         HBox theme = new HBox(new Text("Chiffre d'affaire par thème en année"), pinceau);
@@ -257,13 +265,17 @@ public class FenetreUnMagasinAdmin extends Application{
         theme.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px;");
         theme.setPadding(new Insets(10));
 
-        ImageView mag = new ImageView(new Image("file:./img/phone_icon.jpg"));
+        theme.setOnMouseClicked(new ControleurCA(this.magasinBD.getConnexion(), magasin, stage));
+
+        ImageView mag = new ImageView(new Image("file:./img/magasin.png"));
         mag.setFitHeight(20);
         mag.setPreserveRatio(true);
-        HBox ca = new HBox(new Text("Chiffre d'affaire par magasin et par mois en une année"), mag);
+        HBox ca = new HBox(new Text("CA des magasins par mois dans l'année"), mag);
         HBox.setMargin(mag, new Insets(0, 0, 0, 5));
         ca.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px;");
         ca.setPadding(new Insets(10));
+
+        ca.setOnMouseClicked(new ControleurCAglobal(this.magasinBD.getConnexion(), magasin, stage));
 
         stat.getChildren().addAll(titre, vente, theme, ca);
         return stat;
