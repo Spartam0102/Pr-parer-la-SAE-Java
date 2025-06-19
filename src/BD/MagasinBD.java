@@ -211,4 +211,14 @@ public class MagasinBD {
 			}
 		}
 	}
+
+	public void supprimerLivreDuMagasin(long isbn, int idMagasin) throws SQLException {
+    String sql = "DELETE FROM POSSEDER WHERE isbn = ? AND idmag = ?";
+    try (PreparedStatement ps = laConnexion.prepareStatement(sql)) {
+        ps.setLong(1, isbn);
+        ps.setInt(2, idMagasin);
+        ps.executeUpdate();
+    }
+}
+
 }
