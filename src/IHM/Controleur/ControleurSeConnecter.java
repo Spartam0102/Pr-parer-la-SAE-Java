@@ -5,8 +5,7 @@ import BD.ConnexionMySQL;
 import BD.VendeurBD;
 import BD.AdministrateurBD;
 import BD.ClientBD;
-import IHM.FenetreUnMagasinVendeur;
-import IHM.FenetreMagasinsClient;
+import IHM.*;
 import IHM.FenetreMagasinsAdmin;
 
 import javafx.scene.control.*;

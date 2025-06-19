@@ -5,6 +5,7 @@ import IHM.Controleur.ControleurCarteMagasinAdmin;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurMagasinVendeur;
 import IHM.Controleur.ControleurPanier;
+import IHM.Controleur.ControleurParametre;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -58,6 +59,8 @@ public class FenetreMagasinsClient extends Application {
         this.boutonSettings = new Button("", settingsView);
         this.boutonPanier = new Button("", panierView);
         this.boutonRetour = new Button("", retourView);
+        boutonSettings.setOnAction(new ControleurParametre(this.stage));
+
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";

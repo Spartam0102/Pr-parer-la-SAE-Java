@@ -3,8 +3,15 @@ package IHM;
 
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
+import IHM.Controleur.ControleurAllerModifierStock;
 import IHM.Controleur.ControleurHome;
+
 import IHM.Controleur.ControleurRetour;
+
+import IHM.Controleur.ControleurStock;
+import IHM.Controleur.ControleurSuppElemPanier;
+import IHM.Controleur.ControleurSuppMagasin;
+
 import Java.Magasin;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -158,6 +165,9 @@ public class FenetreUnMagasinAdmin extends Application{
         lesBoutons.setAlignment(Pos.CENTER);
         BorderPane.setMargin(lesBoutons, new Insets(20));
         lesBoutons.getChildren().addAll(modifierStock, supprimerMagasin);
+
+        modifierStock.setOnMouseClicked(new ControleurAllerModifierStock(this.magasinBD.getConnexion(), magasin, stage));
+        supprimerMagasin.setOnMouseClicked(new ControleurSuppMagasin(magasin, this.magasinBD.getConnexion(), stage));
 
         entier.setBottom(lesBoutons);
 
