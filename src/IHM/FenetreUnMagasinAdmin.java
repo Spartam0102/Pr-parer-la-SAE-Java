@@ -4,6 +4,7 @@ package IHM;
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurRetour;
 import Java.Magasin;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -65,6 +66,7 @@ public class FenetreUnMagasinAdmin extends Application{
         boutons.setAlignment(Pos.CENTER);
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, null, "fenetreMagasinsAdmin"));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);

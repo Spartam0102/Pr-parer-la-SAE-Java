@@ -76,6 +76,9 @@ public class FenetreUnMagasinVendeur extends Application {
     boutonSettings.setStyle(styleBouton);
     boutonPanier.setStyle(styleBouton);
     boutonRetour.setStyle(styleBouton);
+    boutonRetour.setStyle("-fx-background-color:rgb(150, 175, 201);" +
+                "-fx-border-radius: 18; -fx-background-radius: 18;");
+    boutonRetour.setDisable(true);
 
     boutonHome.setOnAction(new ControleurHome(this.stage));
 

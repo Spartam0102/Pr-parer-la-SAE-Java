@@ -80,8 +80,8 @@ public class FenetrePanier extends Application {
         boutonRetour.setStyle(styleBouton);
 
         boutonPanier.setOnAction(new ControleurPanier(this.connexionMySQL, this.client, this.stage));
-
         boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonRetour.setOnAction(new ControleurRetour(this.connexionMySQL, stage, client, "fenetreMagasinsClient"));
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
