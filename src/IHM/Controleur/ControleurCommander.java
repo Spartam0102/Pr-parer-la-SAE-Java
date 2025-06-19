@@ -3,7 +3,7 @@ package IHM.Controleur;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Map;
-
+import IHM.*;
 import BD.*;
 import Java.*;
 import javafx.event.ActionEvent;
@@ -11,18 +11,24 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 
 public class ControleurCommander implements EventHandler<ActionEvent> {
 
-    private Magasin magasin;
+    private ComboBox<Magasin> comboMagasins;
     private Client client;
     private CommandeBD commandeBD;
     private String modeDeReception;
     private LivreBD livreBD;
     private ClientBD clientBD;
+    private ConnexionMySQL connexion;
+    private Stage stage;
 
-    public ControleurCommander(ConnexionMySQL connexion, Magasin magasin, Client client, String modeDeReception) {
-        this.magasin = magasin;
+    public ControleurCommander(Stage stage, ConnexionMySQL connexion, ComboBox<Magasin> comboMagasins, Client client, String modeDeReception) {
+        this.stage = stage;
+        this.connexion = connexion;
+        this.comboMagasins = comboMagasins;        
         this.client = client;
         this.commandeBD = new CommandeBD(connexion);
         this.modeDeReception = modeDeReception;
@@ -32,7 +38,17 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        
+        Magasin magasin = comboMagasins.getSelectionModel().getSelectedItem();
+
+        if (magasin == null) {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setTitle("Avertissement");
+            alert.setHeaderText("Aucun magasin sélectionné");
+            alert.setContentText("Veuillez choisir un magasin de retrait\n avant de commander.");
+            alert.showAndWait();
+            return;
+        }
+
         Map<Livre, Integer> panier = client.getPanier();
         double prixTotal = 0;
         for (Map.Entry<Livre, Integer> entry : panier.entrySet()) {
@@ -71,6 +87,9 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
                 good.setHeaderText(null);
                 good.setContentText("Votre commande a bien été enregistrée !");
                 good.showAndWait();
+
+                FenetrePanier fenetrePanier = new FenetrePanier(this.connexion, client);
+                fenetrePanier.start(this.stage);
             }
             catch (SQLException e) {
                 System.out.println("Erreur SQL : " + e.getMessage());
