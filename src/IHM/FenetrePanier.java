@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -36,6 +37,7 @@ public class FenetrePanier extends Application {
     private Stage stage;
     private MagasinBD magasinBD;
     private String modeLivraisonChoisi;
+    private Magasin magasinChoisi;
 
     public FenetrePanier(ConnexionMySQL connexionMySQL, Client client) {
         this.client = client;
@@ -254,7 +256,6 @@ public class FenetrePanier extends Application {
         HBox boutonCommander = new HBox();
         commander.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white; -fx-font-weight: bold;" + 
                             "-fx-border-radius : 18px");
-        commander.setOnAction(new ControleurCommander(connexionMySQL, null, client, this.modeLivraisonChoisi));
         boutonCommander.setAlignment(Pos.CENTER);
         boutonCommander.getChildren().add(commander);
         recap.getChildren().addAll(nbProduitsLabel, livraisonLabel, totalLabel, boutonCommander);
@@ -316,12 +317,11 @@ public class FenetrePanier extends Application {
             }
         });
 
-        comboMagasins.setOnAction(e -> {
-            Magasin selected = comboMagasins.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                System.out.println("Magasin sélectionné : " + selected.getNom());
-            }
+        comboMagasins.getSelectionModel().selectedItemProperty().addListener((obs, oldMagasin, newMagasin) -> {
+            this.magasinChoisi = newMagasin;
         });
+
+        commander.setOnAction(new ControleurCommander(this.stage, connexionMySQL, comboMagasins, client, this.modeLivraisonChoisi));
 
         Text choixMagRetrait = new Text("Choisissez votre magasin de retrait");
         choixMagRetrait.setStyle(" -fx-font-size: 18px;");
