@@ -7,9 +7,11 @@ import java.util.Map;
 
 public class VendeurBD {
 	private ConnexionMySQL laConnexion;
+	private MagasinBD magasinBD;
 
 	public VendeurBD(ConnexionMySQL laConnexion) {
 		this.laConnexion = laConnexion;
+		this.magasinBD = new MagasinBD(laConnexion);
 	}
 
 	public void creerVendeur(Vendeur vendeur) throws SQLException {
@@ -59,7 +61,7 @@ public class VendeurBD {
 				Magasin magasin = null;
 
 				if (idMagasin > 0) {
-					magasin = new Magasin(null, null, idMagasin, 0.0, null);
+					magasin = this.magasinBD.trouverMagasinParId(idMagasin);
 				}
 				return new Vendeur(
 						rs.getString("nomVen"),

@@ -24723,8 +24723,6 @@ INSERT INTO GERER (idmag, idAdmin) VALUES
 	(5, 1),
 	(6, 1),
 	(7, 1),
-
-
 	(1, 2),
 	(2, 2),
 	(3, 2),
@@ -24732,7 +24730,6 @@ INSERT INTO GERER (idmag, idAdmin) VALUES
 	(5, 2),
 	(6, 2),
 	(7, 2),
-
 	(1, 3),
 	(2, 3),
 	(3, 3),
@@ -24740,4 +24737,3 @@ INSERT INTO GERER (idmag, idAdmin) VALUES
 	(5, 3),
 	(6, 3),
 	(7, 3);
-

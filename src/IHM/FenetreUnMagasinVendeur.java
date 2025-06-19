@@ -1,6 +1,8 @@
 package IHM;
 
 import BD.ConnexionMySQL;
+import IHM.Controleur.ControleurHome;
+import Java.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -19,7 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 
-public class FenetreMagasinVendeur extends Application {
+public class FenetreUnMagasinVendeur extends Application {
 
     private BorderPane racine;
     private VBox panelCentral;
@@ -28,16 +30,21 @@ public class FenetreMagasinVendeur extends Application {
     private Button boutonSettings;
     private Button boutonRetour;
     private Button boutonPanier;
+    private Stage stage;
+    private ConnexionMySQL connexionMySQL;
+    private Vendeur vendeur;
+    private Magasin magasin;
 
-    @Override
-    public void init() {
-        // Initialisation si nécessaire
+    public FenetreUnMagasinVendeur(ConnexionMySQL connexionMySQL, Vendeur vendeur){
+        this.connexionMySQL = connexionMySQL;
+        this.vendeur = vendeur;
+        this.magasin = this.vendeur.getMagasin();
     }
 
     private Scene laScene() {
         this.racine = new BorderPane();
-        racine.setTop(this.titre()); // Bannière en haut
-        this.panelCentral = fenetreMagasin(); // Contenu principal au centre
+        racine.setTop(this.titre());
+        this.panelCentral = fenetreMagasin();
         racine.setCenter(this.panelCentral);
         Scene scene = new Scene(racine, 1200, 750);
         return scene;
@@ -70,6 +77,8 @@ public class FenetreMagasinVendeur extends Application {
     boutonPanier.setStyle(styleBouton);
     boutonRetour.setStyle(styleBouton);
 
+    boutonHome.setOnAction(new ControleurHome(this.stage));
+
     HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
     boutons.setPadding(new Insets(10));
     boutons.setAlignment(Pos.CENTER); // centre les boutons dans la HBox horizontalement
@@ -98,29 +107,27 @@ public class FenetreMagasinVendeur extends Application {
     principal.setStyle("-fx-background-color: #2073c4;");
     HBox.setHgrow(principal, Priority.ALWAYS);
 
-    // --- Carte librairie à gauche ---
     VBox carte = new VBox(10);
     carte.setPadding(new Insets(15));
     carte.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
     carte.setPrefWidth(500);
 
-    Label nomLibrairie = new Label("La Librairie Parisienne");
+    Label nomLibrairie = new Label(this.magasin.getNom());
     nomLibrairie.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-    ImageView imgLibrairie = new ImageView(new Image("file:img/librairie.png"));
+    ImageView imgLibrairie = new ImageView(new Image("file:./img/mag" + this.magasin.getIdMagasin() + ".jpeg"));
     imgLibrairie.setFitHeight(200);
     imgLibrairie.setPreserveRatio(true);
 
     HBox infos = new HBox(10);
     VBox gaucheInfos = new VBox(5);
     gaucheInfos.getChildren().addAll(
-        new Label("📦 n°1"),
-        new Label("⭐ 4.6"),
-        new Label("📞 06 48 72 35 19")
+        new Label("id n°" + this.magasin.getIdMagasin()),
+        new Label("" + this.magasin.getTel())
     );
 
     VBox droiteInfos = new VBox(5);
-    droiteInfos.getChildren().add(new Label("📍 24 Rue de la Tombe-Issoire, 75014 Paris"));
+    droiteInfos.getChildren().add(new Label(this.magasin.getAdresse()));
 
     infos.getChildren().addAll(gaucheInfos, droiteInfos);
 
@@ -129,7 +136,6 @@ public class FenetreMagasinVendeur extends Application {
 
     carte.getChildren().addAll(nomLibrairie, imgLibrairie, infos, supprimerLivre);
 
-    // --- Colonne droite avec deux encadrés ---
 
     VBox panneauDroit = new VBox(20);
 
@@ -181,23 +187,23 @@ public class FenetreMagasinVendeur extends Application {
     return container;
 }
 
+public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Vendeur vendeur) {
+        try {
+            FenetreUnMagasinVendeur fv = new FenetreUnMagasinVendeur(connexionMySQL, vendeur);
+            fv.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         Scene scene = laScene();
         stage.setScene(scene);
         stage.setTitle("Livre Express - Panier");
         stage.show();
-    }
-
-     public static void afficher(Stage stage, ConnexionMySQL connexionMySQL) {
-        try {
-            
-            FenetreMagasinVendeur fm = new FenetreMagasinVendeur();
-            fm.start(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
