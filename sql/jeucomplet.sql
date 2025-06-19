@@ -1,4 +1,3 @@
-
 -- les magasins
 INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
   (1, 'La librairie parisienne', '24 Rue de la Tombe-Issoire, 75014 Paris', '06 48 72 35 19', 4.5),
@@ -8,13 +7,6 @@ INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
   (5, 'Le Ch''ti livre', '7 Rue de Paris, 59000 Lille', '03 20 54 78 12', 4.6),
   (6, 'Rhône à lire', '9 Quai Saint-Antoine, 69002 Lyon', '04 78 42 15 37', 4.3),
   (7, 'Loire et livres', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
-
-
-
-SELECT MONTH(datecom) as mois, nommag as Magasin, SUM(prixvente) as CA, YEAR(datecom) as annee
-FROM MAGASIN NATURAL JOIN COMMANDE NATURAL JOIN DETAILCOMMANDE
-WHERE idmag = ?
-GROUP BY annee, mois;
 
 -- La classification
 insert into CLASSIFICATION(iddewey, nomclass) values
@@ -118,7 +110,6 @@ insert into CLASSIFICATION(iddewey, nomclass) values
 	(970, 'Histoire de l''Amérique du Nord'),
 	(980, 'Histoire de l''Amérique du Sud'),
 	(990, 'Histoire d''autres parties du monde');
-
 
 -- les clients
 insert into CLIENT (idcli, nomcli, prenomcli, adressecli, codepostal, villecli, mdpC) values
