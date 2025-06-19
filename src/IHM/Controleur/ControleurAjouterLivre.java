@@ -7,16 +7,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import Java.Auteur;
+import Java.Client;
 import Java.Livre;
 import Java.Vendeur;
 
 import java.sql.SQLException;
 
 import BD.MagasinBD;
+import BD.ClientBD;
 import BD.ConnexionMySQL;
 
 public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
-
 
     private Client client;
     private Livre livre;
@@ -27,7 +28,7 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
         this.client = client;
         this.livre = livre;
         this.clientBD = new ClientBD(connexionMySQL);
-        this.labelCompteur = labelCompteur;
+        this.labelCompteur = labelCompteur;}
 
     private ConnexionMySQL connexion;
     private Vendeur vendeur;

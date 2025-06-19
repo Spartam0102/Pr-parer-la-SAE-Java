@@ -48,6 +48,8 @@ public class FenetreStock extends Application {
     private Timeline timelineDefilante;
     private Client client;
     private Stage stage;
+    private Label lblCompteurPanier;
+
 
     public FenetreStock(ConnexionMySQL connexionMySQL, Magasin magasin, Client client) {
         this.magasinBD = new MagasinBD(connexionMySQL);
@@ -81,6 +83,9 @@ public class FenetreStock extends Application {
         boutonSettings.setStyle(styleBouton);
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
+        lblCompteurPanier = new Label("Panier : " + client.getPanier().size() + " livre(s)");
+lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -358,10 +363,10 @@ public class FenetreStock extends Application {
             nombre.setAlignment(Pos.CENTER_RIGHT);
 
             // Créer le contrôleur pour ajouter au panier avec référence au label
-            ControleurAjouterLivre controleurAjouter = new ControleurAjouterLivre(this.client, livre,
+            ControleurAjouterLivrePanier controleurAjouter = new ControleurAjouterLivrePanier(this.client, livre,
                     magasinBD.getConnexion(), lblCompteur);
 
-            bouton.setOnAction(controleurAjouter);
+            bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier));
 
             droite.getChildren().addAll(prix, nombre, bouton);
 
@@ -456,7 +461,7 @@ public class FenetreStock extends Application {
             Button bouton = new Button("Ajouter au panier");
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
-            bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion()));
+bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier));
             droite.getChildren().addAll(prix, bouton);
 
             BorderPane ligne = new BorderPane();
@@ -473,14 +478,7 @@ public class FenetreStock extends Application {
         }
     }
 
-    public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin, Client client) {
-        try {
-            FenetreStock fenetre = new FenetreStock(connexion, magasin, client);
-            fenetre.start(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+   
 
 
     public static void main(String[] args) {
