@@ -11,6 +11,7 @@ import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.Controleur.ControleurAjouterLivre;
 import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurVoirPanier;
 import Java.*;
 import javafx.application.Application;
@@ -42,7 +43,6 @@ public class FenetreUnMagasinVendeur extends Application {
     private Button boutonHome;
     private Button boutonSettings;
     private Button boutonRetour;
-    private Button boutonPanier;
     private Stage stage;
     private ConnexionMySQL connexionMySQL;
     private Vendeur vendeur;
@@ -72,34 +72,31 @@ public class FenetreUnMagasinVendeur extends Application {
 
         ImageView homeView = new ImageView(new Image("file:img/house.png"));
         ImageView settingsView = new ImageView(new Image("file:img/settings.png"));
-        ImageView panierView = new ImageView(new Image("file:img/panier.png"));
+
         ImageView retourView = new ImageView(new Image("file:img/retour.png"));
 
-        for (ImageView iv : new ImageView[] { homeView, settingsView, panierView, retourView }) {
+        for (ImageView iv : new ImageView[] { homeView, settingsView, retourView }) {
             iv.setFitHeight(30);
             iv.setFitWidth(30);
         }
 
         this.boutonHome = new Button("", homeView);
         this.boutonSettings = new Button("", settingsView);
-        this.boutonPanier = new Button("", panierView);
         this.boutonRetour = new Button("", retourView);
+        boutonSettings.setOnAction(new ControleurParametre(this.stage));
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
         boutonHome.setStyle(styleBouton);
         boutonSettings.setStyle(styleBouton);
-        boutonPanier.setStyle(styleBouton);
-        
-    boutonRetour.setStyle("-fx-background-color:rgb(150, 175, 201);" +
-                "-fx-border-radius: 18; -fx-background-radius: 18;");
-    boutonRetour.setDisable(true);
 
+        boutonRetour.setStyle("-fx-background-color:rgb(150, 175, 201);" +
+                "-fx-border-radius: 18; -fx-background-radius: 18;");
+        boutonRetour.setDisable(true);
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
-       
 
-        HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
+        HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonRetour);
         boutons.setPadding(new Insets(10));
         boutons.setAlignment(Pos.CENTER);
 
@@ -114,14 +111,6 @@ public class FenetreUnMagasinVendeur extends Application {
 
         return banniere;
     }
-
-
-   
-
-
-   
-
-
 
     private VBox fenetreMagasin() {
         VBox container = new VBox();
@@ -199,11 +188,11 @@ public class FenetreUnMagasinVendeur extends Application {
         Button boutonAjouter = new Button("Ajouter");
         boutonAjouter.setStyle("-fx-background-color: green; -fx-text-fill: white;");
         boutonAjouter.setOnAction(new ControleurAjouterLivre(
-    connexionMySQL, vendeur,
-    champTitre, champAuteur, champPages, champPrix, champAnnee
-));
+                connexionMySQL, vendeur,
+                champTitre, champAuteur, champPages, champPrix, champAnnee));
 
-        ajoutLivre.getChildren().addAll(lblAjout, champTitre, champAuteur, champPages, champPrix, champAnnee,boutonAjouter);
+        ajoutLivre.getChildren().addAll(lblAjout, champTitre, champAuteur, champPages, champPrix, champAnnee,
+                boutonAjouter);
 
         panneauDroit.getChildren().addAll(voirPanier, ajoutLivre);
         panneauDroit.setPrefWidth(400);

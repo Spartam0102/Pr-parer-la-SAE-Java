@@ -1,6 +1,7 @@
 package IHM;
 
 import IHM.Controleur.ControleurHome;
+import IHM.Controleur.ControleurParametre;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,6 +40,7 @@ public class FenetreLivres extends Application {
         this.boutonSettings = new Button("", settingsView);
         this.boutonPanier = new Button("", panierView);
         this.boutonRetour = new Button("", retourView);
+        boutonSettings.setOnAction(new ControleurParametre(this.stage));
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";

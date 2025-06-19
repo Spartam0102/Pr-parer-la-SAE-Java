@@ -5,7 +5,7 @@ import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.Controleur.ControleurAllerModifierStock;
 import IHM.Controleur.ControleurHome;
-
+import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurRetour;
 
 import IHM.Controleur.ControleurStock;
@@ -61,6 +61,7 @@ public class FenetreUnMagasinAdmin extends Application{
         this.boutonHome = new Button("", homeView);
         this.boutonSettings = new Button("", settingsView);
         this.boutonRetour = new Button("", retourView);
+        boutonSettings.setOnAction(new ControleurParametre(this.stage));
 
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
