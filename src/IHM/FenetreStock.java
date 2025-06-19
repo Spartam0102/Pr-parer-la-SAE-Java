@@ -3,6 +3,7 @@ package IHM;
 import IHM.Controleur.ControleurAjouterLivrePanier;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
+import IHM.Controleur.ControleurRetour;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public class FenetreStock extends Application {
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
         boutonPanier.setOnAction(new ControleurPanier(this.magasinBD.getConnexion(), client, stage));
+        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, client, "fenetreMagasinsClient"));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);

@@ -54,7 +54,9 @@ public class FenetreMagasinsAdmin extends Application {
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
         boutonHome.setStyle(styleBouton);
         boutonSettings.setStyle(styleBouton);
-        boutonRetour.setStyle(styleBouton);
+        boutonRetour.setStyle("-fx-background-color: #206db8;" +
+                "-fx-border-radius: 18; -fx-background-radius: 18;");
+        boutonRetour.setDisable(true);
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonRetour);
         boutons.setPadding(new Insets(10));
