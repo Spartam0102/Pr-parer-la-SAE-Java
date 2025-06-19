@@ -90,9 +90,14 @@ public class FenetreUnMagasinVendeur extends Application {
         boutonHome.setStyle(styleBouton);
         boutonSettings.setStyle(styleBouton);
         boutonPanier.setStyle(styleBouton);
-        boutonRetour.setStyle(styleBouton);
+        
+    boutonRetour.setStyle("-fx-background-color:rgb(150, 175, 201);" +
+                "-fx-border-radius: 18; -fx-background-radius: 18;");
+    boutonRetour.setDisable(true);
+
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
+       
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -111,44 +116,12 @@ public class FenetreUnMagasinVendeur extends Application {
     }
 
 
-    this.boutonHome = new Button("", homeView);
-    this.boutonSettings = new Button("", settingsView);
-    this.boutonPanier = new Button("", panierView);
-    this.boutonRetour = new Button("", retourView);
-
-    String styleBouton = "-fx-background-color: #206db8;" +
-            "-fx-border-radius: 18; -fx-background-radius: 18;";
-    boutonHome.setStyle(styleBouton);
-    boutonSettings.setStyle(styleBouton);
-    boutonPanier.setStyle(styleBouton);
-    boutonRetour.setStyle(styleBouton);
-    boutonRetour.setStyle("-fx-background-color:rgb(150, 175, 201);" +
-                "-fx-border-radius: 18; -fx-background-radius: 18;");
-    boutonRetour.setDisable(true);
-
-    boutonHome.setOnAction(new ControleurHome(this.stage));
-
-    HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
-    boutons.setPadding(new Insets(10));
-    boutons.setAlignment(Pos.CENTER); // centre les boutons dans la HBox horizontalement
-
-    // Conteneur pour centrer la HBox verticalement dans la partie droite
-    VBox conteneurDroit = new VBox(boutons);
-    conteneurDroit.setAlignment(Pos.CENTER); 
-    conteneurDroit.setPadding(new Insets(10));
-
-    BorderPane banniere = new BorderPane();
-    banniere.setLeft(logo);
-    banniere.setRight(conteneurDroit); 
-    banniere.setStyle("-fx-background-color: white;");
-
-    return banniere;
-}
+   
 
 
    
 
-public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Vendeur vendeur) {
+
 
     private VBox fenetreMagasin() {
         VBox container = new VBox();
