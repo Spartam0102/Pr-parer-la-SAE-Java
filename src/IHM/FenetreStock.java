@@ -1,6 +1,7 @@
 package IHM;
 
 import IHM.Controleur.ControleurAjouterLivre;
+import IHM.Controleur.ControleurCompteur;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 
@@ -20,6 +21,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,7 +59,7 @@ public class FenetreStock extends Application {
         ImageView panierView = new ImageView(new Image("file:img/panier.png"));
         ImageView retourView = new ImageView(new Image("file:img/retour.png"));
 
-        for (ImageView iv : new ImageView[]{homeView, settingsView, panierView, retourView}) {
+        for (ImageView iv : new ImageView[] { homeView, settingsView, panierView, retourView }) {
             iv.setFitHeight(30);
             iv.setFitWidth(30);
         }
@@ -93,13 +95,15 @@ public class FenetreStock extends Application {
         return banniere;
     }
 
-    // Création d'une ImageView pour un livre à partir de son ISBN avec fallback image locale
+    // Création d'une ImageView pour un livre à partir de son ISBN avec fallback
+    // image locale
     private ImageView creerImageLivre(long isbn) {
         String urlImage = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
         Image imageLivre;
         try {
             imageLivre = new Image(urlImage, 120, 180, true, true, true);
-            if (imageLivre.isError()) throw new Exception("Erreur chargement image");
+            if (imageLivre.isError())
+                throw new Exception("Erreur chargement image");
         } catch (Exception e) {
             imageLivre = new Image("file:img/default_book_cover.png", 120, 180, true, true);
         }
@@ -227,7 +231,8 @@ public class FenetreStock extends Application {
         for (Livre livre : listeLivres.keySet()) {
             livresPourBanniere.add(livre);
             cpt++;
-            if (cpt >= max) break;
+            if (cpt >= max)
+                break;
         }
 
         setupBanniereDefilanteImages(test, livresPourBanniere, scene.getWidth());
@@ -249,75 +254,109 @@ public class FenetreStock extends Application {
         GridPane.setHalignment(titreMag, HPos.CENTER);
 
         final int nbColonnes = 3;
-int i = 0;
-for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
-    Livre livre = entry.getKey();
-    Integer quantite = entry.getValue();
+        int i = 0;
+        for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
+            Livre livre = entry.getKey();
+            Integer quantite = entry.getValue();
 
-    long isbn = livre.getIdLivre();  // Assure-toi que ce soit un long valide
+            long isbn = livre.getIdLivre(); // Assure-toi que ce soit un long valide
 
-    Image imageLivre;
-    try {
-        String imageUrl = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
-        imageLivre = new Image(imageUrl, 120, 180, true, true, true);
-        if (imageLivre.isError()) throw new Exception("Erreur chargement image");
-    } catch (Exception e) {
-        imageLivre = new Image("file:img/default_book_cover.png", 120, 180, true, true);
-    }
+            Image imageLivre;
+            try {
+                String imageUrl = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+                imageLivre = new Image(imageUrl, 120, 180, true, true, true);
+                if (imageLivre.isError())
+                    throw new Exception("Erreur chargement image");
+            } catch (Exception e) {
+                imageLivre = new Image("file:img/default_book_cover.png", 120, 180, true, true);
+            }
 
-    ImageView imageView = new ImageView(imageLivre);
-    imageView.setFitHeight(140);
-    imageView.setPreserveRatio(true);
+            ImageView imageView = new ImageView(imageLivre);
+            imageView.setFitHeight(140);
+            imageView.setPreserveRatio(true);
 
-    VBox carte = new VBox(10);
-    carte.setPadding(new Insets(10));
-    carte.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 20px; -fx-border-radius: 20px;");
-    carte.setAlignment(Pos.TOP_LEFT);
-    carte.setPrefWidth(300);
-    GridPane.setMargin(carte, new Insets(5, 0, 5, 0));
+            VBox carte = new VBox(10);
+            carte.setPadding(new Insets(10));
+            carte.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 20px; -fx-border-radius: 20px;");
+            carte.setAlignment(Pos.TOP_LEFT);
+            carte.setPrefWidth(300);
+            GridPane.setMargin(carte, new Insets(5, 0, 5, 0));
 
-    Text titre = new Text(livre.getNomLivre());
-    titre.setWrappingWidth(400);
-    titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+            Text titre = new Text(livre.getNomLivre());
+            titre.setWrappingWidth(400);
+            titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-    Text auteur = new Text("Claire Dubois");  // Remplace par livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois"); // Remplace par livre.getAuteur() si dispo
 
-    HBox stock = new HBox(5);
-    ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
-    iconeStock.setFitHeight(22);
-    iconeStock.setFitWidth(22);
-    Text stockText = new Text(quantite + (quantite <= 1 ? " en stock" : " en stock"));
-    stock.getChildren().addAll(iconeStock, stockText);
+            HBox stock = new HBox(5);
+            ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
+            iconeStock.setFitHeight(22);
+            iconeStock.setFitWidth(22);
+            Text stockText = new Text(quantite + (quantite <= 1 ? " en stock" : " en stock"));
+            stock.getChildren().addAll(iconeStock, stockText);
 
-    VBox infos = new VBox(5, auteur, stock);
+            VBox infos = new VBox(5, auteur, stock);
 
-    VBox droite = new VBox(8);
-    droite.setAlignment(Pos.CENTER_RIGHT);
-    Text prix = new Text(String.format("%.2f €", livre.getPrix()));
-    prix.setStyle("-fx-font-weight: bold;");
-    Button bouton = new Button("Ajouter au panier");
-    bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
-            " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
+            VBox droite = new VBox(8);
+            droite.setAlignment(Pos.CENTER_RIGHT);
+            Text prix = new Text(String.format("%.2f €", livre.getPrix()));
+            prix.setStyle("-fx-font-weight: bold;");
 
-    // Ici tu peux ajouter un event handler pour le bouton si tu veux
-    bouton.setOnAction(new ControleurAjouterLivre(this.client, livre, magasinBD.getConnexion()));
+            Button bouton = new Button("Ajouter au panier");
+            bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
+                    " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
+            //
+            // nombre
+            //
+            HBox nombre = new HBox();
+            Button btnMoins = new Button("-");
+            btnMoins.setStyle(
+                    "-fx-background-color: transparent;" +
+                            "-fx-border-color: transparent;" +
+                            "-fx-text-fill: black;");
+            Button btnPlus = new Button("+");
+            btnPlus.setStyle(
+                    "-fx-background-color: transparent;" +
+                            "-fx-border-color: transparent;" +
+                            "-fx-text-fill: black;");
 
-    droite.getChildren().addAll(prix, bouton);
+            Label lblCompteur = new Label("1");
+            lblCompteur.setStyle("-fx-font-size: 18px;" + "-fx-text-fill: black;");
 
-    BorderPane ligne = new BorderPane();
-    ligne.setLeft(infos);
-    ligne.setRight(droite);
+            ControleurCompteur controleurMoins = new ControleurCompteur(lblCompteur, "moins", 1, quantite);
+            ControleurCompteur controleurPlus = new ControleurCompteur(lblCompteur, "plus", 1, quantite);
 
-    HBox ligneComplete = new HBox(15);
-    ligneComplete.getChildren().addAll(imageView, ligne);
+            btnMoins.setOnAction(controleurMoins);
+            btnPlus.setOnAction(controleurPlus);
 
-    carte.getChildren().addAll(titre, ligneComplete);
+            nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
+            nombre.setAlignment(Pos.CENTER_RIGHT);
 
-    grilleLivres.add(carte, i % nbColonnes, 1 + i / nbColonnes);
+            // Créer le contrôleur pour ajouter au panier avec référence au label
+            ControleurAjouterLivre controleurAjouter = new ControleurAjouterLivre(this.client, livre,
+                    magasinBD.getConnexion(), lblCompteur);
 
-    i++;
-}
+            bouton.setOnAction(controleurAjouter);
 
+            droite.getChildren().addAll(prix, nombre, bouton);
+
+            //
+            // nombre fin
+            //
+
+            BorderPane ligne = new BorderPane();
+            ligne.setLeft(infos);
+            ligne.setRight(droite);
+
+            HBox ligneComplete = new HBox(15);
+            ligneComplete.getChildren().addAll(imageView, ligne);
+
+            carte.getChildren().addAll(titre, ligneComplete);
+
+            grilleLivres.add(carte, i % nbColonnes, 1 + i / nbColonnes);
+            i++;
+
+        }
 
         // Ajustement dynamique de la largeur lors du redimensionnement
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -328,14 +367,13 @@ for (Map.Entry<Livre, Integer> entry : listeLivres.entrySet()) {
     }
 
     public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin, Client client) {
-    try {
-        FenetreStock fenetre = new FenetreStock(connexion, magasin, client);
-        fenetre.start(stage);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            FenetreStock fenetre = new FenetreStock(connexion, magasin, client);
+            fenetre.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
-
 
     public static void main(String[] args) {
         launch(args);

@@ -105,7 +105,7 @@ public class ControleurPlusMagasin {
 
             popup.close();
 
-            rafraichirFenetreMagasins(parentStage, magasinBD);
+            IHM.FenetreMagasinsAdmin.afficher(parentStage, magasinBD.getConnexion());
             } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,9 +120,4 @@ public class ControleurPlusMagasin {
         alert.showAndWait();
     }
 
-    private static void rafraichirFenetreMagasins(Stage stage, MagasinBD magasinBD) {
-
-            IHM.FenetreMagasinsAdmin.afficher(stage, magasinBD.getConnexion());
-
-    }
 }
