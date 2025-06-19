@@ -3,6 +3,7 @@ package IHM.Controleur;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import Java.Auteur;
@@ -15,6 +16,18 @@ import BD.MagasinBD;
 import BD.ConnexionMySQL;
 
 public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
+
+
+    private Client client;
+    private Livre livre;
+    private ClientBD clientBD;
+    private Label labelCompteur; // Référence au label au lieu d'un nombre fixe
+
+    public ControleurAjouterLivre(Client client, Livre livre, ConnexionMySQL connexionMySQL, Label labelCompteur) {
+        this.client = client;
+        this.livre = livre;
+        this.clientBD = new ClientBD(connexionMySQL);
+        this.labelCompteur = labelCompteur;
 
     private ConnexionMySQL connexion;
     private Vendeur vendeur;
@@ -32,10 +45,12 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
         this.champPages = champPages;
         this.champPrix = champPrix;
         this.champAnnee = champAnnee;
+
     }
 
     @Override
     public void handle(ActionEvent event) {
+
         try {
             // Validation des champs vides
             if (champTitre.getText().trim().isEmpty()) {
@@ -113,6 +128,7 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
                 message = "Ce livre existe déjà.";
             }
             afficherAlerte("Erreur de base de données", message, AlertType.ERROR);
+
         } catch (Exception e) {
             e.printStackTrace();
             afficherAlerte("Erreur inattendue", "Une erreur inattendue s'est produite : " + e.getMessage(),

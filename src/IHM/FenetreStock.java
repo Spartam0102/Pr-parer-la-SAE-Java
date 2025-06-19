@@ -1,6 +1,11 @@
 package IHM;
 
+
+import IHM.Controleur.ControleurAjouterLivre;
+import IHM.Controleur.ControleurCompteur;
+
 import IHM.Controleur.ControleurAjouterLivrePanier;
+
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 import IHM.Controleur.ControleurRetour;
@@ -21,6 +26,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -289,6 +295,7 @@ public class FenetreStock extends Application {
                 imageLivre = new Image("file:img/default_book_cover.png", 120, 180, true, true);
             }
 
+
             ImageView imageView = new ImageView(imageLivre);
             imageView.setFitHeight(140);
             imageView.setPreserveRatio(true);
@@ -319,14 +326,48 @@ public class FenetreStock extends Application {
             droite.setAlignment(Pos.CENTER_RIGHT);
             Text prix = new Text(String.format("%.2f €", livre.getPrix()));
             prix.setStyle("-fx-font-weight: bold;");
+
             Button bouton = new Button("Ajouter au panier");
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
+            //
+            // nombre
+            //
+            HBox nombre = new HBox();
+            Button btnMoins = new Button("-");
+            btnMoins.setStyle(
+                    "-fx-background-color: transparent;" +
+                            "-fx-border-color: transparent;" +
+                            "-fx-text-fill: black;");
+            Button btnPlus = new Button("+");
+            btnPlus.setStyle(
+                    "-fx-background-color: transparent;" +
+                            "-fx-border-color: transparent;" +
+                            "-fx-text-fill: black;");
 
-            // Ici tu peux ajouter un event handler pour le bouton si tu veux
-            bouton.setOnAction(new ControleurAjouterLivrePanier(this.client, livre, magasinBD.getConnexion()));
+            Label lblCompteur = new Label("1");
+            lblCompteur.setStyle("-fx-font-size: 18px;" + "-fx-text-fill: black;");
 
-            droite.getChildren().addAll(prix, bouton);
+            ControleurCompteur controleurMoins = new ControleurCompteur(lblCompteur, "moins", 1, quantite);
+            ControleurCompteur controleurPlus = new ControleurCompteur(lblCompteur, "plus", 1, quantite);
+
+            btnMoins.setOnAction(controleurMoins);
+            btnPlus.setOnAction(controleurPlus);
+
+            nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
+            nombre.setAlignment(Pos.CENTER_RIGHT);
+
+            // Créer le contrôleur pour ajouter au panier avec référence au label
+            ControleurAjouterLivre controleurAjouter = new ControleurAjouterLivre(this.client, livre,
+                    magasinBD.getConnexion(), lblCompteur);
+
+            bouton.setOnAction(controleurAjouter);
+
+            droite.getChildren().addAll(prix, nombre, bouton);
+
+            //
+            // nombre fin
+            //
 
             BorderPane ligne = new BorderPane();
             ligne.setLeft(infos);
@@ -338,8 +379,9 @@ public class FenetreStock extends Application {
             carte.getChildren().addAll(titre, ligneComplete);
 
             grilleLivres.add(carte, i % nbColonnes, 1 + i / nbColonnes);
-
             i++;
+
+
         }
 
         // Ajustement dynamique de la largeur lors du redimensionnement
@@ -348,6 +390,16 @@ public class FenetreStock extends Application {
         });
 
         primaryStage.show();
+    }
+
+
+    public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin, Client client) {
+        try {
+            FenetreStock fenetre = new FenetreStock(connexion, magasin, client);
+            fenetre.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void afficherLivresDansGrille(GridPane grilleLivres, List<Livre> livres, Map<Livre, Integer> stockMap) {
@@ -429,6 +481,7 @@ public class FenetreStock extends Application {
             e.printStackTrace();
         }
     }
+
 
     public static void main(String[] args) {
         launch(args);

@@ -28,4 +28,6 @@ public class ControleurPanier implements EventHandler<ActionEvent> {
             e.printStackTrace();
         }
     }
+
+
 }
