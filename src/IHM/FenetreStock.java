@@ -1,6 +1,5 @@
 package IHM;
 
-
 import IHM.Controleur.ControleurAjouterLivre;
 import IHM.Controleur.ControleurCompteur;
 
@@ -51,7 +50,6 @@ public class FenetreStock extends Application {
     private Stage stage;
     private Label lblCompteurPanier;
 
-
     public FenetreStock(ConnexionMySQL connexionMySQL, Magasin magasin, Client client) {
         this.magasinBD = new MagasinBD(connexionMySQL);
         this.magasin = magasin;
@@ -85,9 +83,8 @@ public class FenetreStock extends Application {
         boutonSettings.setStyle(styleBouton);
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
-        lblCompteurPanier = new Label("Panier : " + client.getPanier().size() + " livre(s)");
-lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
+//        lblCompteurPanier = new Label("Panier : " + client.getPanier().size() + " livre(s)");
+//        lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -95,7 +92,8 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
         boutonPanier.setOnAction(new ControleurPanier(this.magasinBD.getConnexion(), client, stage));
-        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, client, "fenetreMagasinsClient"));
+        boutonRetour.setOnAction(
+                new ControleurRetour(this.magasinBD.getConnexion(), stage, client, "fenetreMagasinsClient"));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
@@ -265,7 +263,6 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         grilleLivres.setVgap(30);
         grilleLivres.setAlignment(Pos.CENTER);
         cadreGrand.getChildren().addAll(champRecherche, grilleLivres);
-
         grilleLivres.setPadding(new Insets(20));
 
         champRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -301,7 +298,6 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             } catch (Exception e) {
                 imageLivre = new Image("file:img/default_book_cover.png", 120, 180, true, true);
             }
-
 
             ImageView imageView = new ImageView(imageLivre);
             imageView.setFitHeight(140);
@@ -363,12 +359,12 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
             nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
             nombre.setAlignment(Pos.CENTER_RIGHT);
+            System.out.println(lblCompteur);
 
             // Créer le contrôleur pour ajouter au panier avec référence au label
-            ControleurAjouterLivrePanier controleurAjouter = new ControleurAjouterLivrePanier(this.client, livre,
-                    magasinBD.getConnexion(), lblCompteur);
+            ControleurAjouterLivrePanier controleurAjouterLivrePanier = new ControleurAjouterLivrePanier(this.client, livre, magasinBD.getConnexion(), lblCompteur,magasin);
 
-            bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier));
+            bouton.setOnAction(controleurAjouterLivrePanier);
 
             droite.getChildren().addAll(prix, nombre, bouton);
 
@@ -388,7 +384,6 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             grilleLivres.add(carte, i % nbColonnes, 1 + i / nbColonnes);
             i++;
 
-
         }
 
         // Ajustement dynamique de la largeur lors du redimensionnement
@@ -398,7 +393,6 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         primaryStage.show();
     }
-
 
     public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin, Client client) {
         try {
@@ -463,7 +457,8 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             Button bouton = new Button("Ajouter au panier");
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
-bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier));
+            bouton.setOnAction(
+                    new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier, magasin));
             droite.getChildren().addAll(prix, bouton);
 
             BorderPane ligne = new BorderPane();
@@ -479,9 +474,6 @@ bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.get
             i++;
         }
     }
-
-   
-
 
     public static void main(String[] args) {
         launch(args);
