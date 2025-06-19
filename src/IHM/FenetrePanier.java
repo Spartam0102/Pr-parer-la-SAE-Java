@@ -284,7 +284,7 @@ public class FenetrePanier extends Application {
             magasin.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
             domicile.setStyle("-fx-background-color: #fbbd8d; -fx-text-fill: black;");
             livraisonLabel.setText("Livraison : Magasin");
-            this.modeLivraisonChoisi = "Domicile";
+            this.modeLivraisonChoisi = "Magasin";
         });
 
         HBox boutonsLivraison = new HBox(10, domicile, magasin);
