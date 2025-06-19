@@ -24,6 +24,11 @@ INSERT INTO MAGASIN (idmag, nommag, adressemag, telmag, note) VALUES
   (15, 'cc', '4 Rue du Commerce, 42000 Saint-Étienne', '04 77 31 22 44', 4.4);
 
 
+SELECT MONTH(datecom) as mois, nommag as Magasin, SUM(prixvente) as CA, YEAR(datecom) as annee
+FROM MAGASIN NATURAL JOIN COMMANDE NATURAL JOIN DETAILCOMMANDE
+WHERE idmag = ?
+GROUP BY annee, mois;
+
 -- La classification
 insert into CLASSIFICATION(iddewey, nomclass) values
 	(000, 'Informatique, généralités'),

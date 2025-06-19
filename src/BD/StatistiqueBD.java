@@ -10,6 +10,10 @@ public class StatistiqueBD {
     public StatistiqueBD(ConnexionMySQL laConnexion) {
         this.laConnexion = laConnexion;
     }
+    
+    public ConnexionMySQL getLaConnexion() {
+        return this.laConnexion;
+    }
 
     public List<List<String>> premier(String id) throws SQLException {
         try (PreparedStatement ps = laConnexion.prepareStatement(
@@ -31,14 +35,10 @@ public class StatistiqueBD {
         }
     }
 
-    public List<List<String>> deuxieme(String annee) throws SQLException {
+    public List<List<String>> deuxieme(String id) throws SQLException {
         try (PreparedStatement ps = laConnexion.prepareStatement(
-                "SELECT FLOOR(iddewey / 100) * 100 as Theme, SUM(prixvente) as Montant " +
-                        "FROM CLASSIFICATION NATURAL JOIN THEMES NATURAL JOIN LIVRE NATURAL JOIN DETAILCOMMANDE " +
-                        "NATURAL JOIN COMMANDE " +
-                        "WHERE YEAR(datecom) = ? " +
-                        "GROUP BY Theme ORDER BY Theme")) {
-            ps.setString(1, annee);
+                "SELECT nommag as Magasin, YEAR(datecom) as annee, SUM(prixvente*qte) as Montant FROM MAGASIN NATURAL JOIN COMMANDE NATURAL JOIN DETAILCOMMANDE WHERE idmag = ? GROUP BY nommag, annee ORDER BY annee")) {
+            ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
 
             List<List<String>> tableau = new ArrayList<>();
@@ -46,7 +46,8 @@ public class StatistiqueBD {
             while (rs.next()) {
                 List<String> ligne = new ArrayList<>();
 
-                ligne.add(rs.getString("Theme"));
+                ligne.add(rs.getString("Magasin"));
+                ligne.add(rs.getString("annee"));
                 ligne.add(rs.getString("Montant"));
                 tableau.add(ligne);
             }

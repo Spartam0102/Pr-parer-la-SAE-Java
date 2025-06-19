@@ -46,7 +46,7 @@ public class AppStatistiques {
                             largeurConsole),
                     centrerTexte("║                                                                        ║",
                             largeurConsole),
-                    centrerTexte("║        Nombre de livres venus pour un magasins magasin.............[1] ║",
+                    centrerTexte("║        Nombre de livres vendus pour un magasins ...................[1] ║",
                             largeurConsole),
                     centrerTexte("║        Chiffre d'affaire par thème en année........................[2] ║",
                             largeurConsole),
