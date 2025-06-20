@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import IHM.*;
+import IHM.Général.*;
 import BD.*;
 import Java.*;
 import javafx.event.ActionEvent;

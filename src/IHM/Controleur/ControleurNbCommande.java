@@ -1,10 +1,9 @@
 package IHM.Controleur;
 
 import java.util.List;
-
+import IHM.Admin.*;
 import BD.ConnexionMySQL;
 import BD.StatistiqueBD;
-import IHM.FenetreUnMagasinAdmin;
 import Java.Magasin;
 import javafx.event.EventHandler;
 import javafx.scene.chart.BarChart;

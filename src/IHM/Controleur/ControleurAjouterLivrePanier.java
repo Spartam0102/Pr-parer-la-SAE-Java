@@ -82,7 +82,7 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
             for (int i = 0; i < nombre; i++) {
                 client.ajouterLivrePanier(livre);
             }
-
+    
             // Sauvegarder le panier
             clientBD.sauvegardePanierBD(client);
 

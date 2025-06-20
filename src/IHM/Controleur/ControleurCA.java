@@ -4,7 +4,7 @@ import java.util.List;
 
 import BD.ConnexionMySQL;
 import BD.StatistiqueBD;
-import IHM.FenetreUnMagasinAdmin;
+import IHM.Admin.*;
 import Java.Magasin;
 import javafx.event.EventHandler;
 import javafx.scene.chart.BarChart;

@@ -2,7 +2,7 @@ package IHM.Controleur;
 
 import Java.Client;
 import BD.ConnexionMySQL;
-import IHM.FenetrePanier;
+import IHM.Général.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;

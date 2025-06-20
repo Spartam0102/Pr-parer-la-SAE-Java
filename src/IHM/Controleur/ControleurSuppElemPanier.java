@@ -3,7 +3,7 @@ package IHM.Controleur;
 import java.util.Optional;
 
 import BD.*;
-import IHM.FenetrePanier;
+import IHM.Général.*;
 import Java.*;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;

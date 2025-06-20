@@ -1,4 +1,4 @@
-package IHM;
+package IHM.Général;
 
 import Java.*;
 import BD.*;
@@ -156,7 +156,7 @@ public class FenetrePanier extends Application {
     VBox ensembleLivresCommand = new VBox();
     ensembleLivresCommand.setStyle("-fx-background-color: white;");
     
-    // Image placeholder locale
+    
     Image placeholder = new Image("file:img/placeholder.png", 100, 140, true, true);
 
     for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
@@ -164,13 +164,13 @@ public class FenetrePanier extends Application {
         unLivreCommand.setPadding(new Insets(20));
 
         long isbn = couple.getKey().getIdLivre();
-        ImageView imageView = new ImageView(placeholder); // placeholder immédiat
+        ImageView imageView = new ImageView(placeholder); 
 
         try {
             String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
-            Image imageLivre = new Image(url, 100, 140, true, true, true); // chargement en arrière-plan
+            Image imageLivre = new Image(url, 100, 140, true, true, true); 
 
-            // Quand l'image est chargée, on remplace le placeholder
+       
             imageLivre.progressProperty().addListener((obs, oldProgress, newProgress) -> {
                 if (newProgress.doubleValue() >= 1.0) {
                     imageView.setImage(imageLivre);
@@ -178,11 +178,11 @@ public class FenetrePanier extends Application {
             });
 
         } catch (Exception e) {
-            // Si erreur, garder le placeholder
+            
 
         }
 
-        // Texte titre + quantité dans un VBox
+     
         Text nomLivre = new Text(couple.getKey().getNomLivre());
         nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
         Text quantite = new Text("     x" + couple.getValue());

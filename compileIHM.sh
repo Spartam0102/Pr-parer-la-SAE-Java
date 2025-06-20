@@ -25,4 +25,4 @@ echo "🚀 Lancement de l'application..."
 java --module-path "/usr/share/openjfx/lib/" \
      --add-modules javafx.controls,javafx.fxml \
      -cp "bin:lib/mariadb-java-client-2.5.3.jar" \
-     IHM.FenetreConnexion
+     IHM.Général.FenetreConnexion

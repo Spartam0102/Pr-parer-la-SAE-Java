@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 public class ControleurCompteur implements EventHandler<ActionEvent> {
     
     private Label labelCompteur;
-    private String operation; // "plus" ou "moins"
+    private String operation; 
     private int valeurMin;
     private int valeurMax;
     

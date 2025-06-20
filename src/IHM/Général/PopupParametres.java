@@ -1,4 +1,4 @@
-package IHM;
+package IHM.Général;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +25,7 @@ public class PopupParametres {
         boutonDeconnexion.setOnAction(e -> {
             popup.close();
             parentStage.close();
-            // Optionnel : FenetreConnexion.afficher(new Stage());
+            
         });
 
         Button fermer = new Button("Fermer");

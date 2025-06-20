@@ -1,6 +1,6 @@
 package BD;
 
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import Java.Administrateur;
-import Java.Client;
+
 
 public class AdministrateurBD {
     private ConnexionMySQL laConnexion;

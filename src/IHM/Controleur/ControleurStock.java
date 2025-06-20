@@ -1,10 +1,10 @@
 package IHM.Controleur;
 
-import IHM.FenetreStock;
+import IHM.Client.*;
+
 import Java.Client;
 import Java.Magasin;
 import BD.ConnexionMySQL;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;

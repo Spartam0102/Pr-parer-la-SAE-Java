@@ -1,4 +1,4 @@
-package IHM;
+package IHM.Général;
 
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurParametre;

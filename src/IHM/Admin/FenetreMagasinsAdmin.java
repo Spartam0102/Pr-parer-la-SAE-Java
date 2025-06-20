@@ -1,4 +1,4 @@
-package IHM;
+package IHM.Admin;
 
 import IHM.Controleur.*;
 import java.sql.SQLException;
@@ -183,13 +183,12 @@ public class FenetreMagasinsAdmin extends Application {
 
              Magasin magasinSelectionne = listeMagasins.get(i);
 
-            ControleurCarteMagasinAdmin controleur = new ControleurCarteMagasinAdmin(magasinBD.getConnexion(),
-                    magasinSelectionne);
+            
 
             conteneurCarte.setOnMouseClicked(new ControleurCarteMagasinAdmin(this.magasinBD.getConnexion(), magasinSelectionne));
         }
 
-        // Création du bouton "Ajouter un magasin" avec l'icône plus
+
         VBox magasinPlus = new VBox();
         magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
         magasinPlus.setPadding(new Insets(10));
@@ -206,19 +205,6 @@ public class FenetreMagasinsAdmin extends Application {
 
         magasinPlus.getChildren().addAll(plusIcon, texteAjouter);
 
-/*         // Ajout de l'effet hover pour le bouton plus
-        magasinPlus.setOnMouseEntered(e -> {
-            magasinPlus.setStyle("-fx-background-color: #f0f8ff; -fx-background-radius: 15px; " +
-                               "-fx-border-color: #206db8; -fx-border-width: 2px; -fx-border-radius: 15px; " +
-                               "-fx-cursor: hand;");
-        });
-
-        magasinPlus.setOnMouseExited(e -> {
-            magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px; " +
-                               "-fx-border-color: #206db8; -fx-border-width: 2px; -fx-border-radius: 15px;");
-        });
-*/
-        // Action pour ouvrir la popup d'ajout de magasin
         magasinPlus.setOnMouseClicked(e -> {
             ControleurPlusMagasin.afficherPopupAjouterMagasin(primaryStage, magasinBD);
         });
