@@ -75,8 +75,6 @@ public class FenetreStock extends Application {
         boutonSettings.setStyle(styleBouton);
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
-//        lblCompteurPanier = new Label("Panier : " + client.getPanier().size() + " livre(s)");
-//        lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -305,7 +303,7 @@ public class FenetreStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); 
+            Text auteur = new Text(""); 
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -349,7 +347,6 @@ public class FenetreStock extends Application {
             nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
             nombre.setAlignment(Pos.CENTER_RIGHT);
 
-            // Créer le contrôleur pour ajouter au panier avec référence au label
             ControleurAjouterLivrePanier controleurAjouterLivrePanier = new ControleurAjouterLivrePanier(this.client, livre, magasinBD.getConnexion(), lblCompteur,magasin);
 
             bouton.setOnAction(controleurAjouterLivrePanier);
@@ -425,7 +422,7 @@ public class FenetreStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois");
+            Text auteur = new Text("");
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));

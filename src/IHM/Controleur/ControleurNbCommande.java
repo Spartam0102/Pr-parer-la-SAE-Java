@@ -41,7 +41,7 @@ public class ControleurNbCommande implements EventHandler<MouseEvent>  {
 
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             if (!data.isEmpty()) {
-                series.setName(data.get(0).get(0)); // Nom du magasin
+                series.setName(data.get(0).get(0));
             }
 
             for (List<String> ligne : data) {

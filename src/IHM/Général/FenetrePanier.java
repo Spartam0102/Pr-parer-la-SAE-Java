@@ -188,7 +188,7 @@ public class FenetrePanier extends Application {
         Text quantite = new Text("     x" + couple.getValue());
         quantite.setStyle("-fx-font-size: 20px");
 
-        Text nomAuteur = new Text("Claude Dubois");
+        Text nomAuteur = new Text("");
 
         VBox texteVBox = new VBox(nomLivre, nomAuteur, quantite);
         texteVBox.setAlignment(Pos.CENTER_LEFT);

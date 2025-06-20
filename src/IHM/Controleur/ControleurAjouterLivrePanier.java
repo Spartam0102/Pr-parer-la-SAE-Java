@@ -33,10 +33,8 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         try {
-            // Récupérer le nombre actuel depuis le label
             int nombre = Integer.parseInt(labelCompteur.getText());
             
-            // Récupérer la quantité disponible du livre dans le magasin
             Map<Livre, Integer> stockMagasin = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
             Integer quantiteDisponible = stockMagasin.get(livre);
             
@@ -49,13 +47,11 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
                 return;
             }
             
-            // Vérifier la quantité déjà dans le panier du client
             Integer quantiteDejaDansPanier = client.getPanier().get(livre);
             if (quantiteDejaDansPanier == null) {
                 quantiteDejaDansPanier = 0;
             }
             
-            // Calculer la quantité maximale qu'on peut encore ajouter
             int quantiteMaxAjoutPossible = quantiteDisponible - quantiteDejaDansPanier;
             
             if (quantiteMaxAjoutPossible <= 0) {
@@ -67,7 +63,6 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
                 return;
             }
             
-            // Limiter le nombre à ajouter à ce qui est disponible
             if (nombre > quantiteMaxAjoutPossible) {
                 nombre = quantiteMaxAjoutPossible;
                 
@@ -78,15 +73,12 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
                 alert.showAndWait();
             }
 
-            // Ajouter le nombre de livres spécifié au panier
             for (int i = 0; i < nombre; i++) {
                 client.ajouterLivrePanier(livre);
             }
     
-            // Sauvegarder le panier
             clientBD.sauvegardePanierBD(client);
 
-            // Message de confirmation adapté au nombre
             String message = nombre + " exemplaire(s) du livre \"" + livre.getNomLivre()
                     + "\" ont bien été ajoutés au panier.";
 
@@ -96,7 +88,6 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
             alert.setContentText(message);
             alert.showAndWait();
 
-            // Remettre le compteur à 1 après ajout
             labelCompteur.setText("1");
 
         } catch (NumberFormatException e) {
