@@ -1,9 +1,11 @@
 package IHM.Controleur;
 
+import IHM.Client.*;
+import IHM.Admin.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
-import IHM.*;
 import BD.*;
 import Java.*;
 

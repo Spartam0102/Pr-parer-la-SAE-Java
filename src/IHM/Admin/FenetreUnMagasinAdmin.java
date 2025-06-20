@@ -1,6 +1,7 @@
-package IHM;
+package IHM.Admin;
 
 
+import IHM.Client.*;
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.Controleur.ControleurAllerModifierStock;
@@ -8,8 +9,7 @@ import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurRetour;
 
-import IHM.Controleur.ControleurStock;
-import IHM.Controleur.ControleurSuppElemPanier;
+
 import IHM.Controleur.ControleurSuppMagasin;
 
 import Java.Magasin;

@@ -1,9 +1,7 @@
-package IHM;
+package IHM.Client;
 
 import IHM.Controleur.ControleurStock;
-import IHM.Controleur.ControleurCarteMagasinAdmin;
 import IHM.Controleur.ControleurHome;
-import IHM.Controleur.ControleurMagasinVendeur;
 import IHM.Controleur.ControleurPanier;
 import IHM.Controleur.ControleurParametre;
 

@@ -1,7 +1,6 @@
-package IHM;
+package IHM.Client;
 
 
-import IHM.Controleur.ControleurAjouterLivre;
 import IHM.Controleur.ControleurCompteur;
 
 import IHM.Controleur.ControleurAjouterLivrePanier;
@@ -109,8 +108,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         return banniere;
     }
 
-    // Création d'une ImageView pour un livre à partir de son ISBN avec fallback
-    // image locale
+   
     private ImageView creerImageLivre(long isbn) {
         String urlImage = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
         Image imageLivre;
@@ -143,7 +141,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         HBox hbox = new HBox(40);
         hbox.setAlignment(Pos.CENTER_LEFT);
 
-        // Double la liste pour un défilement continu
+        
         for (int i = 0; i < 2; i++) {
             for (Livre livre : livres) {
                 ImageView imageView = creerImageLivre(livre.getIdLivre());
@@ -237,7 +235,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         primaryStage.setTitle("Fenêtre Magasin Client");
         primaryStage.setScene(scene);
 
-        // Récupérer les livres pour affichage
+        
         Map<Livre, Integer> listeLivres = magasinBD.listeLivreUnMagasin(this.magasin.getIdMagasin());
         List<Livre> livresPourBanniere = new ArrayList<>();
         int max = 7;
@@ -290,7 +288,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             Livre livre = entry.getKey();
             Integer quantite = entry.getValue();
 
-            long isbn = livre.getIdLivre(); // Assure-toi que ce soit un long valide
+            long isbn = livre.getIdLivre(); 
 
             Image imageLivre;
             try {
@@ -318,7 +316,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Remplace par livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois"); 
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -337,9 +335,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             Button bouton = new Button("Ajouter au panier");
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
-            //
-            // nombre
-            //
+           
             HBox nombre = new HBox();
             Button btnMoins = new Button("-");
             btnMoins.setStyle(
@@ -364,17 +360,14 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
             nombre.setAlignment(Pos.CENTER_RIGHT);
 
-            // Créer le contrôleur pour ajouter au panier avec référence au label
-            ControleurAjouterLivrePanier controleurAjouter = new ControleurAjouterLivrePanier(this.client, livre,
-                    magasinBD.getConnexion(), lblCompteur);
+            
+          
 
             bouton.setOnAction(new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier));
 
             droite.getChildren().addAll(prix, nombre, bouton);
 
-            //
-            // nombre fin
-            //
+            
 
             BorderPane ligne = new BorderPane();
             ligne.setLeft(infos);
@@ -391,7 +384,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         }
 
-        // Ajustement dynamique de la largeur lors du redimensionnement
+        
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             ajusterLargeur(scene, test, livresPourBanniere);
         });
@@ -410,7 +403,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
     }
 
     private void afficherLivresDansGrille(GridPane grilleLivres, List<Livre> livres, Map<Livre, Integer> stockMap) {
-        grilleLivres.getChildren().clear(); // On vide la grille
+        grilleLivres.getChildren().clear(); 
         final int nbColonnes = 3;
         int i = 0;
 
@@ -445,7 +438,7 @@ lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Ou livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois"); 
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));

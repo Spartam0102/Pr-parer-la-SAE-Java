@@ -1,6 +1,6 @@
-package IHM;
+package IHM.Admin;
 
-import IHM.Controleur.ControleurAjouterLivrePanier;
+
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurModifierStock;
 import IHM.Controleur.ControleurParametre;
@@ -35,7 +35,7 @@ public class FenetreModifierStock extends Application {
     private MagasinBD magasinBD;
     private Magasin magasin;
     private Stage stage;
-    private Client client;
+   
 
     public FenetreModifierStock(ConnexionMySQL connexionMySQL, Magasin magasin) {
         this.magasinBD = new MagasinBD(connexionMySQL);
@@ -85,25 +85,7 @@ public class FenetreModifierStock extends Application {
         return banniere;
     }
 
-    // Création d'une ImageView pour un livre à partir de son ISBN avec fallback
-    // image locale
-    private ImageView creerImageLivre(long isbn) {
-        String urlImage = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
-        Image imageLivre;
-        try {
-            imageLivre = new Image(urlImage, 120, 180, true, true, true);
-            if (imageLivre.isError())
-                throw new Exception("Erreur chargement image");
-        } catch (Exception e) {
-            imageLivre = new Image("file:img/default_book_cover.png", 120, 180, true, true);
-        }
-        ImageView imageView = new ImageView(imageLivre);
-        imageView.setFitWidth(120);
-        imageView.setFitHeight(180);
-        imageView.setPreserveRatio(true);
-        return imageView;
-    }
-
+    
     @Override
     public void start(Stage primaryStage) throws SQLException {
         this.stage = primaryStage;
@@ -141,7 +123,7 @@ public class FenetreModifierStock extends Application {
         primaryStage.setTitle("Fenêtre Magasin Client");
         primaryStage.setScene(scene);
 
-        // Récupérer les livres pour affichage
+       
         Map<Livre, Integer> listeLivres = magasinBD.listeLivreUnMagasin(this.magasin.getIdMagasin());
         List<Livre> livresPourBanniere = new ArrayList<>();
         int max = 7;
@@ -193,7 +175,7 @@ public class FenetreModifierStock extends Application {
             Livre livre = entry.getKey();
             Integer quantite = entry.getValue();
 
-            long isbn = livre.getIdLivre(); // Assure-toi que ce soit un long valide
+            long isbn = livre.getIdLivre(); 
 
             Image imageLivre;
             try {
@@ -220,7 +202,7 @@ public class FenetreModifierStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Remplace par livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois"); 
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -262,7 +244,7 @@ public class FenetreModifierStock extends Application {
     }
 
     private void afficherLivresDansGrille(GridPane grilleLivres, List<Livre> livres, Map<Livre, Integer> stockMap) {
-        grilleLivres.getChildren().clear(); // On vide la grille
+        grilleLivres.getChildren().clear(); 
         final int nbColonnes = 3;
         int i = 0;
 
@@ -297,7 +279,7 @@ public class FenetreModifierStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Ou livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois"); 
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));

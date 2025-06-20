@@ -3,7 +3,7 @@ package IHM.Controleur;
 import java.util.Optional;
 
 import BD.*;
-import IHM.FenetreModifierStock;
+import IHM.Admin.*;
 import Java.Livre;
 import Java.Magasin;
 import javafx.event.ActionEvent;

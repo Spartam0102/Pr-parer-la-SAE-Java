@@ -22,7 +22,7 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
     private Client client;
     private Livre livre;
     private ClientBD clientBD;
-    private Label labelCompteur; // Référence au label au lieu d'un nombre fixe
+    private Label labelCompteur; 
 
     public ControleurAjouterLivre(Client client, Livre livre, ConnexionMySQL connexionMySQL, Label labelCompteur) {
         this.client = client;
@@ -53,7 +53,7 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
 
         try {
-            // Validation des champs vides
+          
             if (champTitre.getText().trim().isEmpty()) {
                 afficherAlerte("Champ manquant", "Le titre ne peut pas être vide.", AlertType.WARNING);
                 return;
@@ -65,9 +65,9 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
             }
 
             String titre = champTitre.getText().trim();
-            String auteurInfo = champAuteur.getText().trim(); // Format: "Nom Prénom" ou juste "Nom"
+            String auteurInfo = champAuteur.getText().trim(); 
 
-            // Validation et parsing des champs numériques
+           
             int pages;
             try {
                 pages = Integer.parseInt(champPages.getText().trim());
@@ -94,7 +94,7 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
                 return;
             }
 
-            // Création de l'auteur à partir du champ texte
+           
             Auteur auteur = creerAuteur(auteurInfo);
             if (auteur == null) {
                 afficherAlerte("Format auteur invalide",
@@ -109,17 +109,17 @@ public class ControleurAjouterLivre implements EventHandler<ActionEvent> {
                 return;
             }
 
-            // Création du livre sans ISBN
+          
             Livre livre = new Livre(titre, auteur, pages, prix, annee);
 
-            // Ajout en base de données
+           
             MagasinBD magasinBD = new MagasinBD(connexion);
             magasinBD.ajouterLivreDansMagasin(vendeur.getMagasin().getIdMagasin(), livre, 1);
 
             afficherAlerte("Ajout réussi", "Le livre \"" + titre + "\" a été ajouté avec succès !",
                     AlertType.INFORMATION);
 
-            // Nettoyer les champs après succès
+            
             viderChamps();
 
         } catch (SQLException e) {

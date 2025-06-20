@@ -30,8 +30,8 @@ public void handle(ActionEvent event) {
     try {
         clientBD.sauvegardePanierBD(client);
 
-        // Mise à jour du label compteur
-        int nbLivres = client.getPanier().size(); // ou autre logique
+       
+        int nbLivres = client.getPanier().size(); 
         lblCompteur.setText("Panier : " + nbLivres + " livre(s)");
 
         Alert alert = new Alert(AlertType.INFORMATION);

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
-import IHM.FenetreMagasinsAdmin;
+import IHM.Admin.*;
 import Java.Magasin;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;

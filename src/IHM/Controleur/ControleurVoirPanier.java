@@ -3,7 +3,7 @@ package IHM.Controleur;
 import BD.ClientBD;
 import BD.ConnexionMySQL;
 import Java.Client;
-import IHM.FenetrePanier;
+import IHM.Général.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class ControleurVoirPanier implements EventHandler<ActionEvent> {
 
     private TextField champIdClient;
-    private ConnexionMySQL connexionMySQL;  // stockage connexion
+    private ConnexionMySQL connexionMySQL;  
     private Stage stage;
 
     public ControleurVoirPanier(Stage stage, ConnexionMySQL connexionMySQL, TextField champIdClient) {

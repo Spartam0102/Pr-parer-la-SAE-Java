@@ -1,6 +1,6 @@
 package IHM.Controleur;
 
-import IHM.PopupParametres;
+import IHM.Général.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;

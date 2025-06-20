@@ -1,5 +1,6 @@
 package IHM.Controleur;
 
+import IHM.Admin.*;
 import BD.*;
 import Java.*;
 import javafx.geometry.Insets;
@@ -105,7 +106,7 @@ public class ControleurPlusMagasin {
 
             popup.close();
 
-            IHM.FenetreMagasinsAdmin.afficher(parentStage, magasinBD.getConnexion());
+            FenetreMagasinsAdmin.afficher(parentStage, magasinBD.getConnexion());
             } catch (Exception e) {
             e.printStackTrace();
         }

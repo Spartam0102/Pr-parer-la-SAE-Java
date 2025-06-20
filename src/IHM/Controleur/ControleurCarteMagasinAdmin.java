@@ -1,7 +1,7 @@
 package IHM.Controleur;
 
 import BD.ConnexionMySQL;
-import IHM.FenetreUnMagasinAdmin;
+import IHM.Admin.*;
 import Java.Magasin;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;

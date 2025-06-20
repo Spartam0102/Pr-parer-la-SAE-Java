@@ -1,4 +1,4 @@
-package IHM;
+package IHM.Controleur;
 
 import BD.MagasinBD;
 import Java.Livre;
