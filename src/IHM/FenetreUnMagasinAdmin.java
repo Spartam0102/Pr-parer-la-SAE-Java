@@ -82,7 +82,7 @@ public class FenetreUnMagasinAdmin extends Application{
         boutons.setAlignment(Pos.CENTER);
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
-        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, null, "fenetreMagasinsAdmin"));
+        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, "fenetreMagasinsAdmin"));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
