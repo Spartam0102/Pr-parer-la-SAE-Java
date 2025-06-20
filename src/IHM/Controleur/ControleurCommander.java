@@ -3,6 +3,9 @@ package IHM.Controleur;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
+
 import IHM.*;
 import BD.*;
 import Java.*;
@@ -38,6 +41,16 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
+        if (client.getPanier().isEmpty()){
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Panier vide");
+            alert.setHeaderText(null);
+            alert.setContentText("Le panier est vide.");
+            alert.showAndWait();
+            return;
+        }
+
+
         Magasin magasin = comboMagasins.getSelectionModel().getSelectedItem();
 
         if (magasin == null) {
