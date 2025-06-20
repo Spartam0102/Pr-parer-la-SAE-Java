@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 public class ControleurVoirPanier implements EventHandler<ActionEvent> {
 
     private TextField champIdClient;
-    private ConnexionMySQL connexionMySQL;  // stockage connexion
+    private ConnexionMySQL connexionMySQL;
     private Stage stage;
 
     public ControleurVoirPanier(Stage stage, ConnexionMySQL connexionMySQL, TextField champIdClient) {
