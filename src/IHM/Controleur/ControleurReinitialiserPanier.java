@@ -5,6 +5,7 @@ import java.util.Optional;
 import BD.*;
 import IHM.FenetrePanier;
 import Java.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -41,8 +42,7 @@ public class ControleurReinitialiserPanier implements EventHandler<ActionEvent> 
                 clientBD.sauvegardePanierBD(client);
                 FenetrePanier fenetrePanier = new FenetrePanier(connexionMySQL, client);
                 fenetrePanier.start(this.stage);
-            } 
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Impossible de sauvegarder dans la base de données.");
             }
         }

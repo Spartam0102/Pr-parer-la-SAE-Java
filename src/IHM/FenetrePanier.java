@@ -3,13 +3,12 @@ package IHM;
 import Java.*;
 import BD.*;
 import IHM.Controleur.*;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -45,11 +44,10 @@ public class FenetrePanier extends Application {
         this.connexionMySQL = connexionMySQL;
         this.magasinBD = new MagasinBD(connexionMySQL);
         this.modeLivraisonChoisi = "Domicile";
-        
-        try{
+
+        try {
             client.setPanier(clientBD.recupererPanier(client.getIdCli()));
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Erreur sql : " + e.getMessage());
         }
         this.panierClient = client.getPanier();
@@ -111,124 +109,119 @@ public class FenetrePanier extends Application {
         return banniere;
     }
 
+    private VBox fenetrePanier() {
+        VBox containerVertical = new VBox();
+        containerVertical.setPadding(new Insets(20));
+        containerVertical.setSpacing(10);
 
-   private VBox fenetrePanier() {
-    VBox containerVertical = new VBox();
-    containerVertical.setPadding(new Insets(20));
-    containerVertical.setSpacing(10);
+        HBox conteneur = new HBox(20);
+        conteneur.setPadding(new Insets(20));
+        conteneur.setStyle("-fx-background-color: #2073c4;");
+        HBox.setHgrow(conteneur, Priority.ALWAYS);
 
-    HBox conteneur = new HBox(20);
-    conteneur.setPadding(new Insets(20));
-    conteneur.setStyle("-fx-background-color: #2073c4;");
-    HBox.setHgrow(conteneur, Priority.ALWAYS);
+        VBox listeLivres = new VBox(10);
+        listeLivres.setPadding(new Insets(10));
+        listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+        listeLivres.setPrefWidth(400);
 
-    VBox listeLivres = new VBox(10);
-    listeLivres.setPadding(new Insets(10));
-    listeLivres.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
-    listeLivres.setPrefWidth(400);
+        VBox partieGauche = new VBox();
 
-    VBox partieGauche = new VBox();
+        Button boutonConnexion = new Button("Réinitialiser le Panier");
+        boutonConnexion.setStyle("-fx-background-color:rgb(250, 0, 0); -fx-text-fill: white; -fx-font-size: 18px;" +
+                "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
+        boutonConnexion.setOnAction(new ControleurReinitialiserPanier(this.client, this.connexionMySQL, this.stage));
+        boutonConnexion.setPrefHeight(45);
+        boutonConnexion.setPrefWidth(260);
 
-    Button boutonConnexion = new Button("Réinitialiser le Panier");
-    boutonConnexion.setStyle("-fx-background-color:rgb(250, 0, 0); -fx-text-fill: white; -fx-font-size: 18px;" +
-            "-fx-font-weight: bold; -fx-border-radius: 18; -fx-background-radius: 18;");
-    boutonConnexion.setOnAction(new ControleurReinitialiserPanier(this.client, this.connexionMySQL, this.stage));
-    boutonConnexion.setPrefHeight(45);
-    boutonConnexion.setPrefWidth(260);
+        VBox boxConnection = new VBox();
+        boxConnection.setAlignment(Pos.CENTER_RIGHT);
+        boxConnection.getChildren().add(boutonConnexion);
+        boxConnection.setPadding(new Insets(10, 0, 10, 10));
+        ;
 
-    VBox boxConnection = new VBox();
-    boxConnection.setAlignment(Pos.CENTER_RIGHT);
-    boxConnection.getChildren().add(boutonConnexion);
-    boxConnection.setPadding(new Insets(10, 0, 10, 10));;
+        ScrollPane scrollPane = new ScrollPane(listeLivres);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: transparent;");
+        scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
+        scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
+        scrollPane.setPrefWidth(900);
+        scrollPane.setMinWidth(900);
+        scrollPane.setMaxWidth(900);
 
-    ScrollPane scrollPane = new ScrollPane(listeLivres);
-    scrollPane.setFitToWidth(true);
-    scrollPane.setStyle("-fx-background: transparent;");
-    scrollPane.prefHeightProperty().bind(racine.heightProperty().multiply(0.7));
-    scrollPane.maxHeightProperty().bind(racine.heightProperty().multiply(0.7));
-    scrollPane.setPrefWidth(900);
-    scrollPane.setMinWidth(900);
-    scrollPane.setMaxWidth(900);
+        partieGauche.getChildren().addAll(scrollPane, boxConnection);
+        VBox.setMargin(scrollPane, new Insets(20, 20, 0, 20));
 
-    partieGauche.getChildren().addAll(scrollPane, boxConnection);
-    VBox.setMargin(scrollPane, new Insets(20, 20, 0, 20));
+        VBox ensembleLivresCommand = new VBox();
+        ensembleLivresCommand.setStyle("-fx-background-color: white;");
 
-    VBox ensembleLivresCommand = new VBox();
-    ensembleLivresCommand.setStyle("-fx-background-color: white;");
-    
-    // Image placeholder locale
-    Image placeholder = new Image("file:img/placeholder.png", 100, 140, true, true);
+        Image placeholder = new Image("file:img/placeholder.png", 100, 140, true, true);
 
-    for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
-        HBox unLivreCommand = new HBox();
-        unLivreCommand.setPadding(new Insets(20));
+        for (Map.Entry<Livre, Integer> couple : this.panierClient.entrySet()) {
+            HBox unLivreCommand = new HBox();
+            unLivreCommand.setPadding(new Insets(20));
 
-        long isbn = couple.getKey().getIdLivre();
-        ImageView imageView = new ImageView(placeholder); // placeholder immédiat
+            long isbn = couple.getKey().getIdLivre();
+            ImageView imageView = new ImageView(placeholder);
 
-        try {
-            String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
-            Image imageLivre = new Image(url, 100, 140, true, true, true); // chargement en arrière-plan
+            try {
+                String url = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
+                Image imageLivre = new Image(url, 100, 140, true, true, true);
 
-            // Quand l'image est chargée, on remplace le placeholder
-            imageLivre.progressProperty().addListener((obs, oldProgress, newProgress) -> {
-                if (newProgress.doubleValue() >= 1.0) {
-                    imageView.setImage(imageLivre);
-                }
-            });
+                imageLivre.progressProperty().addListener((obs, oldProgress, newProgress) -> {
+                    if (newProgress.doubleValue() >= 1.0) {
+                        imageView.setImage(imageLivre);
+                    }
+                });
 
-        } catch (Exception e) {
-            // Si erreur, garder le placeholder
+            } catch (Exception e) {
 
+            }
+
+            Text nomLivre = new Text(couple.getKey().getNomLivre());
+            nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
+            Text quantite = new Text("     x" + couple.getValue());
+            quantite.setStyle("-fx-font-size: 20px");
+
+            Text nomAuteur = new Text("Claude Dubois");
+
+            VBox texteVBox = new VBox(nomLivre, nomAuteur, quantite);
+            texteVBox.setAlignment(Pos.CENTER_LEFT);
+            texteVBox.setSpacing(20);
+
+            HBox ligneLivre = new HBox(10, imageView, texteVBox);
+            ligneLivre.setAlignment(Pos.CENTER_LEFT);
+
+            Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
+            VBox prixBox = new VBox(prixText);
+
+            HBox boxPoubelle = new HBox();
+            ImageView poubelle = new ImageView(new Image("file:img/trash.png"));
+            boxPoubelle.setAlignment(Pos.CENTER);
+            poubelle.setFitHeight(25);
+            poubelle.setPreserveRatio(true);
+            boxPoubelle.setOnMouseClicked(
+                    new ControleurSuppElemPanier(this.client, couple.getKey(), this.connexionMySQL, this.stage));
+            boxPoubelle.getChildren().add(poubelle);
+            VBox boxPrixButton = new VBox(prixText);
+            prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+            boxPrixButton.setAlignment(Pos.CENTER_RIGHT);
+            HBox.setHgrow(boxPrixButton, Priority.NEVER);
+            boxPrixButton.setMaxWidth(Region.USE_PREF_SIZE);
+
+            boxPrixButton.getChildren().addAll(prixBox, boxPoubelle);
+
+            Separator barre = new Separator();
+            barre.setPrefHeight(1);
+            barre.setOpacity(0.5);
+
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            unLivreCommand.getChildren().addAll(ligneLivre, spacer, boxPrixButton);
+
+            ensembleLivresCommand.getChildren().addAll(unLivreCommand, barre);
         }
 
-        // Texte titre + quantité dans un VBox
-        Text nomLivre = new Text(couple.getKey().getNomLivre());
-        nomLivre.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
-        Text quantite = new Text("     x" + couple.getValue());
-        quantite.setStyle("-fx-font-size: 20px");
-
-        Text nomAuteur = new Text("Claude Dubois");
-
-        VBox texteVBox = new VBox(nomLivre, nomAuteur, quantite);
-        texteVBox.setAlignment(Pos.CENTER_LEFT);
-        texteVBox.setSpacing(20);
-
-        HBox ligneLivre = new HBox(10, imageView, texteVBox);
-        ligneLivre.setAlignment(Pos.CENTER_LEFT);
-
-        Text prixText = new Text(String.format("%.2f €", couple.getKey().getPrix()));
-        VBox prixBox = new VBox(prixText);
-
-
-        HBox boxPoubelle = new HBox();
-        ImageView poubelle = new ImageView(new Image("file:img/trash.png"));
-        boxPoubelle.setAlignment(Pos.CENTER);
-        poubelle.setFitHeight(25);
-        poubelle.setPreserveRatio(true);
-        boxPoubelle.setOnMouseClicked(new ControleurSuppElemPanier(this.client, couple.getKey(), this.connexionMySQL, this.stage));
-        boxPoubelle.getChildren().add(poubelle);
-        VBox boxPrixButton = new VBox(prixText);
-        prixText.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        boxPrixButton.setAlignment(Pos.CENTER_RIGHT);
-        HBox.setHgrow(boxPrixButton, Priority.NEVER);
-        boxPrixButton.setMaxWidth(Region.USE_PREF_SIZE);
-
-        boxPrixButton.getChildren().addAll(prixBox, boxPoubelle);
-
-        Separator barre = new Separator();
-        barre.setPrefHeight(1);
-        barre.setOpacity(0.5);
-
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        unLivreCommand.getChildren().addAll(ligneLivre, spacer, boxPrixButton);
-
-        ensembleLivresCommand.getChildren().addAll(unLivreCommand, barre);
-    }
-
-    scrollPane.setContent(ensembleLivresCommand);
+        scrollPane.setContent(ensembleLivresCommand);
 
         VBox recap = new VBox(20);
         recap.setPrefWidth(400);
@@ -254,8 +247,8 @@ public class FenetrePanier extends Application {
         commander.setPrefHeight(45);
         commander.setPrefWidth(160);
         HBox boutonCommander = new HBox();
-        commander.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white; -fx-font-weight: bold;" + 
-                            "-fx-border-radius : 18px");
+        commander.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white; -fx-font-weight: bold;" +
+                "-fx-border-radius : 18px");
         boutonCommander.setAlignment(Pos.CENTER);
         boutonCommander.getChildren().add(commander);
         recap.getChildren().addAll(nbProduitsLabel, livraisonLabel, totalLabel, boutonCommander);
@@ -293,20 +286,19 @@ public class FenetrePanier extends Application {
         boutonsLivraison.setAlignment(Pos.CENTER);
 
         ComboBox<Magasin> comboMagasins = new ComboBox<>();
-        List<Magasin> listeMagasins = new ArrayList<>(); 
-        try{
+        List<Magasin> listeMagasins = new ArrayList<>();
+        try {
             listeMagasins = this.magasinBD.listeDesMagasins();
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         comboMagasins.getItems().addAll(listeMagasins);
-        
+
         comboMagasins.setCellFactory(lv -> new ListCell<Magasin>() {
             @Override
             protected void updateItem(Magasin magasin, boolean empty) {
                 super.updateItem(magasin, empty);
-                setText(empty || magasin == null ? "" : magasin.getNom()); 
+                setText(empty || magasin == null ? "" : magasin.getNom());
             }
         });
         comboMagasins.setButtonCell(new ListCell<Magasin>() {
@@ -321,7 +313,8 @@ public class FenetrePanier extends Application {
             this.magasinChoisi = newMagasin;
         });
 
-        commander.setOnAction(new ControleurCommander(this.stage, connexionMySQL, comboMagasins, client, this.modeLivraisonChoisi));
+        commander.setOnAction(
+                new ControleurCommander(this.stage, connexionMySQL, comboMagasins, client, this.modeLivraisonChoisi));
 
         Text choixMagRetrait = new Text("Choisissez votre magasin de retrait");
         choixMagRetrait.setStyle(" -fx-font-size: 18px;");
@@ -346,7 +339,7 @@ public class FenetrePanier extends Application {
         HBox.setHgrow(recapWrapper, Priority.ALWAYS);
 
         recapWrapper.heightProperty().addListener((obs, oldVal, newVal) -> {
-            scrollPane.prefHeightProperty().unbind(); //
+            scrollPane.prefHeightProperty().unbind();
             scrollPane.setPrefHeight(newVal.doubleValue());
         });
 
@@ -358,14 +351,13 @@ public class FenetrePanier extends Application {
     }
 
     public static void afficher(Stage stage, ConnexionMySQL connexion, Client client) {
-    try {
-        FenetrePanier fenetre = new FenetrePanier(connexion, client);
-        fenetre.start(stage);
-    } catch (Exception e) {
-        e.printStackTrace();
+        try {
+            FenetrePanier fenetre = new FenetrePanier(connexion, client);
+            fenetre.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
-
 
     @Override
     public void start(Stage stage) {

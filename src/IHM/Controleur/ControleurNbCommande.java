@@ -6,6 +6,7 @@ import BD.ConnexionMySQL;
 import BD.StatistiqueBD;
 import IHM.FenetreUnMagasinAdmin;
 import Java.Magasin;
+
 import javafx.event.EventHandler;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -17,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class ControleurNbCommande implements EventHandler<MouseEvent>  {
+public class ControleurNbCommande implements EventHandler<MouseEvent> {
     private StatistiqueBD statistiqueBD;
     private Magasin magasin;
     private Stage stage;
@@ -42,7 +43,7 @@ public class ControleurNbCommande implements EventHandler<MouseEvent>  {
 
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             if (!data.isEmpty()) {
-                series.setName(data.get(0).get(0)); // Nom du magasin
+                series.setName(data.get(0).get(0));
             }
 
             for (List<String> ligne : data) {
@@ -62,7 +63,8 @@ public class ControleurNbCommande implements EventHandler<MouseEvent>  {
             alert.getDialogPane().setContent(content);
             alert.setResizable(true);
             alert.showAndWait();
-            FenetreUnMagasinAdmin fenetreUnMagasinAdmin = new FenetreUnMagasinAdmin(statistiqueBD.getLaConnexion(), magasin);
+            FenetreUnMagasinAdmin fenetreUnMagasinAdmin = new FenetreUnMagasinAdmin(statistiqueBD.getLaConnexion(),
+                    magasin);
             fenetreUnMagasinAdmin.start(this.stage);
         } catch (Exception exception) {
             System.out.println("connexion base de donné impossible");

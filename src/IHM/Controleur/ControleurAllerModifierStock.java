@@ -1,8 +1,11 @@
 package IHM.Controleur;
 
 import BD.ConnexionMySQL;
+
 import Java.*;
+
 import IHM.FenetreModifierStock;
+
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -15,7 +18,7 @@ public class ControleurAllerModifierStock implements EventHandler<MouseEvent> {
 
     public ControleurAllerModifierStock(ConnexionMySQL connexion, Magasin magasin, Stage stage) {
         this.connexion = connexion;
-        this.magasin =magasin;
+        this.magasin = magasin;
         this.stage = stage;
     }
 

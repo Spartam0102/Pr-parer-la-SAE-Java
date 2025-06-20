@@ -14,6 +14,7 @@ import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurVoirPanier;
 import Java.*;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -21,16 +22,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
@@ -230,16 +228,13 @@ public class FenetreUnMagasinVendeur extends Application {
                 return;
             }
 
-            // Liste complète
             List<Livre> livresList = new ArrayList<>(livres.keySet());
 
-            // ComboBox avec tous les livres
             javafx.scene.control.ComboBox<Livre> comboLivres = new javafx.scene.control.ComboBox<>();
             comboLivres.getItems().addAll(livresList);
             comboLivres.setPrefWidth(300);
             comboLivres.setPromptText("Choisissez un livre à supprimer");
 
-            // Champ de recherche dynamique
             TextField champRecherche = new TextField();
             champRecherche.setPromptText("Rechercher un livre...");
 
@@ -271,7 +266,6 @@ public class FenetreUnMagasinVendeur extends Application {
                 alertConfirm.setContentText("Le livre \"" + livreChoisi.getNomLivre() + "\" a été supprimé.");
                 alertConfirm.showAndWait();
 
-                // Rafraîchir la vue
                 panelCentral.getChildren().clear();
                 panelCentral.getChildren().add(fenetreMagasin());
             }

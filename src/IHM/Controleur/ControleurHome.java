@@ -1,6 +1,7 @@
 package IHM.Controleur;
 
 import IHM.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -15,7 +16,7 @@ public class ControleurHome implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-       try {
+        try {
             FenetreConnexion fenetreConnexion = new FenetreConnexion();
             fenetreConnexion.start(this.stage);
         } catch (Exception e) {

@@ -1,17 +1,15 @@
 package IHM;
 
-import IHM.Controleur.ControleurAjouterLivrePanier;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurModifierStock;
 import IHM.Controleur.ControleurParametre;
+import BD.*;
+import Java.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import BD.*;
-import Java.*;
 
 import javafx.application.Application;
 import javafx.geometry.HPos;
@@ -85,8 +83,6 @@ public class FenetreModifierStock extends Application {
         return banniere;
     }
 
-    // Création d'une ImageView pour un livre à partir de son ISBN avec fallback
-    // image locale
     private ImageView creerImageLivre(long isbn) {
         String urlImage = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
         Image imageLivre;
@@ -127,7 +123,6 @@ public class FenetreModifierStock extends Application {
         test.setMinWidth(scene.getWidth());
         test.setMaxWidth(scene.getWidth());
 
-
         cadreGrand.setMaxWidth(Double.MAX_VALUE);
         ensemble.getChildren().addAll(test, cadreGrand);
         ensemble.setMaxWidth(Double.MAX_VALUE);
@@ -141,7 +136,6 @@ public class FenetreModifierStock extends Application {
         primaryStage.setTitle("Fenêtre Magasin Client");
         primaryStage.setScene(scene);
 
-        // Récupérer les livres pour affichage
         Map<Livre, Integer> listeLivres = magasinBD.listeLivreUnMagasin(this.magasin.getIdMagasin());
         List<Livre> livresPourBanniere = new ArrayList<>();
         int max = 7;
@@ -163,14 +157,13 @@ public class FenetreModifierStock extends Application {
         grilleLivres.setStyle(
                 "-fx-background-color: white; -fx-background-radius: 20px 20px 0 0; -fx-border-radius: 20px 20px 0 0;");
         cadreGrand.setPadding(new Insets(20, 50, 0, 50));
-        
+
         grilleLivres.setHgap(30);
         grilleLivres.setVgap(30);
         grilleLivres.setAlignment(Pos.CENTER);
         cadreGrand.getChildren().addAll(champRecherche, grilleLivres);
         grilleLivres.setPadding(new Insets(20));
 
-        
         champRecherche.textProperty().addListener((observable, oldValue, newValue) -> {
             String recherche = newValue.toLowerCase();
 
@@ -180,7 +173,7 @@ public class FenetreModifierStock extends Application {
 
             afficherLivresDansGrille(grilleLivres, livresFiltres, listeLivres);
         });
-        
+
         javafx.scene.text.Text titreMag = new javafx.scene.text.Text(magasin.getNom());
         titreMag.setStyle("-fx-font-size: 35px; -fx-font-weight: bold;");
         titreMag.setWrappingWidth(400);
@@ -193,7 +186,7 @@ public class FenetreModifierStock extends Application {
             Livre livre = entry.getKey();
             Integer quantite = entry.getValue();
 
-            long isbn = livre.getIdLivre(); // Assure-toi que ce soit un long valide
+            long isbn = livre.getIdLivre();
 
             Image imageLivre;
             try {
@@ -220,7 +213,7 @@ public class FenetreModifierStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Remplace par livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois");
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -228,8 +221,6 @@ public class FenetreModifierStock extends Application {
             iconeStock.setFitWidth(22);
             Text stockText = new Text(quantite + (quantite <= 1 ? " en stock" : " en stock"));
             stock.getChildren().addAll(iconeStock, stockText);
-
-            
 
             VBox infos = new VBox(5, auteur, stock);
 
@@ -262,7 +253,7 @@ public class FenetreModifierStock extends Application {
     }
 
     private void afficherLivresDansGrille(GridPane grilleLivres, List<Livre> livres, Map<Livre, Integer> stockMap) {
-        grilleLivres.getChildren().clear(); // On vide la grille
+        grilleLivres.getChildren().clear();
         final int nbColonnes = 3;
         int i = 0;
 
@@ -297,7 +288,7 @@ public class FenetreModifierStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Ou livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois");
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -316,7 +307,6 @@ public class FenetreModifierStock extends Application {
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
 
-
             BorderPane ligne = new BorderPane();
             ligne.setLeft(infos);
             ligne.setRight(droite);
@@ -330,7 +320,6 @@ public class FenetreModifierStock extends Application {
             i++;
         }
     }
-
 
     public static void afficher(Stage stage, ConnexionMySQL connexion, Magasin magasin, Client client) {
         try {

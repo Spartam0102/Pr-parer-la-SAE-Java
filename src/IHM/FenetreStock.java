@@ -1,22 +1,18 @@
 package IHM;
 
-import IHM.Controleur.ControleurAjouterLivre;
 import IHM.Controleur.ControleurCompteur;
-
 import IHM.Controleur.ControleurAjouterLivrePanier;
-
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurPanier;
 import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurRetour;
+import BD.*;
+import Java.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import BD.*;
-import Java.*;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -83,8 +79,6 @@ public class FenetreStock extends Application {
         boutonSettings.setStyle(styleBouton);
         boutonPanier.setStyle(styleBouton);
         boutonRetour.setStyle(styleBouton);
-//        lblCompteurPanier = new Label("Panier : " + client.getPanier().size() + " livre(s)");
-//        lblCompteurPanier.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         HBox boutons = new HBox(10, boutonHome, boutonSettings, boutonPanier, boutonRetour);
         boutons.setPadding(new Insets(10));
@@ -107,8 +101,6 @@ public class FenetreStock extends Application {
         return banniere;
     }
 
-    // Création d'une ImageView pour un livre à partir de son ISBN avec fallback
-    // image locale
     private ImageView creerImageLivre(long isbn) {
         String urlImage = "https://covers.openlibrary.org/b/isbn/" + isbn + "-M.jpg";
         Image imageLivre;
@@ -141,7 +133,6 @@ public class FenetreStock extends Application {
         HBox hbox = new HBox(40);
         hbox.setAlignment(Pos.CENTER_LEFT);
 
-        // Double la liste pour un défilement continu
         for (int i = 0; i < 2; i++) {
             for (Livre livre : livres) {
                 ImageView imageView = creerImageLivre(livre.getIdLivre());
@@ -235,7 +226,6 @@ public class FenetreStock extends Application {
         primaryStage.setTitle("Fenêtre Magasin Client");
         primaryStage.setScene(scene);
 
-        // Récupérer les livres pour affichage
         Map<Livre, Integer> listeLivres = magasinBD.listeLivreUnMagasin(this.magasin.getIdMagasin());
         List<Livre> livresPourBanniere = new ArrayList<>();
         int max = 7;
@@ -287,7 +277,7 @@ public class FenetreStock extends Application {
             Livre livre = entry.getKey();
             Integer quantite = entry.getValue();
 
-            long isbn = livre.getIdLivre(); // Assure-toi que ce soit un long valide
+            long isbn = livre.getIdLivre();
 
             Image imageLivre;
             try {
@@ -314,7 +304,7 @@ public class FenetreStock extends Application {
             titre.setWrappingWidth(400);
             titre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-            Text auteur = new Text("Claire Dubois"); // Remplace par livre.getAuteur() si dispo
+            Text auteur = new Text("Claire Dubois");
 
             HBox stock = new HBox(5);
             ImageView iconeStock = new ImageView(new Image("file:img/stock_icon.png"));
@@ -333,9 +323,7 @@ public class FenetreStock extends Application {
             Button bouton = new Button("Ajouter au panier");
             bouton.setStyle("-fx-background-color: #206db8; -fx-text-fill: white; -fx-font-size: 13px;" +
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
-            //
-            // nombre
-            //
+
             HBox nombre = new HBox();
             Button btnMoins = new Button("-");
             btnMoins.setStyle(
@@ -360,17 +348,12 @@ public class FenetreStock extends Application {
             nombre.getChildren().addAll(btnMoins, lblCompteur, btnPlus);
             nombre.setAlignment(Pos.CENTER_RIGHT);
 
-
-            // Créer le contrôleur pour ajouter au panier avec référence au label
-            ControleurAjouterLivrePanier controleurAjouterLivrePanier = new ControleurAjouterLivrePanier(this.client, livre, magasinBD.getConnexion(), lblCompteur,magasin);
+            ControleurAjouterLivrePanier controleurAjouterLivrePanier = new ControleurAjouterLivrePanier(this.client,
+                    livre, magasinBD.getConnexion(), lblCompteur, magasin);
 
             bouton.setOnAction(controleurAjouterLivrePanier);
 
             droite.getChildren().addAll(prix, nombre, bouton);
-
-            //
-            // nombre fin
-            //
 
             BorderPane ligne = new BorderPane();
             ligne.setLeft(infos);
@@ -386,7 +369,6 @@ public class FenetreStock extends Application {
 
         }
 
-        // Ajustement dynamique de la largeur lors du redimensionnement
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             ajusterLargeur(scene, test, livresPourBanniere);
         });
@@ -404,7 +386,7 @@ public class FenetreStock extends Application {
     }
 
     private void afficherLivresDansGrille(GridPane grilleLivres, List<Livre> livres, Map<Livre, Integer> stockMap) {
-        grilleLivres.getChildren().clear(); // On vide la grille
+        grilleLivres.getChildren().clear();
         final int nbColonnes = 3;
         int i = 0;
 
@@ -459,7 +441,8 @@ public class FenetreStock extends Application {
                     " -fx-background-radius: 18; -fx-padding: 6 14 6 14;");
 
             bouton.setOnAction(
-                    new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier, magasin));
+                    new ControleurAjouterLivrePanier(client, livre, magasinBD.getConnexion(), lblCompteurPanier,
+                            magasin));
 
             droite.getChildren().addAll(prix, bouton);
 

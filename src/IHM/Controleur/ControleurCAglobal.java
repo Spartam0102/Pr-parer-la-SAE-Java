@@ -9,8 +9,10 @@ import java.util.TreeSet;
 
 import BD.ConnexionMySQL;
 import BD.StatistiqueBD;
+
 import IHM.FenetreUnMagasinAdmin;
 import Java.Magasin;
+
 import javafx.event.EventHandler;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -50,10 +52,8 @@ public class ControleurCAglobal implements EventHandler<MouseEvent> {
             chart.setCategoryGap(10);
             chart.setBarGap(3);
 
-            // Map : nommag → série
             Map<String, XYChart.Series<String, Number>> magasinSeries = new HashMap<>();
 
-            // Pour garder l'ordre des mois
             Set<String> moisSet = new TreeSet<>(Comparator.comparingInt(Integer::parseInt));
 
             for (List<String> ligne : data) {

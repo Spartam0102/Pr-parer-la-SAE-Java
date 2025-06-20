@@ -25,7 +25,6 @@ public class PopupParametres {
         boutonDeconnexion.setOnAction(e -> {
             popup.close();
             parentStage.close();
-            // Optionnel : FenetreConnexion.afficher(new Stage());
         });
 
         Button fermer = new Button("Fermer");

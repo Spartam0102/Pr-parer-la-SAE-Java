@@ -4,11 +4,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import IHM.*;
 import BD.*;
 import Java.*;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -28,10 +27,11 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
     private ConnexionMySQL connexion;
     private Stage stage;
 
-    public ControleurCommander(Stage stage, ConnexionMySQL connexion, ComboBox<Magasin> comboMagasins, Client client, String modeDeReception) {
+    public ControleurCommander(Stage stage, ConnexionMySQL connexion, ComboBox<Magasin> comboMagasins, Client client,
+            String modeDeReception) {
         this.stage = stage;
         this.connexion = connexion;
-        this.comboMagasins = comboMagasins;        
+        this.comboMagasins = comboMagasins;
         this.client = client;
         this.commandeBD = new CommandeBD(connexion);
         this.modeDeReception = modeDeReception;
@@ -41,7 +41,7 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        if (client.getPanier().isEmpty()){
+        if (client.getPanier().isEmpty()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Panier vide");
             alert.setHeaderText(null);
@@ -49,7 +49,6 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
             alert.showAndWait();
             return;
         }
-
 
         Magasin magasin = comboMagasins.getSelectionModel().getSelectedItem();
 
@@ -76,7 +75,7 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
         confirmation.setContentText("Prix total : " + String.format("%.2f", prixTotal) + " €");
 
         if (confirmation.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-            
+
             try {
                 System.out.println(magasin);
                 int idCommande = commandeBD.genererNouvelIdCommande();
@@ -103,10 +102,9 @@ public class ControleurCommander implements EventHandler<ActionEvent> {
 
                 FenetrePanier fenetrePanier = new FenetrePanier(this.connexion, client);
                 fenetrePanier.start(this.stage);
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 System.out.println("Erreur SQL : " + e.getMessage());
             }
-        }    
+        }
     }
 }

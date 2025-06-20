@@ -98,7 +98,7 @@ public class FenetreMagasinsAdmin extends Application {
         scrollPane.setStyle("-fx-background: transparent;");
         scrollPane.prefHeightProperty().bind(root.heightProperty().multiply(1));
         scrollPane.maxHeightProperty().bind(root.heightProperty().multiply(1));
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); 
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         root.setCenter(scrollPane);
 
@@ -117,10 +117,10 @@ public class FenetreMagasinsAdmin extends Application {
             ImageView image = new ImageView(new Image("file:./img/mag" + (i + 1) + ".jpeg"));
             image.setFitHeight(130);
             image.setPreserveRatio(true);
-            if(i>6){
-            image = new ImageView(new Image("file:./img/image.png"));
-            image.setFitHeight(130);
-            image.setPreserveRatio(true);
+            if (i > 6) {
+                image = new ImageView(new Image("file:./img/image.png"));
+                image.setFitHeight(130);
+                image.setPreserveRatio(true);
 
             }
             VBox boxImage = new VBox(image);
@@ -181,15 +181,12 @@ public class FenetreMagasinsAdmin extends Application {
             conteneurCarte.setMaxWidth(Double.MAX_VALUE);
             GridPane.setHgrow(conteneurCarte, Priority.ALWAYS);
 
-             Magasin magasinSelectionne = listeMagasins.get(i);
+            Magasin magasinSelectionne = listeMagasins.get(i);
 
-            ControleurCarteMagasinAdmin controleur = new ControleurCarteMagasinAdmin(magasinBD.getConnexion(),
-                    magasinSelectionne);
-
-            conteneurCarte.setOnMouseClicked(new ControleurCarteMagasinAdmin(this.magasinBD.getConnexion(), magasinSelectionne));
+            conteneurCarte.setOnMouseClicked(
+                    new ControleurCarteMagasinAdmin(this.magasinBD.getConnexion(), magasinSelectionne));
         }
 
-        // Création du bouton "Ajouter un magasin" avec l'icône plus
         VBox magasinPlus = new VBox();
         magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
         magasinPlus.setPadding(new Insets(10));
@@ -206,19 +203,6 @@ public class FenetreMagasinsAdmin extends Application {
 
         magasinPlus.getChildren().addAll(plusIcon, texteAjouter);
 
-/*         // Ajout de l'effet hover pour le bouton plus
-        magasinPlus.setOnMouseEntered(e -> {
-            magasinPlus.setStyle("-fx-background-color: #f0f8ff; -fx-background-radius: 15px; " +
-                               "-fx-border-color: #206db8; -fx-border-width: 2px; -fx-border-radius: 15px; " +
-                               "-fx-cursor: hand;");
-        });
-
-        magasinPlus.setOnMouseExited(e -> {
-            magasinPlus.setStyle("-fx-background-color: white; -fx-background-radius: 15px; " +
-                               "-fx-border-color: #206db8; -fx-border-width: 2px; -fx-border-radius: 15px;");
-        });
-*/
-        // Action pour ouvrir la popup d'ajout de magasin
         magasinPlus.setOnMouseClicked(e -> {
             ControleurPlusMagasin.afficherPopupAjouterMagasin(primaryStage, magasinBD);
         });

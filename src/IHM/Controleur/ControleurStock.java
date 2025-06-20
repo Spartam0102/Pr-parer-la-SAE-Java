@@ -4,12 +4,12 @@ import IHM.FenetreStock;
 import Java.Client;
 import Java.Magasin;
 import BD.ConnexionMySQL;
-import javafx.event.ActionEvent;
+
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ControleurStock  implements EventHandler<MouseEvent> {
+public class ControleurStock implements EventHandler<MouseEvent> {
 
     private ConnexionMySQL connexionMySQL;
     private Magasin magasin;
@@ -31,6 +31,5 @@ public class ControleurStock  implements EventHandler<MouseEvent> {
             e.printStackTrace();
         }
     }
-
 
 }

@@ -2,6 +2,7 @@ package IHM.Controleur;
 
 import BD.*;
 import Java.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -106,7 +107,7 @@ public class ControleurPlusMagasin {
             popup.close();
 
             IHM.FenetreMagasinsAdmin.afficher(parentStage, magasinBD.getConnexion());
-            } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

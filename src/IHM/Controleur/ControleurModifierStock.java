@@ -6,6 +6,7 @@ import BD.*;
 import IHM.FenetreModifierStock;
 import Java.Livre;
 import Java.Magasin;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -44,13 +45,14 @@ public class ControleurModifierStock implements EventHandler<ActionEvent> {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            magasin.getStockLivre().put(livre, Integer.parseInt(textField.getText())); 
+            magasin.getStockLivre().put(livre, Integer.parseInt(textField.getText()));
             try {
-                magasinBD.modifierStock(livre.getIdLivre(), magasin.getIdMagasin(), Integer.parseInt(textField.getText()));;
+                magasinBD.modifierStock(livre.getIdLivre(), magasin.getIdMagasin(),
+                        Integer.parseInt(textField.getText()));
+                ;
                 FenetreModifierStock fms = new FenetreModifierStock(this.magasinBD.getConnexion(), magasin);
                 fms.start(this.stage);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Impossible de supprimer dans la base de donnée");
                 e.printStackTrace();
             }

@@ -1,9 +1,7 @@
 package IHM;
 
 import IHM.Controleur.ControleurStock;
-import IHM.Controleur.ControleurCarteMagasinAdmin;
 import IHM.Controleur.ControleurHome;
-import IHM.Controleur.ControleurMagasinVendeur;
 import IHM.Controleur.ControleurPanier;
 import IHM.Controleur.ControleurParametre;
 
@@ -61,7 +59,6 @@ public class FenetreMagasinsClient extends Application {
         this.boutonRetour = new Button("", retourView);
         boutonSettings.setOnAction(new ControleurParametre(this.stage));
 
-
         String styleBouton = "-fx-background-color: #206db8;" +
                 "-fx-border-radius: 18; -fx-background-radius: 18;";
         boutonHome.setStyle(styleBouton);
@@ -97,7 +94,7 @@ public class FenetreMagasinsClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws SQLException {
-         this.stage = primaryStage;
+        this.stage = primaryStage;
 
         BorderPane root = new BorderPane();
 
@@ -202,7 +199,8 @@ public class FenetreMagasinsClient extends Application {
             GridPane.setHgrow(carteMagasin, Priority.ALWAYS);
             Magasin magasinSelectionne = listeMagasins.get(i);
 
-            carteMagasin.setOnMouseClicked(new ControleurStock(this.magasinBD.getConnexion(), magasinSelectionne, client, primaryStage));
+            carteMagasin.setOnMouseClicked(
+                    new ControleurStock(this.magasinBD.getConnexion(), magasinSelectionne, client, primaryStage));
         }
 
         Scene scene = new Scene(root, 1500, 750);

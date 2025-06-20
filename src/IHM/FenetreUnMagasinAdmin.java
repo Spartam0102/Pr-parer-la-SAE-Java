@@ -1,26 +1,18 @@
 package IHM;
 
-
 import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.Controleur.ControleurAjouterVendeur;
 import IHM.Controleur.ControleurAllerModifierStock;
-
 import IHM.Controleur.ControleurCAglobal;
 import IHM.Controleur.ControleurCA;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurNbCommande;
-
-import IHM.Controleur.ControleurCompteur;
-import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurParametre;
 import IHM.Controleur.ControleurRetour;
-
-import IHM.Controleur.ControleurStock;
-import IHM.Controleur.ControleurSuppElemPanier;
 import IHM.Controleur.ControleurSuppMagasin;
-
 import Java.Magasin;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -37,8 +29,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class FenetreUnMagasinAdmin extends Application{
-    
+public class FenetreUnMagasinAdmin extends Application {
+
     private Button boutonHome;
     private Button boutonSettings;
     private Button boutonRetour;
@@ -50,7 +42,7 @@ public class FenetreUnMagasinAdmin extends Application{
         this.magasinBD = new MagasinBD(connexionMySQL);
         this.magasin = magasin;
     }
- 
+
     private Pane titre() {
         ImageView logo = new ImageView(new Image("file:img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
         logo.setFitHeight(110);
@@ -82,7 +74,8 @@ public class FenetreUnMagasinAdmin extends Application{
         boutons.setAlignment(Pos.CENTER);
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
-        boutonRetour.setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, null, "fenetreMagasinsAdmin"));
+        boutonRetour
+                .setOnAction(new ControleurRetour(this.magasinBD.getConnexion(), stage, null, "fenetreMagasinsAdmin"));
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
@@ -96,7 +89,7 @@ public class FenetreUnMagasinAdmin extends Application{
         return banniere;
     }
 
-    private Pane infoMag(){
+    private Pane infoMag() {
         BorderPane entier = new BorderPane();
         entier.setStyle("-fx-background-color:rgb(255, 255, 255); -fx-background-radius: 10px;");
 
@@ -106,14 +99,14 @@ public class FenetreUnMagasinAdmin extends Application{
         entier.setTop(titre);
 
         BorderPane centre = new BorderPane();
-        ImageView image = new ImageView(new Image("file:./img/mag"+ magasin.getIdMagasin() + ".jpeg"));
+        ImageView image = new ImageView(new Image("file:./img/mag" + magasin.getIdMagasin() + ".jpeg"));
         image.setFitHeight(300);
         image.setStyle("-fx-background-radius: 10px;");
         image.setPreserveRatio(true);
         centre.setLeft(image);
 
         HBox num = new HBox();
-        Text numMagasin = new Text("n°"+ magasin.getIdMagasin());
+        Text numMagasin = new Text("n°" + magasin.getIdMagasin());
         numMagasin.setStyle("-fx-font-size: 20px;");
         ImageView maison = new ImageView(new Image("file:./img/magasin.png"));
         maison.setFitHeight(20);
@@ -142,9 +135,9 @@ public class FenetreUnMagasinAdmin extends Application{
         VBox descriptionMagasin = new VBox();
         descriptionMagasin.setAlignment(Pos.CENTER_RIGHT);
         descriptionMagasin.setSpacing(17);
-        VBox.setMargin(num, new Insets(0, 0 , 20, 0));
-        VBox.setMargin(boxNote, new Insets(0, 0 , 20, 0));
-        VBox.setMargin(boxTel, new Insets(0, 0 , 20, 0));
+        VBox.setMargin(num, new Insets(0, 0, 20, 0));
+        VBox.setMargin(boxNote, new Insets(0, 0, 20, 0));
+        VBox.setMargin(boxTel, new Insets(0, 0, 20, 0));
         descriptionMagasin.getChildren().addAll(num, boxNote, boxTel);
         centre.setRight(descriptionMagasin);
 
@@ -162,12 +155,14 @@ public class FenetreUnMagasinAdmin extends Application{
 
         HBox lesBoutons = new HBox();
         Button modifierStock = new Button("Modifier les stocks");
-        modifierStock.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
+        modifierStock.setStyle(
+                "-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
         HBox.setMargin(modifierStock, new Insets(0, 50, 0, 0));
         modifierStock.setPrefHeight(50);
         modifierStock.setPrefWidth(220);
         Button supprimerMagasin = new Button("Supprimer Magasin");
-        supprimerMagasin.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
+        supprimerMagasin.setStyle(
+                "-fx-background-color: #f44336; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
         HBox.setMargin(supprimerMagasin, new Insets(0, 0, 0, 50));
         supprimerMagasin.setPrefHeight(50);
         supprimerMagasin.setPrefWidth(220);
@@ -175,7 +170,8 @@ public class FenetreUnMagasinAdmin extends Application{
         BorderPane.setMargin(lesBoutons, new Insets(20));
         lesBoutons.getChildren().addAll(modifierStock, supprimerMagasin);
 
-        modifierStock.setOnMouseClicked(new ControleurAllerModifierStock(this.magasinBD.getConnexion(), magasin, stage));
+        modifierStock
+                .setOnMouseClicked(new ControleurAllerModifierStock(this.magasinBD.getConnexion(), magasin, stage));
         supprimerMagasin.setOnMouseClicked(new ControleurSuppMagasin(magasin, this.magasinBD.getConnexion(), stage));
 
         entier.setBottom(lesBoutons);
@@ -183,8 +179,8 @@ public class FenetreUnMagasinAdmin extends Application{
         return entier;
     }
 
-    private Pane compteVendeur(){
-       HBox compteVendeur = new HBox(10);
+    private Pane compteVendeur() {
+        HBox compteVendeur = new HBox(10);
         compteVendeur.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
         compteVendeur.setPadding(new Insets(15));
         compteVendeur.setAlignment(Pos.CENTER);
@@ -195,17 +191,21 @@ public class FenetreUnMagasinAdmin extends Application{
         titre.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         TextField nom = new TextField();
         nom.setPromptText("Nom");
-        nom.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        nom.setStyle(
+                "-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         TextField prenom = new TextField();
         prenom.setPromptText("Prénom");
-        prenom.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        prenom.setStyle(
+                "-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         TextField mdp = new TextField();
         mdp.setPromptText("mdp");
-        mdp.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        mdp.setStyle(
+                "-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
         TextField date = new TextField();
         date.setPromptText("date de naissance");
-        date.setStyle("-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
-        gauche.getChildren().addAll(titre, nom, prenom,mdp,date);
+        date.setStyle(
+                "-fx-background-color: #d9d9d9; -fx-background-radius: 10px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-radius: 10px;");
+        gauche.getChildren().addAll(titre, nom, prenom, mdp, date);
         VBox.setMargin(prenom, new Insets(5));
         VBox.setMargin(nom, new Insets(5));
         VBox.setMargin(date, new Insets(5));
@@ -217,11 +217,12 @@ public class FenetreUnMagasinAdmin extends Application{
         image.setFitHeight(100);
         image.setPreserveRatio(true);
         Button button = new Button("Créer");
-        button.setStyle("-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
+        button.setStyle(
+                "-fx-background-color: #f28c28; -fx-text-fill: white; -fx-background-radius: 10px; -fx-font-weight: bold;");
         button.setPrefWidth(100);
 
-
-        ControleurAjouterVendeur controleurAjouterVendeur = new ControleurAjouterVendeur(nom, prenom, date, mdp, magasin, magasinBD.getConnexion());
+        ControleurAjouterVendeur controleurAjouterVendeur = new ControleurAjouterVendeur(nom, prenom, date, mdp,
+                magasin, magasinBD.getConnexion());
         button.setOnAction(controleurAjouterVendeur);
 
         droit.setAlignment(Pos.CENTER);
@@ -234,7 +235,7 @@ public class FenetreUnMagasinAdmin extends Application{
         return compteVendeur;
     }
 
-    private Pane statistique(){
+    private Pane statistique() {
         VBox stat = new VBox(15);
         VBox.setVgrow(stat, Priority.ALWAYS);
         stat.setStyle("-fx-background-color: white; -fx-background-radius: 15px;");
@@ -283,10 +284,8 @@ public class FenetreUnMagasinAdmin extends Application{
         return stat;
     }
 
-        
-
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
         this.stage = primaryStage;
         BorderPane root = new BorderPane();
 
@@ -313,15 +312,13 @@ public class FenetreUnMagasinAdmin extends Application{
         cadre.getChildren().addAll(mag, compteStat);
         HBox.setHgrow(mag, Priority.ALWAYS);
 
-
         Scene scene = new Scene(root, 1500, 750);
         primaryStage.setTitle("Fenêtre des magasins");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-
-     public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Magasin magasin) {
+    public static void afficher(Stage stage, ConnexionMySQL connexionMySQL, Magasin magasin) {
         try {
             FenetreStock fs = new FenetreStock(connexionMySQL, magasin, null);
             fs.start(stage);
@@ -329,9 +326,9 @@ public class FenetreUnMagasinAdmin extends Application{
             e.printStackTrace();
         }
     }
+
     public static void main(String[] args) {
         launch(args);
     }
 
 }
-

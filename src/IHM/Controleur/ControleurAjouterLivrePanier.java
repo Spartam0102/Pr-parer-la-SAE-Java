@@ -1,11 +1,12 @@
 package IHM.Controleur;
 
-import java.util.Map;
-
 import BD.*;
+
+import java.util.Map;
 import Java.Client;
 import Java.Livre;
 import Java.Magasin;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -21,7 +22,8 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
     private Magasin magasin;
     private MagasinBD magasinBD;
 
-    public ControleurAjouterLivrePanier(Client client, Livre livre, ConnexionMySQL connexionMySQL, Label labelCompteur, Magasin magasin) {
+    public ControleurAjouterLivrePanier(Client client, Livre livre, ConnexionMySQL connexionMySQL, Label labelCompteur,
+            Magasin magasin) {
         this.client = client;
         this.livre = livre;
         this.clientBD = new ClientBD(connexionMySQL);
@@ -33,13 +35,11 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         try {
-            // Récupérer le nombre actuel depuis le label
             int nombre = Integer.parseInt(labelCompteur.getText());
-            
-            // Récupérer la quantité disponible du livre dans le magasin
+
             Map<Livre, Integer> stockMagasin = magasinBD.listeLivreUnMagasin(magasin.getIdMagasin());
             Integer quantiteDisponible = stockMagasin.get(livre);
-            
+
             if (quantiteDisponible == null || quantiteDisponible <= 0) {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Stock insuffisant");
@@ -48,29 +48,27 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
                 alert.showAndWait();
                 return;
             }
-            
-            // Vérifier la quantité déjà dans le panier du client
+
             Integer quantiteDejaDansPanier = client.getPanier().get(livre);
             if (quantiteDejaDansPanier == null) {
                 quantiteDejaDansPanier = 0;
             }
-            
-            // Calculer la quantité maximale qu'on peut encore ajouter
+
             int quantiteMaxAjoutPossible = quantiteDisponible - quantiteDejaDansPanier;
-            
+
             if (quantiteMaxAjoutPossible <= 0) {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setTitle("Stock insuffisant");
                 alert.setHeaderText(null);
-                alert.setContentText("Vous avez déjà le maximum de ce livre dans votre panier (" + quantiteDejaDansPanier + "/" + quantiteDisponible + ").");
+                alert.setContentText("Vous avez déjà le maximum de ce livre dans votre panier ("
+                        + quantiteDejaDansPanier + "/" + quantiteDisponible + ").");
                 alert.showAndWait();
                 return;
             }
-            
-            // Limiter le nombre à ajouter à ce qui est disponible
+
             if (nombre > quantiteMaxAjoutPossible) {
                 nombre = quantiteMaxAjoutPossible;
-                
+
                 Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle("Quantité ajustée");
                 alert.setHeaderText(null);
@@ -78,15 +76,12 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
                 alert.showAndWait();
             }
 
-            // Ajouter le nombre de livres spécifié au panier
             for (int i = 0; i < nombre; i++) {
                 client.ajouterLivrePanier(livre);
             }
 
-            // Sauvegarder le panier
             clientBD.sauvegardePanierBD(client);
 
-            // Message de confirmation adapté au nombre
             String message = nombre + " exemplaire(s) du livre \"" + livre.getNomLivre()
                     + "\" ont bien été ajoutés au panier.";
 
@@ -96,7 +91,6 @@ public class ControleurAjouterLivrePanier implements EventHandler<ActionEvent> {
             alert.setContentText(message);
             alert.showAndWait();
 
-            // Remettre le compteur à 1 après ajout
             labelCompteur.setText("1");
 
         } catch (NumberFormatException e) {

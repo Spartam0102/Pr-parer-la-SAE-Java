@@ -6,6 +6,7 @@ import BD.ConnexionMySQL;
 import BD.MagasinBD;
 import IHM.FenetreMagasinsAdmin;
 import Java.Magasin;
+
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -13,8 +14,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ControleurSuppMagasin implements EventHandler<MouseEvent>{
-    
+public class ControleurSuppMagasin implements EventHandler<MouseEvent> {
+
     private MagasinBD magasinBD;
     private Magasin magasin;
     private ConnexionMySQL connexionMySQL;
@@ -41,8 +42,7 @@ public class ControleurSuppMagasin implements EventHandler<MouseEvent>{
                 magasinBD.effacerMagasin(magasin.getIdMagasin());
                 FenetreMagasinsAdmin fma = new FenetreMagasinsAdmin(connexionMySQL);
                 fma.start(this.stage);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Impossible de supprimer dans la base de donnée");
                 e.printStackTrace();
             }

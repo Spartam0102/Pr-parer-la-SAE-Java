@@ -1,12 +1,10 @@
 package IHM;
 
 import BD.ConnexionMySQL;
-import BD.MagasinBD;
-import BD.LivreBD;
-import BD.StatistiqueBD;
 import BD.ClientBD;
 import IHM.Controleur.ControleurSeConnecter;
 import Java.Client;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -49,7 +47,6 @@ public class FenetreConnexion extends Application {
 
         BorderPane root = new BorderPane();
 
-        // Barre de sélection des rôles en haut à droite
         HBox boxRoles = new HBox(20);
         boxRoles.setAlignment(Pos.TOP_RIGHT);
         boxRoles.setPadding(new Insets(20, 30, 0, 0));
@@ -64,7 +61,6 @@ public class FenetreConnexion extends Application {
         btnVendeur.setToggleGroup(groupeRoles);
         btnAdmin.setToggleGroup(groupeRoles);
 
-        // Ajout des icônes aux boutons rôles
         ImageView iconeC = new ImageView(new Image("file:./img/shopping-32.png"));
         iconeC.setFitHeight(30);
         iconeC.setFitWidth(30);
@@ -85,7 +81,6 @@ public class FenetreConnexion extends Application {
 
         boxRoles.getChildren().addAll(btnClient, btnVendeur, btnAdmin);
 
-        // Sélection par défaut sur Client
         btnClient.setSelected(true);
         updateButtonStyles(btnClient, btnClient, btnVendeur, btnAdmin);
 
@@ -96,13 +91,12 @@ public class FenetreConnexion extends Application {
             }
         });
 
-        // Logo à gauche
         ImageView logo = new ImageView(new Image("file:./img/ChatGPT Image 17 juin 2025, 08_55_03.png"));
         logo.setFitHeight(200);
         logo.setPreserveRatio(true);
         Pane conteneurLogo = new Pane(logo);
         BorderPane.setMargin(conteneurLogo, new Insets(10, 0, 0, 15));
-        root.setTop(new BorderPane(null, null, boxRoles, null, conteneurLogo)); // top = logo gauche + rôles droite
+        root.setTop(new BorderPane(null, null, boxRoles, null, conteneurLogo));
         BorderPane.setAlignment(conteneurLogo, Pos.CENTER_LEFT);
 
         VBox cadre = new VBox();
@@ -171,7 +165,6 @@ public class FenetreConnexion extends Application {
         CheckBox voirMdp = new CheckBox("Afficher mot de passe");
         voirMdp.setStyle("-fx-text-fill: white;");
 
-        // Gestion affichage / masquage mot de passe
         voirMdp.selectedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 mdpVisibleField.setText(mdpfield.getText());
@@ -241,7 +234,6 @@ public class FenetreConnexion extends Application {
         primaryStage.show();
     }
 
-    // Méthode pour mettre à jour le style selon la sélection
     private void updateButtonStyles(ToggleButton selected, ToggleButton... allButtons) {
         for (ToggleButton btn : allButtons) {
             if (btn == selected) {
@@ -254,7 +246,7 @@ public class FenetreConnexion extends Application {
         }
     }
 
-    private void afficherPopupInscription(){
+    private void afficherPopupInscription() {
         Stage popup = new Stage();
         popup.setTitle("Inscription nouveau client");
 
@@ -270,7 +262,8 @@ public class FenetreConnexion extends Application {
 
         TextField prenomField = new TextField();
         prenomField.setPromptText("Prénom");
-        nomField.setPrefWidth(300);;
+        nomField.setPrefWidth(300);
+        ;
 
         TextField adresseField = new TextField();
         adresseField.setPromptText("Adresse complète (ex: 12 rue X 75000 Paris)");
@@ -297,7 +290,7 @@ public class FenetreConnexion extends Application {
         grid.add(message, 1, 5);
 
         btnValider.setOnAction(ev -> {
-            try{
+            try {
                 String nom = nomField.getText().trim();
                 String prenom = prenomField.getText().trim();
                 String adresse = adresseField.getText().trim();
@@ -327,8 +320,7 @@ public class FenetreConnexion extends Application {
                 } catch (SQLException e) {
                     message.setText(e.getMessage());
                 }
-            }
-            catch(SQLException e){
+            } catch (SQLException e) {
                 message.setText("Erreur lors de la création du compte : " + e.getMessage());
             }
         });

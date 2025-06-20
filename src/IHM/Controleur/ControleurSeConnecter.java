@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-
 public class ControleurSeConnecter {
 
     private ConnexionMySQL connexionMySQL;
@@ -31,92 +30,88 @@ public class ControleurSeConnecter {
         this.adminBD = new AdministrateurBD(connexionMySQL);
     }
 
-    public void gererConnexion(Button boutonConnexion, TextField userfield, PasswordField mdpfield,
+    public void gererConnexion(Button boutonConnexion, TextField userfield, PasswordField mdpfield, ToggleGroup groupeRoles) {
+        boutonConnexion.setOnAction(e -> {
+            String idTexte = userfield.getText().trim();
+            String mdp = mdpfield.getText();
 
-            ToggleGroup groupeRoles) {
-
-
-    boutonConnexion.setOnAction(e -> {
-        String idTexte = userfield.getText().trim();
-        String mdp = mdpfield.getText();
-
-        Toggle selectedToggle = groupeRoles.getSelectedToggle();
-        if (idTexte.isEmpty() || mdp.isEmpty() || selectedToggle == null) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setContentText("Veuillez remplir tous les champs.");
-            alert.show();
-            return;
-        }
-
-        String role = ((ToggleButton) selectedToggle).getText();
-
-        int id;
-        try {
-            id = Integer.parseInt(idTexte);
-        } catch (NumberFormatException ex) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setContentText("L'identifiant doit être un nombre.");
-            alert.show();
-            return;
-        }
-
-        boolean authOk = false;
-
-        try {
-            switch (role) {
-                case "Client":
-                    authOk = clientBD.verifierConnexion(id, mdp);
-                    break;
-                case "Vendeur":
-                    authOk = vendeurBD.verifierConnexion(id, mdp);
-                    break;
-                case "Administrateur":
-                    authOk = adminBD.verifierConnexion(id, mdp);
-                    break;
-                default:
-                    Alert alert = new Alert(AlertType.ERROR);
-                    alert.setContentText("Rôle inconnu.");
-                    alert.show();
-                    return;
+            Toggle selectedToggle = groupeRoles.getSelectedToggle();
+            if (idTexte.isEmpty() || mdp.isEmpty() || selectedToggle == null) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setContentText("Veuillez remplir tous les champs.");
+                alert.show();
+                return;
             }
-        } catch (SQLException ex) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setContentText("Erreur lors de la connexion à la base de données.");
-            alert.show();
-            ex.printStackTrace();
-            return;
-        }
 
-        if (authOk) {
-            Stage currentStage = (Stage) boutonConnexion.getScene().getWindow();
+            String role = ((ToggleButton) selectedToggle).getText();
+
+            int id;
+            try {
+                id = Integer.parseInt(idTexte);
+            } catch (NumberFormatException ex) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setContentText("L'identifiant doit être un nombre.");
+                alert.show();
+                return;
+            }
+
+            boolean authOk = false;
 
             try {
                 switch (role) {
                     case "Client":
-                        this.client = clientBD.recupererClient(id);
-                        FenetreMagasinsClient.afficher(currentStage, connexionMySQL, this.client);
+                        authOk = clientBD.verifierConnexion(id, mdp);
                         break;
                     case "Vendeur":
-                        this.vendeur = vendeurBD.recupererVendeur(id);
-                        FenetreUnMagasinVendeur.afficher(currentStage, connexionMySQL, this.vendeur);
+                        authOk = vendeurBD.verifierConnexion(id, mdp);
                         break;
                     case "Administrateur":
-                        FenetreMagasinsAdmin.afficher(currentStage, connexionMySQL);
+                        authOk = adminBD.verifierConnexion(id, mdp);
                         break;
+                    default:
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.setContentText("Rôle inconnu.");
+                        alert.show();
+                        return;
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+            } catch (SQLException ex) {
                 Alert alert = new Alert(AlertType.ERROR);
-                alert.setContentText("Erreur lors de l'ouverture de la fenêtre.");
+                alert.setContentText("Erreur lors de la connexion à la base de données.");
                 alert.show();
+                ex.printStackTrace();
+                return;
             }
-        } else {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Erreur de connexion");
-            alert.setHeaderText("Identifiants incorrects");
-            alert.setContentText("Le mot de passe ou l'identifiant est incorrect.");
-            alert.showAndWait();
-        }
-    });
-}
+
+            if (authOk) {
+                Stage currentStage = (Stage) boutonConnexion.getScene().getWindow();
+
+                try {
+                    switch (role) {
+                        case "Client":
+                            this.client = clientBD.recupererClient(id);
+                            FenetreMagasinsClient.afficher(currentStage, connexionMySQL, this.client);
+                            break;
+                        case "Vendeur":
+                            this.vendeur = vendeurBD.recupererVendeur(id);
+                            FenetreUnMagasinVendeur.afficher(currentStage, connexionMySQL, this.vendeur);
+                            break;
+                        case "Administrateur":
+                            FenetreMagasinsAdmin.afficher(currentStage, connexionMySQL);
+                            break;
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setContentText("Erreur lors de l'ouverture de la fenêtre.");
+                    alert.show();
+                }
+            } else {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Erreur de connexion");
+                alert.setHeaderText("Identifiants incorrects");
+                alert.setContentText("Le mot de passe ou l'identifiant est incorrect.");
+                alert.showAndWait();
+            }
+        });
+    }
 }

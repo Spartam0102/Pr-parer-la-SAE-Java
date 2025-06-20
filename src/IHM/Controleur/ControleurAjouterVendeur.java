@@ -2,8 +2,10 @@ package IHM.Controleur;
 
 import BD.ConnexionMySQL;
 import BD.VendeurBD;
+
 import Java.Magasin;
 import Java.Vendeur;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -52,9 +54,9 @@ public class ControleurAjouterVendeur implements EventHandler<ActionEvent> {
             Alert alertSuccess = new Alert(Alert.AlertType.INFORMATION);
             alertSuccess.setTitle("Vendeur créé");
             alertSuccess.setHeaderText("Création réussie !");
-            alertSuccess.setContentText("Le vendeur " + nomText + " " + prenomText + 
-                                      " a été créé avec succès.\n\n" +
-                                      "ID du vendeur : " + id);
+            alertSuccess.setContentText("Le vendeur " + nomText + " " + prenomText +
+                    " a été créé avec succès.\n\n" +
+                    "ID du vendeur : " + id);
             alertSuccess.showAndWait();
 
             System.out.println("Vendeur créé avec succès ! ID: " + id);
@@ -69,10 +71,10 @@ public class ControleurAjouterVendeur implements EventHandler<ActionEvent> {
             Alert alertError = new Alert(Alert.AlertType.ERROR);
             alertError.setTitle("Erreur");
             alertError.setHeaderText("Erreur lors de la création du vendeur");
-            alertError.setContentText("Une erreur s'est produite lors de la création du vendeur :\n\n" + 
-                                    e.getMessage());
+            alertError.setContentText("Une erreur s'est produite lors de la création du vendeur :\n\n" +
+                    e.getMessage());
             alertError.showAndWait();
-            
+
             System.err.println("Erreur lors de la création du vendeur : " + e.getMessage());
             e.printStackTrace();
         }

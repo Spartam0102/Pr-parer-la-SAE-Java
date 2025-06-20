@@ -3,6 +3,7 @@ package IHM.Controleur;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+
 import IHM.*;
 import BD.*;
 import Java.*;
@@ -14,7 +15,7 @@ public class ControleurRetour implements EventHandler<ActionEvent> {
     private ConnexionMySQL connexionMySQL;
     private Client client;
 
-    public ControleurRetour(ConnexionMySQL connexionMySQL, Stage stage, Client client,String destination) {
+    public ControleurRetour(ConnexionMySQL connexionMySQL, Stage stage, Client client, String destination) {
         this.stage = stage;
         this.destination = destination;
         this.connexionMySQL = connexionMySQL;
@@ -24,7 +25,7 @@ public class ControleurRetour implements EventHandler<ActionEvent> {
     @Override
     public void handle(ActionEvent event) {
         try {
-            switch(destination) {
+            switch (destination) {
                 case "fenetreMagasinsClient":
                     FenetreMagasinsClient fenetreMagasinsClient = new FenetreMagasinsClient(connexionMySQL, client);
                     fenetreMagasinsClient.start(this.stage);
