@@ -30,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.geometry.Insets;
@@ -118,34 +119,35 @@ public class FenetreUnMagasinVendeur extends Application {
         container.setSpacing(10);
 
         HBox principal = new HBox(20);
-        principal.setPadding(new Insets(20));
+        principal.setPadding(new Insets(35));
         principal.setStyle("-fx-background-color: #2073c4;");
         HBox.setHgrow(principal, Priority.ALWAYS);
 
         VBox carte = new VBox(10);
+        HBox.setHgrow(carte, Priority.ALWAYS);
         carte.setPadding(new Insets(15));
         carte.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
         carte.setPrefWidth(500);
 
         Label nomLibrairie = new Label(this.magasin.getNom());
-        nomLibrairie.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        nomLibrairie.setStyle("-fx-font-size: 30px; -fx-font-weight: bold;");
 
         ImageView imgLibrairie = new ImageView(new Image("file:./img/mag" + this.magasin.getIdMagasin() + ".jpeg"));
-        imgLibrairie.setFitHeight(200);
+        imgLibrairie.setFitHeight(300);
         imgLibrairie.setPreserveRatio(true);
 
-        HBox infos = new HBox(10);
-        VBox gaucheInfos = new VBox(5);
-        gaucheInfos.getChildren().addAll(
-                new Label("id n°" + this.magasin.getIdMagasin()),
-                new Label("" + this.magasin.getTel()));
-
-        VBox droiteInfos = new VBox(5);
-        droiteInfos.getChildren().add(new Label(this.magasin.getAdresse()));
-
-        infos.getChildren().addAll(gaucheInfos, droiteInfos);
+        VBox infos = new VBox(10);
+        Label idLabel = new Label("id n°" + this.magasin.getIdMagasin());
+        idLabel.setStyle("-fx-font-size: 20px;");
+        Label telLabel = new Label("" + this.magasin.getTel());
+        telLabel.setStyle("-fx-font-size: 20px;");
+        Label adresseLabel = new Label(this.magasin.getAdresse());
+        adresseLabel.setStyle("-fx-font-size: 20px;");
+        infos.getChildren().addAll(idLabel, telLabel, adresseLabel);
 
         Button boutonSupprimerLivre = new Button("Supprimer un livre ❌");
+        boutonSupprimerLivre.setPrefHeight(45);
+        boutonSupprimerLivre.setPrefWidth(160);
         boutonSupprimerLivre.setStyle("-fx-background-color: red; -fx-text-fill: white;");
         boutonSupprimerLivre.setOnAction(e -> afficherPopupSuppression());
 
@@ -154,12 +156,16 @@ public class FenetreUnMagasinVendeur extends Application {
         VBox panneauDroit = new VBox(20);
 
         VBox voirPanier = new VBox(10);
+        voirPanier.setPrefWidth(600);
         voirPanier.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
         voirPanier.setPadding(new Insets(15));
         Label lblVoir = new Label("Voir un panier");
+        lblVoir.setStyle("-fx-font-size: 18px;");
         TextField champIdPanier = new TextField();
         champIdPanier.setPromptText("ID client");
         Button boutonVoir = new Button("Voir");
+        boutonVoir.setPrefHeight(35);
+        boutonVoir.setPrefWidth(140);
         boutonVoir.setStyle("-fx-background-color: #ff6600; -fx-text-fill: white;");
         boutonVoir.setOnAction(new ControleurVoirPanier(stage, this.connexionMySQL, champIdPanier));
 
@@ -172,9 +178,13 @@ public class FenetreUnMagasinVendeur extends Application {
         voirPanier.setAlignment(Pos.CENTER);
 
         VBox ajoutLivre = new VBox(10);
+        VBox.setVgrow(ajoutLivre, Priority.ALWAYS);
+        ajoutLivre.setPrefWidth(600);
+        ajoutLivre.setSpacing(18);
         ajoutLivre.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
         ajoutLivre.setPadding(new Insets(15));
         Label lblAjout = new Label("Ajouter un livre 📖");
+        lblAjout.setStyle("-fx-font-size: 18px;");
         TextField champTitre = new TextField();
         champTitre.setPromptText("Titre");
         TextField champAuteur = new TextField();
@@ -186,6 +196,8 @@ public class FenetreUnMagasinVendeur extends Application {
         TextField champPrix = new TextField();
         champPrix.setPromptText("Prix");
         Button boutonAjouter = new Button("Ajouter");
+        boutonAjouter.setPrefHeight(35);
+        boutonAjouter.setPrefWidth(140);
         boutonAjouter.setStyle("-fx-background-color: green; -fx-text-fill: white;");
         boutonAjouter.setOnAction(new ControleurAjouterLivre(
                 connexionMySQL, vendeur,
