@@ -14,12 +14,26 @@ public class ControleurRetour implements EventHandler<ActionEvent> {
     private String destination;
     private ConnexionMySQL connexionMySQL;
     private Client client;
+    private Magasin magasin;
 
     public ControleurRetour(ConnexionMySQL connexionMySQL, Stage stage, Client client, String destination) {
         this.stage = stage;
         this.destination = destination;
         this.connexionMySQL = connexionMySQL;
         this.client = client;
+    }
+
+    public ControleurRetour(ConnexionMySQL connexionMySQL, Stage stage, Magasin magasin,String destination) {
+        this.stage = stage;
+        this.destination = destination;
+        this.connexionMySQL = connexionMySQL;
+        this.magasin = magasin;
+    }
+
+    public ControleurRetour(ConnexionMySQL connexionMySQL, Stage stage, String destination) {
+        this.stage = stage;
+        this.destination = destination;
+        this.connexionMySQL = connexionMySQL;
     }
 
     @Override
@@ -33,6 +47,10 @@ public class ControleurRetour implements EventHandler<ActionEvent> {
                 case "fenetreMagasinsAdmin":
                     FenetreMagasinsAdmin fenetreMagasinsAdmin = new FenetreMagasinsAdmin(connexionMySQL);
                     fenetreMagasinsAdmin.start(this.stage);
+                    break;
+                case "fenetreUnMagasinAdmin":
+                    FenetreUnMagasinAdmin fenetreUnMagasinAdmin = new FenetreUnMagasinAdmin(connexionMySQL, this.magasin);
+                    fenetreUnMagasinAdmin.start(this.stage);
                     break;
             }
         } catch (Exception e) {

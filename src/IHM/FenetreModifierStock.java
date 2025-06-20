@@ -3,8 +3,12 @@ package IHM;
 import IHM.Controleur.ControleurHome;
 import IHM.Controleur.ControleurModifierStock;
 import IHM.Controleur.ControleurParametre;
+
 import BD.*;
 import Java.*;
+
+import IHM.Controleur.ControleurRetour;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -70,6 +74,9 @@ public class FenetreModifierStock extends Application {
         boutons.setAlignment(Pos.CENTER);
 
         boutonHome.setOnAction(new ControleurHome(this.stage));
+        boutonRetour.setOnAction(
+                new ControleurRetour(this.magasinBD.getConnexion(), stage, magasin, "fenetreUnMagasinAdmin"));
+
 
         VBox conteneurDroit = new VBox(boutons);
         conteneurDroit.setAlignment(Pos.CENTER);
